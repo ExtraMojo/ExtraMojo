@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.11.0
+
+- Added `OptParser.expect_at_least_n_args` to tell the parser to expect at least some args and raise an error of at least that many aren't found.
+- Added `header_values` to the `FromDelimited.from_delimited` trait method in order to handle cases where headers can be dynamic and we might want to read values in to a dict.
+- Added example of reading / writing similar to dictreader / dictwriter
+
 ## v0.10.0 
 
 - Added `MovableWriter` trait so that all writers can take things that implement that, allowing them to take FileHandles, or FileDescriptors

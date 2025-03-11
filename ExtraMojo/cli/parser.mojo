@@ -4,7 +4,7 @@
 from testing import assert_equal, assert_true
 from ExtraMojo.cli.parser import OptParser, OptConfig, OptKind
 
-var args = List(String("--file"), String("/path/to/thing"), String("--count"), String("42"), String("--fraction"), String("-0.2"), String("--verbose"))
+var args = List(String("--file"), String("/path/to/thing"), String("--count"), String("42"), String("--fraction"), String("-0.2"), String("--verbose"), String("ExtraFile.tsv"))
 var program_name = "example"
 
 var parser = OptParser(name="example", description="An example program.")
@@ -13,6 +13,8 @@ parser.add_opt(OptConfig("count", OptKind.IntLike, default_value=String("100"), 
 parser.add_opt(OptConfig("fraction", OptKind.FloatLike, default_value=String("0.5"), description="Some interesting fraction to keep."))
 # Note that with flags, the OptKind must be BoolLike and there must be a default_value specified.
 parser.add_opt(OptConfig("verbose", OptKind.BoolLike, is_flag=True, default_value=String("False"), description="Turn up the logging."))
+# Specify any needed arguments. If at least n arguments aren't found after parsing the opts, an exception will be raised.
+parser.expect_at_least_n_args(1, "Additional files to process")
 
 # Note, a user would call parser.parse_sys_args()
 var opts = parser.parse_args(args)
@@ -300,6 +302,10 @@ struct OptParser:
     """The description of the program, to be used in the help message."""
     var program_name: String
     """Your programs name, to be used in the help message."""
+    var min_num_args_expected: Optional[Int]
+    """Whether or not to expect any program args, and if so, at least (>=) how many."""
+    var args_help_msg: String
+    """Help message for arguments."""
 
     fn __init__(
         out self,
@@ -310,6 +316,8 @@ struct OptParser:
         self.options = Dict[String, OptConfig]()
         self.program_description = description
         self.program_name = name
+        self.min_num_args_expected = None
+        self.args_help_msg = ""
 
         # Add help message by default, this means a user can override help if they want to
         self.add_opt(
@@ -321,6 +329,16 @@ struct OptParser:
                 description="Show help message",
             )
         )
+
+    fn expect_at_least_n_args(mut self, n: Int, args_help_msg: String = ""):
+        """The minimum number of args to expect.
+
+        len(args) >= min_num_args_expected
+
+        If not set, args are not checked.
+        """
+        self.min_num_args_expected = n
+        self.args_help_msg = args_help_msg
 
     fn add_opt(mut self, owned arg: OptConfig):
         """Add an [`OptConfig`]."""
@@ -348,6 +366,14 @@ struct OptParser:
         var help_msg = String()
         help_msg.write(self.program_name, "\n")
         help_msg.write(self.program_description, "\n\n")
+
+        if self.min_num_args_expected:
+            help_msg.write("ARGS:\n")
+            help_msg.write(
+                "\t", "<ARGS (>=", self.min_num_args_expected.value(), ")>...\n"
+            )
+            if len(self.args_help_msg) > 0:
+                help_msg.write("\t\t", self.args_help_msg, "\n")
 
         help_msg.write("FLAGS:\n")
         for kv in self.options.items():
@@ -470,6 +496,13 @@ struct OptParser:
                     raise String.write("No value provided for ", arg[].key)
                 result.options[arg[].key] = OptValue.parse_kind(
                     arg[].value.value_kind, default.value()
+                )
+
+        if self.min_num_args_expected:
+            if len(result.args) < self.min_num_args_expected.value():
+                raise "Expected >= {} arguments, found {}".format(
+                    self.min_num_args_expected.value(),
+                    len(result.args),
                 )
 
         return result

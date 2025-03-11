@@ -7,6 +7,7 @@ Compile-time known fields:
 TODO: this should be two different examples, but the doc parser can't seem to handle that for this example.
 
 ```mojo
+from collections import Optional, Dict
 from collections.string import StringSlice
 from testing import assert_equal
 
@@ -39,7 +40,7 @@ struct SerDerStruct(ToDelimited, FromDelimited):
         writer.write_record("index", "name")
 
     @staticmethod
-    fn from_delimited(mut data: SplitIterator) raises -> Self:
+    fn from_delimited(mut data: SplitIterator, read header_values: Optional[List[String]]=None) raises -> Self:
         var index = Int(StringSlice(unsafe_from_utf8=data.__next__()))
         var name = String()  # String constructor expected nul terminated byte span
         name.write_bytes(data.__next__())
@@ -142,6 +143,71 @@ fn run_check_scores(opts: ParsedOpts) raises:
     out_writer.flush()
     out_writer.close()
 
+# #########################################
+# Example similar to dictreader/dictwriter.
+# #########################################
+
+@value
+struct ThinWrapper(ToDelimited, FromDelimited):
+    var stuff: Dict[String, Int]
+
+    fn write_to_delimited(read self, mut writer: DelimWriter) raises:
+        var seen = 1
+        for value in self.stuff.values():  # Relying on stable iteration order
+            writer.write_field(value[], is_last=seen == len(self.stuff))
+            seen += 1
+
+    fn write_header(read self, mut writer: DelimWriter) raises:
+        var seen = 1
+        for header in self.stuff.keys():  # Relying on stable iteration order
+            writer.write_field(header[], is_last=seen == len(self.stuff))
+            seen += 1
+
+    @staticmethod
+    fn from_delimited(
+        mut data: SplitIterator,
+        read header_values: Optional[List[String]] = None,
+    ) raises -> Self:
+        var result = Dict[String, Int]()
+        for header in header_values.value():
+            result[header[]] = Int(
+                StringSlice(unsafe_from_utf8=data.__next__())
+            )
+        return Self(result)
+
+
+fn test_delim_reader_writer_dicts(file: String) raises:
+    var to_write = List[ThinWrapper]()
+    var headers = List(
+        String("a"), String("b"), String("c"), String("d"), String("e")
+    )
+    for i in range(0, 1000):
+        var stuff = Dict[String, Int]()
+        for header in headers:
+            stuff[header[]] = i
+        to_write.append(ThinWrapper(stuff))
+    var writer = DelimWriter(
+        BufferedWriter(open(String(file), "w")),
+        delim="\t",
+        write_header=True,
+    )
+    for item in to_write:
+        writer.serialize(item[])
+    writer.flush()
+    writer.close()
+
+    var reader = DelimReader[ThinWrapper](
+        BufferedReader(open(String(file), "r")),
+        delim=ord("\t"),
+        has_header=True,
+    )
+    var count = 0
+    for item in reader^:
+        for header in headers:
+            assert_equal(to_write[count].stuff[header[]], item.stuff[header[]])
+        count += 1
+    assert_equal(count, len(to_write))
+    print("Successful delim_writer")
 ```
 
 
@@ -151,7 +217,7 @@ fn run_check_scores(opts: ParsedOpts) raises:
 """
 from collections import Optional
 from memory import Span
-from utils import Writer
+from utils import Writer, StringSlice
 
 from ExtraMojo.bstr.bstr import SplitIterator
 from ExtraMojo.io import MovableWriter
@@ -163,7 +229,10 @@ trait FromDelimited(CollectionElement):
     """
 
     @staticmethod
-    fn from_delimited(mut data: SplitIterator) raises -> Self:
+    fn from_delimited(
+        mut data: SplitIterator,
+        read header_values: Optional[List[String]] = None,
+    ) raises -> Self:
         ...
 
 
@@ -182,6 +251,7 @@ struct DelimReader[RowType: FromDelimited]:
     var buffer: List[UInt8]
     var len: Int
     var has_header: Bool
+    var header_values: Optional[List[String]]
 
     fn __init__(
         out self,
@@ -196,6 +266,7 @@ struct DelimReader[RowType: FromDelimited]:
         self.buffer = List[UInt8]()
         self.len = 1
         self.has_header = has_header
+        self.header_values = None
         if self.has_header:
             self._skip_header()
         self._get_next()
@@ -207,6 +278,7 @@ struct DelimReader[RowType: FromDelimited]:
         self.buffer = existing.buffer^
         self.len = existing.len
         self.has_header = existing.has_header
+        self.header_values = existing.header_values^
 
     fn __len__(read self) -> Int:
         return self.len
@@ -226,10 +298,16 @@ struct DelimReader[RowType: FromDelimited]:
 
     fn _skip_header(mut self) raises:
         var bytes_read = self.reader.read_until(self.buffer, ord("\n"))
+
         if bytes_read == 0:
             self.len = 0
             self.next_elem = None
             raise "No header found"
+
+        var header_values = List[String]()
+        for header in SplitIterator(self.buffer, self.delim):
+            header_values.append(String(StringSlice(unsafe_from_utf8=header)))
+        self.header_values = header_values
 
     fn _get_next(mut self) raises:
         var bytes_read = self.reader.read_until(self.buffer, ord("\n"))
@@ -240,7 +318,7 @@ struct DelimReader[RowType: FromDelimited]:
             self.next_elem = None
             return
         var iterator = SplitIterator(self.buffer, self.delim)
-        self.next_elem = RowType.from_delimited(iterator)
+        self.next_elem = RowType.from_delimited(iterator, self.header_values)
 
 
 trait ToDelimited:
