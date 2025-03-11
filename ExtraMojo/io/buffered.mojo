@@ -289,7 +289,6 @@ struct BufferedReader:
         Returns:
             The number of bytes read.
         """
-        buffer.clear()
 
         var bytes_read = 0
 
