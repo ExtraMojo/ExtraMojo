@@ -1,0 +1,50 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ExtraMojo – regex</title>
+    <link>https://extramojo.github.io/ExtraMojo/ExtraMojo/regex/</link>
+    <description>Recent content in regex on ExtraMojo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    
+	  <atom:link href="https://extramojo.github.io/ExtraMojo/ExtraMojo/regex/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+      
+        
+      
+    
+    
+    <item>
+      <title>simple_re</title>
+      <link>https://extramojo.github.io/ExtraMojo/ExtraMojo/regex/simple_re/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://extramojo.github.io/ExtraMojo/ExtraMojo/regex/simple_re/</guid>
+      <description>
+        
+        
+        &lt;p&gt;Mojo module &lt;a href=&#34;https://github.com/ExtraMojo/ExtraMojo/blob/main/ExtraMojo/regex/simple_re.mojo&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;🡭&lt;/a&gt;&lt;/p&gt;
+&lt;h1&gt;&lt;code&gt;simple_re&lt;/code&gt;&lt;/h1&gt;&lt;p&gt;A very simple regex implementation in Mojo inspired by Rob Pikes implementation.&lt;/p&gt;
+&lt;h2&gt;References&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;references&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#references&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.cs.princeton.edu/courses/archive/spr09/cos333/beautiful.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://www.cs.princeton.edu/courses/archive/spr09/cos333/beautiful.html&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Aliases&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;aliases&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#aliases&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;START_ANCHOR = ord[::Bool,::Origin[$0]](StringSlice(&amp;quot;^&amp;quot;))&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;END_ANCHOR = ord[::Bool,::Origin[$0]](StringSlice(&amp;quot;$&amp;quot;))&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;DOT = ord[::Bool,::Origin[$0]](StringSlice(&amp;quot;.&amp;quot;))&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;STAR = ord[::Bool,::Origin[$0]](StringSlice(&amp;quot;*&amp;quot;))&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;NULL = 0&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Functions&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;functions&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#functions&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://extramojo.github.io/ExtraMojo/ExtraMojo/regex/simple_re/is_match/&#34; &gt;&lt;code&gt;is_match&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://extramojo.github.io/ExtraMojo/ExtraMojo/regex/simple_re/is_match_bytes/&#34; &gt;&lt;code&gt;is_match_bytes&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+      </description>
+    </item>
+    
+  </channel>
+</rss>
