@@ -47,6 +47,7 @@ fn test_read_until(file: Path, expected_lines: List[String]) raises:
         while reader.read_until(buffer) != 0:
             assert_equal(List(expected_lines[counter].as_bytes()), buffer)
             counter += 1
+            buffer.clear()
 
         assert_equal(counter, len(expected_lines))
         print("Successful read_until with buffer capacity of {}".format(cap[]))
@@ -62,6 +63,7 @@ fn test_read_until_return_trailing(
     while reader.read_until(buffer) != 0:
         assert_equal(List(expected_lines[counter].as_bytes()), buffer)
         counter += 1
+        buffer.clear()
     assert_equal(counter, len(expected_lines))
     print("Successful read_until_return_trailing")
 
@@ -99,6 +101,7 @@ fn test_context_manager_simple(file: Path, expected_lines: List[String]) raises:
         while reader.read_until(buffer) != 0:
             assert_equal(List(expected_lines[counter].as_bytes()), buffer)
             counter += 1
+            buffer.clear()
     assert_equal(counter, len(expected_lines))
     print("Successful read_until")
 

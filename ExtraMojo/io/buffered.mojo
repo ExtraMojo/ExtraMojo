@@ -19,6 +19,7 @@ fn test_read_until(file: String, expected_lines: List[String]) raises:
         while reader.read_until(buffer) != 0:
             assert_equal(List(expected_lines[counter].as_bytes()), buffer)
             counter += 1
+            buffer.clear()
         assert_equal(counter, len(expected_lines))
         print("Successful read_until with buffer capacity of {}".format(cap[]))
 
@@ -281,6 +282,8 @@ struct BufferedReader:
     ) raises -> Int:
         """
         Fill the given `line_buffer` until the given `char` is hit, or EOF.
+
+        **Note**: the callee is responsible for clearing (or not) the buffer between calls to `read_until`.
 
         Args:
             buffer: The buffer to filled with any bytes found before `char` is hit.
