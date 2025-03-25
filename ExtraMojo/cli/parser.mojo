@@ -26,8 +26,7 @@ assert_equal(opts.get_bool("verbose"), True)
 assert_true(len(opts.get_help_message()[]) > 0)
 ```
 """
-from collections import Dict, Optional
-from memory import Span
+from collections import Dict
 from utils import StringSlice
 
 import sys

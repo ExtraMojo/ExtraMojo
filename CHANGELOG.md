@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.12.0
+
+- Support for Mojo v0.25.2.
+
 ## v0.11.0
 
 - Added `OptParser.expect_at_least_n_args` to tell the parser to expect at least some args and raise an error of at least that many aren't found.

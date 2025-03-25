@@ -6,7 +6,7 @@ it should be faster. `memchr` is just vanilla memchr.
 """
 import math
 from bit import count_trailing_zeros
-from memory import Span, pack_bits, UnsafePointer
+from memory import pack_bits, UnsafePointer
 from sys.info import simdwidthof
 
 alias SIMD_U8_WIDTH: Int = simdwidthof[DType.uint8]()
@@ -18,7 +18,6 @@ fn memchr(haystack: Span[UInt8], chr: UInt8, start: Int = 0) -> Int:
     Function to find the next occurrence of character.
 
     ```mojo
-    from memory import Span
     from testing import assert_equal
     from ExtraMojo.bstr.memchr import memchr
 
@@ -87,7 +86,6 @@ fn memchr_wide(haystack: Span[UInt8], chr: UInt8, start: Int = 0) -> Int:
     This function does more unrolling and will be faster if the search if over longer distances. If in doubt use `memchr`.
 
     ```mojo
-    from memory import Span
     from testing import assert_equal
     from ExtraMojo.bstr.memchr import memchr_wide
 

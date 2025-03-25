@@ -1,7 +1,6 @@
 import math
 from algorithm import vectorize
-from collections import Optional
-from memory import Span, UnsafePointer
+from memory import UnsafePointer
 from sys.info import simdwidthof
 
 from ExtraMojo.bstr.memchr import memchr
@@ -291,7 +290,6 @@ struct SplitIterator[is_mutable: Bool, //, origin: Origin[is_mutable]]:
 
     ```
     from collections.string.string_slice import StringSlice
-    from memory import Span
     from testing import assert_equal
     from ExtraMojo.bstr.bstr import SplitIterator
 

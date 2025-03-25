@@ -5,7 +5,6 @@ from ExtraMojo.bstr.bstr import (
     to_ascii_uppercase,
 )
 from ExtraMojo.bstr.memchr import memchr, memchr_wide
-from memory import Span
 from testing import *
 
 

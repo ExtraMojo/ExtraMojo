@@ -45,8 +45,7 @@ fn test_buffered_writer(file: String, expected_lines: List[String]) raises:
 """
 import math
 from algorithm import vectorize
-from collections import Optional
-from memory import Span, UnsafePointer, memcpy
+from memory import UnsafePointer, memcpy
 from sys.info import simdwidthof
 from utils import Writable
 
@@ -312,7 +311,7 @@ struct BufferedReader:
             var line_ptr = buffer.unsafe_ptr().offset(len(buffer))
             memcpy(line_ptr, self.buffer.offset(self.buffer_offset), size)
             # TODO: is there a better way to do this?
-            buffer.size += size
+            buffer._len += size
 
             # Advance our position in our buffer
             self.buffer_offset = newline_index + 1
@@ -414,7 +413,7 @@ struct BufferedWriter[W: MovableWriter](Writer):
                 to_copy.unsafe_ptr(),
                 len(to_copy),
             )
-            self.buffer.size += len(to_copy)
+            self.buffer._len += len(to_copy)
             self.buffer_len += len(to_copy)
             if len(to_copy) == len(b):
                 break

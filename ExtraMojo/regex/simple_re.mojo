@@ -5,7 +5,6 @@ A very simple regex implementation in Mojo inspired by Rob Pikes implementation.
 - https://www.cs.princeton.edu/courses/archive/spr09/cos333/beautiful.html
 """
 from builtin.dtype import DType
-from memory import Span
 
 alias START_ANCHOR = ord("^")
 alias END_ANCHOR = ord("$")

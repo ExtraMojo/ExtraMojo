@@ -7,7 +7,6 @@ Compile-time known fields:
 TODO: this should be two different examples, but the doc parser can't seem to handle that for this example.
 
 ```mojo
-from collections import Optional, Dict
 from collections.string import StringSlice
 from testing import assert_equal
 
@@ -215,8 +214,6 @@ fn test_delim_reader_writer_dicts(file: String) raises:
 
 
 """
-from collections import Optional
-from memory import Span
 from utils import Writer, StringSlice
 
 from ExtraMojo.bstr.bstr import SplitIterator
