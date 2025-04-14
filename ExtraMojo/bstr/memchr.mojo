@@ -13,7 +13,9 @@ alias SIMD_U8_WIDTH: Int = simdwidthof[DType.uint8]()
 
 
 @always_inline("nodebug")
-fn memchr(haystack: Span[UInt8], chr: UInt8, start: Int = 0) -> Int:
+fn memchr[
+    do_alignment: Bool = False
+](haystack: Span[UInt8], chr: UInt8, start: Int = 0) -> Int:
     """
     Function to find the next occurrence of character.
 
@@ -29,6 +31,13 @@ fn memchr(haystack: Span[UInt8], chr: UInt8, start: Int = 0) -> Int:
         chr: The byte to search for.
         start: The starting point to begin the search in `haystack`.
 
+    Parameters:
+        do_alignment: If True this will do an aligning read at the very start of the haystack.
+                      If your haystack is very long, this may provide a marginal benefit. If the haystack is short,
+                      or the needle is frequently in the first `SIMD_U8_WIDTH * 2` bytes, then skipping the
+                      aligning read can be very beneficial since the aligning read check will overlap some
+                      amount with the subsequent aligned read that happens next.
+
     Returns:
         The index of the found character, or -1 if not found.
     """
@@ -40,17 +49,23 @@ fn memchr(haystack: Span[UInt8], chr: UInt8, start: Int = 0) -> Int:
 
     # Do an unaligned initial read, it doesn't matter that this will overlap the next portion
     var ptr = haystack[start:].unsafe_ptr()
-    var v = ptr.load[width=SIMD_U8_WIDTH]()
-    var mask = v == chr
 
-    var packed = pack_bits(mask)
-    if packed:
-        var index = Int(count_trailing_zeros(packed))
-        return index + start
+    var offset = 0
 
-    # Now get the alignment
-    var offset = SIMD_U8_WIDTH - (ptr.__int__() & (SIMD_U8_WIDTH - 1))
-    var aligned_ptr = ptr.offset(offset)
+    @parameter
+    if do_alignment:
+        var v = ptr.load[width=SIMD_U8_WIDTH]()
+        var mask = v == chr
+
+        var packed = pack_bits(mask)
+        if packed:
+            var index = Int(count_trailing_zeros(packed))
+            return index + start
+
+        # Now get the alignment
+        offset = SIMD_U8_WIDTH - (ptr.__int__() & (SIMD_U8_WIDTH - 1))
+        # var aligned_ptr = ptr.offset(offset)
+        ptr = ptr.offset(offset)
 
     # Find the last aligned end
     var haystack_len = len(haystack) - (start + offset)
@@ -60,7 +75,7 @@ fn memchr(haystack: Span[UInt8], chr: UInt8, start: Int = 0) -> Int:
 
     # Now do aligned reads all through
     for s in range(0, aligned_end, SIMD_U8_WIDTH):
-        var v = aligned_ptr.load[width=SIMD_U8_WIDTH](s)
+        var v = ptr.load[width=SIMD_U8_WIDTH](s)
         var mask = v == chr
         var packed = pack_bits(mask)
         if packed:
