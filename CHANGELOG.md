@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.13.0
+
+- Added a `do_alignment` parameter to `memchr` to allow for tuning to scenarios where the needle is near the front of haystacks frequently.
+
 ## v0.12.0
 
 - Support for Mojo v0.25.2.
