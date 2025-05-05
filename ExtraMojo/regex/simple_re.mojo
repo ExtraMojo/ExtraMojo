@@ -10,7 +10,6 @@ alias START_ANCHOR = ord("^")
 alias END_ANCHOR = ord("$")
 alias DOT = ord(".")
 alias STAR = ord("*")
-alias NULL = 0
 
 
 fn is_match(read regexp: String, read text: String) -> Bool:
@@ -70,7 +69,7 @@ fn is_match_bytes(regexp: Span[UInt8], text: Span[UInt8]) -> Bool:
         # Must look even if string is empty
         if _is_match_here(re, txt):
             return True
-        if txt[0] == NULL:
+        if len(txt) == 0:
             break
         txt = txt[1:]
 
@@ -81,13 +80,13 @@ fn _is_match_here(regexp: Span[UInt8], text: Span[UInt8]) -> Bool:
     """
     Search for regexp at beginning of text.
     """
-    if regexp[0] == NULL:
+    if len(regexp) == 0:
         return True
     if regexp[1] == STAR:
         return _is_match_star(regexp[0], regexp[2:], text)
-    if regexp[0] == END_ANCHOR and regexp[1] == NULL:
-        return text[0] == NULL
-    if text[0] != NULL and (regexp[0] == DOT or regexp[0] == text[0]):
+    if regexp[0] == END_ANCHOR and len(regexp) == 1:
+        return len(text) == 0
+    if len(text) > 0 and (regexp[0] == DOT or regexp[0] == text[0]):
         return _is_match_here(regexp[1:], text[1:])
     return False
 
@@ -102,7 +101,7 @@ fn _is_match_star(c: UInt8, regexp: Span[UInt8], text: Span[UInt8]) -> Bool:
         if _is_match_here(regexp, txt):
             return True
 
-        if txt[0] == NULL or (txt[0] != c and c != DOT):
+        if len(txt) == 0 or (txt[0] != c and c != DOT):
             break
         txt = txt[1:]
     return False

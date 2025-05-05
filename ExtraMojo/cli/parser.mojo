@@ -27,7 +27,6 @@ assert_true(len(opts.get_help_message()[]) > 0)
 ```
 """
 from collections import Dict
-from utils import StringSlice
 
 import sys
 
@@ -144,7 +143,7 @@ struct OptValue:
         elif value.lower() == "0":
             return Self(False)
 
-        raise "Attempt to covert invalid bool value of {}".format(value)
+        raise String("Attempt to covert invalid bool value of {}").format(value)
 
     @staticmethod
     fn parse_kind(kind: OptKind, read value: String) raises -> Self:
@@ -220,7 +219,7 @@ struct ParsedOpts:
         ref self,
     ) -> Pointer[String, __origin_of(self.help_msg)]:
         """Get a nicely formatted help string."""
-        return Pointer.address_of(self.help_msg)
+        return Pointer(to=self.help_msg)
 
     fn get_string(read self, read key: String) raises -> String:
         """Try to get the option specified with the given key as a String.
@@ -499,7 +498,7 @@ struct OptParser:
 
         if self.min_num_args_expected:
             if len(result.args) < self.min_num_args_expected.value():
-                raise "Expected >= {} arguments, found {}".format(
+                raise String("Expected >= {} arguments, found {}").format(
                     self.min_num_args_expected.value(),
                     len(result.args),
                 )
@@ -588,12 +587,12 @@ struct SubcommandParser:
     fn get_help_message(read self) raises -> String:
         """Create the help message for the subcommands."""
         var help = String()
-        help.write("{}\n".format(self.name))
-        help.write("\t{}\n\n".format(self.description))
+        help.write(String("{}\n").format(self.name))
+        help.write(String("\t{}\n\n").format(self.description))
         help.write("SUBCOMMANDS:\n")
         for kv in self.commands.items():
             help.write(
-                "\t{}: {}\n".format(
+                String("\t{}: {}\n").format(
                     kv[].key, kv[].value.parser.program_description
                 )
             )

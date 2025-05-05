@@ -9,7 +9,7 @@ from random import random_ui64
 
 
 @value
-struct ReservoirSampler[T: CollectionElement]:
+struct ReservoirSampler[T: Copyable & Movable]:
     """Sample N items from a stream of unknown length.
 
     Sample all the elements, this should retain the order since we always automatically take the first N elements.

@@ -33,12 +33,12 @@ from os.path import dirname, join
 
 @value
 struct Setting:
-    var kind: StringLiteral
-    var ext: StringLiteral
+    var kind: StaticString
+    var ext: StaticString
 
 
 fn dump_ir[
-    Fn: AnyTrivialRegType, //, f: Fn, name: StringLiteral = "out"
+    Fn: AnyTrivialRegType, //, f: Fn, name: StaticString = "out"
 ](dir: String = "/tmp"):
     alias l = List(Setting("llvm", "ll"), Setting("asm", "s"))
     print(compile.get_linkage_name[f]())
@@ -47,10 +47,10 @@ fn dump_ir[
     @parameter
     for i in range(len(l)):
         alias s = l[i]
-        ir = compile._internal_compile_code[f, emission_kind = s.kind]()
+        ir = compile.compile_info[f, emission_kind = s.kind]()
         print("-", full_path := join(dir, name + "." + s.ext))
         try:
             with open(full_path, "w") as f:
-                f.write(String(ir))
+                f.write(ir)
         except e:
             print("error:", e)

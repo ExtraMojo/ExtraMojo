@@ -214,14 +214,14 @@ fn test_delim_reader_writer_dicts(file: String) raises:
 
 
 """
-from utils import Writer, StringSlice
+from utils import Writer
 
 from ExtraMojo.bstr.bstr import SplitIterator
 from ExtraMojo.io import MovableWriter
 from ExtraMojo.io.buffered import BufferedReader, BufferedWriter
 
 
-trait FromDelimited(CollectionElement):
+trait FromDelimited(Copyable & Movable):
     """Create an instance of `Self` from the iterator over `Span[UInt8]` bytes.
     """
 
