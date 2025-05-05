@@ -335,7 +335,11 @@ struct BufferedReader:
             The number of bytes read
         """
         var buf_ptr = self.buffer
-        var bytes_read = self.fh.read(buf_ptr, self.buffer_capacity)
+        var bytes_read = self.fh.read(
+            Span[UInt8, __origin_of(buf_ptr)](
+                ptr=buf_ptr, length=self.buffer_capacity
+            )
+        )
         self.buffer_len = bytes_read.__int__()
         self.buffer_offset = 0
         return self.buffer_len
