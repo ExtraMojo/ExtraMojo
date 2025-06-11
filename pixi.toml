@@ -1,0 +1,20 @@
+[project]
+authors = ["Seth Stadick <sstadick@gmail.com>"]
+channels = [
+    "conda-forge",
+    #"https://conda.modular.com/max",
+    "https://conda.modular.com/max-nightly",
+]
+description = "Useful things that aren't in the standard library."
+name = "ExtraMojo"
+platforms = ["osx-arm64", "linux-64", "linux-aarch64"]
+version = "0.15.0"
+license = "Unlicense OR MIT"
+
+[tasks]
+build = "pixi run mojo package ExtraMojo -o ExtraMojo.mojopkg"
+test = "pixi run mojo test -I . && pixi run mojo run -I . tests/test_file.mojo"
+format = "pixi run mojo format ./"
+
+[dependencies]
+modular = ">25.3.0"

@@ -267,8 +267,9 @@ struct _StartEnd:
     var end: Int
 
 
-@value
-struct SplitIterator[is_mutable: Bool, //, origin: Origin[is_mutable]]:
+struct SplitIterator[is_mutable: Bool, //, origin: Origin[is_mutable]](
+    Copyable, ExplicitlyCopyable, Movable
+):
     """
     Get an iterator the yields the splits from the input `to_split` string.
 

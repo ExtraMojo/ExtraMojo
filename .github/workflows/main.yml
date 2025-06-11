@@ -9,24 +9,24 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Install magic CLI
+    - name: Install pixi CLI
       run: |
-        curl -ssL https://magic.modular.com | bash
-        source /home/runner/.bash_profile 
+        curl -fsSL https://pixi.sh/install.sh | sh
+        export PATH="/home/runner/.pixi/bin:$PATH"
  
     - name: Install mojo and dependencies
       run: |
-        source /home/runner/.bash_profile 
-        magic install --locked
+        export PATH="/home/runner/.pixi/bin:$PATH"
+        pixi install --locked
   
     - name: Run tests
       run: |
-        source /home/runner/.bash_profile 
-        magic run mojo test --validate-doc-strings --sanitize address -I ExtraMojo/ test
-        magic run mojo run -I ExtraMojo/ ./test_file.mojo
+        export PATH="/home/runner/.pixi/bin:$PATH"
+        pixi run mojo test --validate-doc-strings --sanitize address -I .
+        pixi run mojo run -I . ./tests/test_file.mojo
 
     - name: Check formatting
       run: |
-        source /home/runner/.bash_profile 
-        if magic run mojo format ExtraMojo/* 2>&1 | grep -E "reformatted|error|failed" ; then echo "Formatter failed" ; exit 1 ; els; e echo "Formatting OK"; fi
-        if magic run mojo format test_* 2>&1 | grep -E "reformatted|error|failed" ; then echo "Formatter failed" ; exit 1 ; els; e echo "Formatting OK"; fi
+        export PATH="/home/runner/.pixi/bin:$PATH"
+        if pixi run mojo format ExtraMojo/* 2>&1 | grep -E "reformatted|error|failed" ; then echo "Formatter failed" ; exit 1 ; else echo "Formatting OK"; fi
+        if pixi run mojo format tests/* 2>&1 | grep -E "reformatted|error|failed" ; then echo "Formatter failed" ; exit 1 ; else echo "Formatting OK"; fi

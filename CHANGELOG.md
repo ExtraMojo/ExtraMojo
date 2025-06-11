@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v0.15.0
+
+- Support for 0.25.4
+- Removed ir_utils
+
 ## v0.14.0
 
 - Support for 0.25.3

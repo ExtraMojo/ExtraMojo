@@ -46,19 +46,19 @@ fn test_memchr() raises:
             ),
         )
 
-        for kase in cases:
+        for kase, i in cases:
             var index = memchr[do_alignment = check[do_alignment]](
-                kase[][0].as_bytes(), ord("|")
+                kase.as_bytes(), ord("|")
             )
             assert_equal(
                 index,
-                kase[][1],
+                i,
                 "Expected "
-                + String(kase[][1])
+                + String(i)
                 + " Found "
                 + String(index)
                 + " in "
-                + kase[][0],
+                + kase,
             )
 
 
@@ -78,17 +78,12 @@ fn test_memchr_wide() raises:
         ),
     )
 
-    for kase in cases:
-        var index = memchr_wide(kase[][0].as_bytes(), ord("|"))
+    for kase, i in cases:
+        var index = memchr_wide(kase.as_bytes(), ord("|"))
         assert_equal(
             index,
-            kase[][1],
-            "Expected "
-            + String(kase[][1])
-            + " Found "
-            + String(index)
-            + " in "
-            + kase[][0],
+            i,
+            "Expected " + String(i) + " Found " + String(index) + " in " + kase,
         )
 
 

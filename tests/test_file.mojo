@@ -1,7 +1,5 @@
-from collections import Dict
 from pathlib import Path
 from python import Python
-from tensor import Tensor
 from testing import *
 
 from ExtraMojo.bstr.bstr import SplitIterator
@@ -39,7 +37,7 @@ fn test_read_until(file: Path, expected_lines: List[String]) raises:
     var buffer_capacities = List(10, 100, 200, 500)
     for cap in buffer_capacities:
         var fh = open(file, "r")
-        var reader = BufferedReader(fh^, buffer_capacity=cap[])
+        var reader = BufferedReader(fh^, buffer_capacity=cap)
         var buffer = List[UInt8]()
         var counter = 0
         while reader.read_until(buffer) != 0:
@@ -50,7 +48,7 @@ fn test_read_until(file: Path, expected_lines: List[String]) raises:
         assert_equal(counter, len(expected_lines))
         print(
             String("Successful read_until with buffer capacity of {}").format(
-                cap[]
+                cap
             )
         )
 
@@ -79,7 +77,7 @@ fn test_read_bytes(file: Path) raises:
     var found_file = List[UInt8]()
 
     # Read bytes from the buf reader, copy to found
-    var bytes_read = 0
+    var bytes_read: Int
     while True:
         bytes_read = reader.read_bytes(buffer)
         if bytes_read == 0:
@@ -148,7 +146,9 @@ struct SerDerStruct(ToDelimited, FromDelimited):
         read header_values: Optional[List[String]] = None,
     ) raises -> Self:
         var index = Int(StringSlice(unsafe_from_utf8=data.__next__()))
-        var name = String()  # String constructor expected nul terminated byte span
+        var name = (
+            String()
+        )  # String constructor expected nul terminated byte span
         name.write_bytes(data.__next__())
         return Self(index, name)
 
@@ -161,7 +161,7 @@ fn test_delim_reader_writer(file: Path) raises:
         BufferedWriter(open(String(file), "w")), delim="\t", write_header=True
     )
     for item in to_write:
-        writer.serialize(item[])
+        writer.serialize(item)
     writer.flush()
     writer.close()
 
@@ -186,13 +186,13 @@ struct ThinWrapper(ToDelimited, FromDelimited):
     fn write_to_delimited(read self, mut writer: DelimWriter) raises:
         var seen = 1
         for value in self.stuff.values():  # Relying on stable iteration order
-            writer.write_field(value[], is_last=seen == len(self.stuff))
+            writer.write_field(value, is_last=seen == len(self.stuff))
             seen += 1
 
     fn write_header(read self, mut writer: DelimWriter) raises:
         var seen = 1
         for header in self.stuff.keys():  # Relying on stable iteration order
-            writer.write_field(header[], is_last=seen == len(self.stuff))
+            writer.write_field(header, is_last=seen == len(self.stuff))
             seen += 1
 
     @staticmethod
@@ -202,9 +202,7 @@ struct ThinWrapper(ToDelimited, FromDelimited):
     ) raises -> Self:
         var result = Dict[String, Int]()
         for header in header_values.value():
-            result[header[]] = Int(
-                StringSlice(unsafe_from_utf8=data.__next__())
-            )
+            result[header] = Int(StringSlice(unsafe_from_utf8=data.__next__()))
         return Self(result)
 
 
@@ -216,7 +214,7 @@ fn test_delim_reader_writer_dicts(file: Path) raises:
     for i in range(0, 1000):
         var stuff = Dict[String, Int]()
         for header in headers:
-            stuff[header[]] = i
+            stuff[header] = i
         to_write.append(ThinWrapper(stuff))
     var writer = DelimWriter(
         BufferedWriter(open(String(file), "w")),
@@ -224,7 +222,7 @@ fn test_delim_reader_writer_dicts(file: Path) raises:
         write_header=True,
     )
     for item in to_write:
-        writer.serialize(item[])
+        writer.serialize(item)
     writer.flush()
     writer.close()
 
@@ -236,7 +234,7 @@ fn test_delim_reader_writer_dicts(file: Path) raises:
     var count = 0
     for item in reader^:
         for header in headers:
-            assert_equal(to_write[count].stuff[header[]], item.stuff[header[]])
+            assert_equal(to_write[count].stuff[header], item.stuff[header])
         count += 1
     assert_equal(count, len(to_write))
     print("Successful delim_writer")
@@ -272,9 +270,9 @@ fn main() raises:
     var tempfile = Python.import_module("tempfile")
     var tempdir = tempfile.TemporaryDirectory()
     var file = Path(String(tempdir.name)) / "lines.txt"
-    var file_no_trailing_newline = Path(
-        String(tempdir.name)
-    ) / "lines_no_trailing_newline.txt"
+    var file_no_trailing_newline = (
+        Path(String(tempdir.name)) / "lines_no_trailing_newline.txt"
+    )
     var strings = strings_for_writing(10000)
     create_file(String(file), strings)
     create_file_no_trailing_newline(String(file_no_trailing_newline), strings)

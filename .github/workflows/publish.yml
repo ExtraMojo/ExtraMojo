@@ -8,7 +8,7 @@ on:
 # on:  [push, pull_request]
 
 env:
-  MODO_VERSION: 16b8b5d5dcd0dc4953ad1f809751bf234e47a86c # 0.11.1
+  MODO_VERSION: 94f83c7cee0f6b091e38feed53deaea2b38f875b # 0.11.6
   HUGO_VERSION: mojo-lexer # 0.140.2
 
 jobs:
@@ -19,10 +19,10 @@ jobs:
     steps:
       - name: Checkout ExtraMojo
         uses: actions/checkout@v3
-      - name: Install magic CLI
+      - name: Install pixi CLI
         run: |
-          curl -ssL https://magic.modular.com | bash
-          source /home/runner/.bash_profile
+          curl -fsSL https://pixi.sh/install.sh | sh
+          export PATH="/home/runner/.pixi/bin:$PATH"
         
       - name: Setup Go
         uses: actions/setup-go@v3
@@ -65,8 +65,8 @@ jobs:
         
       - name: Run Modo # Includes 'mojo doc' and 'mojo test'
         run: |
-          source /home/runner/.bash_profile
-          magic install --locked
+          export PATH="/home/runner/.pixi/bin:$PATH"
+          pixi install --locked
           ./modo/modo build
       
       - name: Run Hugo

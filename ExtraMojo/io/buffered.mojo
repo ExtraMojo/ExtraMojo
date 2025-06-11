@@ -13,7 +13,7 @@ fn test_read_until(file: String, expected_lines: List[String]) raises:
     var buffer_capacities = List(10, 100, 200, 500)
     for cap in buffer_capacities:
         var fh = open(file, "r")
-        var reader = BufferedReader(fh^, buffer_capacity=cap[])
+        var reader = BufferedReader(fh^, buffer_capacity=cap)
         var buffer = List[UInt8]()
         var counter = 0
         while reader.read_until(buffer) != 0:
@@ -21,7 +21,7 @@ fn test_read_until(file: String, expected_lines: List[String]) raises:
             counter += 1
             buffer.clear()
         assert_equal(counter, len(expected_lines))
-        print("Successful read_until with buffer capacity of {}".format(cap[]))
+        print(String("Successful read_until with buffer capacity of {}").format(cap))
 
 ```
 
@@ -163,7 +163,7 @@ fn get_next_line[
     return buffer[in_start:next_line_pos]
 
 
-struct BufferedReader:
+struct BufferedReader(Movable):
     """
     BufferedReader for readying lines and bytes from a file in a buffered way.
 
@@ -345,7 +345,7 @@ struct BufferedReader:
         return self.buffer_len
 
 
-struct BufferedWriter[W: MovableWriter](Writer):
+struct BufferedWriter[W: MovableWriter](Writer, Movable):
     """A BufferedWriter.
 
     ## Example
@@ -436,7 +436,9 @@ struct BufferedWriter[W: MovableWriter](Writer):
         fn write_arg[T: Writable](arg: T):
             arg.write_to(self)
 
-        args.each[write_arg]()
+        @parameter
+        for i in range(0, args.__len__()):
+            write_arg(args[i])
 
     fn flush(mut self):
         """Write any remaining bytes in the current buffer, then clear the buffer.
