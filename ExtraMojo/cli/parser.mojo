@@ -31,8 +31,7 @@ from collections import Dict
 import sys
 
 
-@value
-struct OptKind:
+struct OptKind(Copyable, Movable, ExplicitlyCopyable, Stringable):
     """The viable types for an option to have."""
 
     var value: UInt8
@@ -63,8 +62,7 @@ struct OptKind:
             return "String"
 
 
-@value
-struct OptValue:
+struct OptValue(Copyable, ExplicitlyCopyable, Movable):
     """When an option is parsed, it's stored as an OptValue.
 
     To get concrete values out of the `ParsedOpts` prefer to use the
@@ -160,8 +158,7 @@ struct OptValue:
             raise "Unsupported OptKind"
 
 
-@value
-struct OptConfig:
+struct OptConfig(Copyable, ExplicitlyCopyable, Movable):
     """Create an option to be added to the `OptParser`."""
 
     var long_name: String
@@ -193,8 +190,7 @@ struct OptConfig:
         self.default_value = default_value
 
 
-@value
-struct ParsedOpts:
+struct ParsedOpts(Copyable, ExplicitlyCopyable, Movable):
     """The parsed CLI options. Access your values with `ParsedOpts.get_string()`, `ParsedOpts.get_int()`, etc.
 
     Access CLI arguments from `ParsedOpts.args`.
@@ -290,8 +286,7 @@ struct ParsedOpts:
         return bool_value.value()
 
 
-@value
-struct OptParser:
+struct OptParser(Copyable, ExplicitlyCopyable, Movable):
     """[`OptParser`] will try to parse your long-form CLI options."""
 
     var options: Dict[String, OptConfig]
@@ -375,15 +370,15 @@ struct OptParser:
 
         help_msg.write("FLAGS:\n")
         for kv in self.options.items():
-            if not kv[].value.is_flag:
+            if not kv.value.is_flag:
                 continue
-            write_arg_msg(help_msg, kv[].value)
+            write_arg_msg(help_msg, kv.value)
 
         help_msg.write("OPTIONS:\n")
         for kv in self.options.items():
-            if kv[].value.is_flag:
+            if kv.value.is_flag:
                 continue
-            write_arg_msg(help_msg, kv[].value)
+            write_arg_msg(help_msg, kv.value)
         # TODO: create a USAGE message if we every add anything about expected ARGS
         return help_msg
 
@@ -421,7 +416,7 @@ struct OptParser:
         # Short circuit if "--help" is found
         var j = 0
         for arg in args:
-            if arg[] == "--help":
+            if arg == "--help":
                 var opt = "help"
                 # Even though help can be overridden, we treat it specially
                 var opt_def = self.options.get("help")
@@ -488,12 +483,12 @@ struct OptParser:
 
         # Fill in any args that haven't been seen with their defaults
         for arg in self.options.items():
-            if not result.options.get(arg[].key):
-                var default = arg[].value.default_value
+            if not result.options.get(arg.key):
+                var default = arg.value.default_value
                 if not default:
-                    raise String.write("No value provided for ", arg[].key)
-                result.options[arg[].key] = OptValue.parse_kind(
-                    arg[].value.value_kind, default.value()
+                    raise String.write("No value provided for ", arg.key)
+                result.options[arg.key] = OptValue.parse_kind(
+                    arg.value.value_kind, default.value()
                 )
 
         if self.min_num_args_expected:
@@ -506,8 +501,7 @@ struct OptParser:
         return result
 
 
-@value
-struct Subcommand(Hashable):
+struct Subcommand(Hashable, Copyable, ExplicitlyCopyable, Movable):
     """A subcommand.
 
     The name of the subcommand is the `OptParser.name`.
@@ -517,7 +511,7 @@ struct Subcommand(Hashable):
 
     var parser: OptParser
 
-    fn __init__(out self, owned name: String, owned parser: OptParser):
+    fn __init__(out self, owned parser: OptParser):
         self.parser = parser^
 
     fn __hash__(read self) -> UInt:
@@ -530,8 +524,7 @@ struct Subcommand(Hashable):
         return not (self == other)
 
 
-@value
-struct SubcommandParser:
+struct SubcommandParser(Copyable, ExplicitlyCopyable, Movable):
     """Subcommands are created by passing in the command, and an `OptParser`.
 
     The parser is for the options for the subcommand.
@@ -593,7 +586,7 @@ struct SubcommandParser:
         for kv in self.commands.items():
             help.write(
                 String("\t{}: {}\n").format(
-                    kv[].key, kv[].value.parser.program_description
+                    kv.key, kv.value.parser.program_description
                 )
             )
 

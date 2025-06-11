@@ -8,8 +8,9 @@ Reservoir sampling on a stream.
 from random import random_ui64
 
 
-@value
-struct ReservoirSampler[T: Copyable & Movable]:
+struct ReservoirSampler[T: Copyable & Movable](
+    Copyable, Movable, ExplicitlyCopyable
+):
     """Sample N items from a stream of unknown length.
 
     Sample all the elements, this should retain the order since we always automatically take the first N elements.
@@ -27,7 +28,7 @@ struct ReservoirSampler[T: Copyable & Movable]:
 
     var items = List(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
     for item in items:
-        sampler.insert(item[])
+        sampler.insert(item)
     assert_equal(sampler.reservoir, items)
     ```
 
@@ -37,7 +38,7 @@ struct ReservoirSampler[T: Copyable & Movable]:
     var sampler = ReservoirSampler[Int](5)
 
     for item in items:
-        sampler.insert(item[])
+        sampler.insert(item)
     assert_equal(len(sampler.reservoir), 5)
     assert_equal(sampler.reservoir, List(0, 9, 2, 3, 7))
     ```
@@ -48,7 +49,7 @@ struct ReservoirSampler[T: Copyable & Movable]:
     var sampler = ReservoirSampler[Int](1)
 
     for item in items:
-        sampler.insert(item[])
+        sampler.insert(item)
     assert_equal(len(sampler.reservoir), 1)
     assert_equal(sampler.reservoir, List(6))
     ```
@@ -58,7 +59,7 @@ struct ReservoirSampler[T: Copyable & Movable]:
     var sampler = ReservoirSampler[Int](11)
 
     for item in items:
-        sampler.insert(item[])
+        sampler.insert(item)
     assert_equal(len(sampler.reservoir), 10)
     assert_equal(sampler.reservoir, items)
     ```
@@ -68,7 +69,7 @@ struct ReservoirSampler[T: Copyable & Movable]:
     var sampler = ReservoirSampler[Int](0)
 
     for item in items:
-        sampler.insert(item[])
+        sampler.insert(item)
     assert_equal(len(sampler.reservoir), 0)
     assert_equal(sampler.reservoir, List[Int]())
     ```

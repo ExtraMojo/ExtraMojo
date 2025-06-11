@@ -47,7 +47,7 @@ templates: [docs/templates]
 pre-run:
   - |
     echo Running 'mojo doc'...
-    magic run mojo doc -o docs/src/ExtraMojo.json ExtraMojo
+    pixi run mojo doc -o docs/src/ExtraMojo.json ExtraMojo
     echo Done.
 
 # Bash scripts to run before build.
@@ -62,7 +62,7 @@ pre-test: []
 post-test:
   - |
     echo Running 'mojo test'...
-    magic run mojo test -I . docs/test
+    pixi run mojo test -I . docs/test
     echo Done.
 
 # Bash scripts to run after build.

@@ -54,7 +54,7 @@ fn test_delim_reader_writer(file: String) raises:
         BufferedWriter(open(String(file), "w")), delim="\t", write_header=True
     )
     for item in to_write:
-        writer.serialize(item[])
+        writer.serialize(item)
     writer.flush()
     writer.close()
 
@@ -96,15 +96,15 @@ struct Score[
         self.assembly_name = assembly_name^
         self.assembly_length = assembly_length
         self.scores = scores^
-        self.truth_lengths = Pointer.address_of(truth_lengths)
-        self.truth_names = Pointer.address_of(truth_names)
+        self.truth_lengths = Pointer(to=truth_lengths)
+        self.truth_names = Pointer(to=truth_names)
 
     fn write_to_delimited(read self, mut writer: DelimWriter) raises:
         writer.write_field(self.assembly_name, is_last=False)
         writer.write_field(self.assembly_length, is_last=False)
         for i in range(0, len(self.scores)):
             writer.write_field(
-                "{}/{}".format(self.scores[i], self.truth_lengths[][i]),
+                String("{}/{}").format(self.scores[i], self.truth_lengths[][i]),
                 is_last=i == len(self.scores) - 1,
             )
 
@@ -137,7 +137,7 @@ fn run_check_scores(opts: ParsedOpts) raises:
     for score in scores:
         out_writer.serialize[
             Score[__origin_of(truth_lengths), __origin_of(truth_names)]
-        ](score[])
+        ](score)
 
     out_writer.flush()
     out_writer.close()
@@ -153,13 +153,13 @@ struct ThinWrapper(ToDelimited, FromDelimited):
     fn write_to_delimited(read self, mut writer: DelimWriter) raises:
         var seen = 1
         for value in self.stuff.values():  # Relying on stable iteration order
-            writer.write_field(value[], is_last=seen == len(self.stuff))
+            writer.write_field(value, is_last=seen == len(self.stuff))
             seen += 1
 
     fn write_header(read self, mut writer: DelimWriter) raises:
         var seen = 1
         for header in self.stuff.keys():  # Relying on stable iteration order
-            writer.write_field(header[], is_last=seen == len(self.stuff))
+            writer.write_field(header, is_last=seen == len(self.stuff))
             seen += 1
 
     @staticmethod
@@ -169,7 +169,7 @@ struct ThinWrapper(ToDelimited, FromDelimited):
     ) raises -> Self:
         var result = Dict[String, Int]()
         for header in header_values.value():
-            result[header[]] = Int(
+            result[header] = Int(
                 StringSlice(unsafe_from_utf8=data.__next__())
             )
         return Self(result)
@@ -183,7 +183,7 @@ fn test_delim_reader_writer_dicts(file: String) raises:
     for i in range(0, 1000):
         var stuff = Dict[String, Int]()
         for header in headers:
-            stuff[header[]] = i
+            stuff[header] = i
         to_write.append(ThinWrapper(stuff))
     var writer = DelimWriter(
         BufferedWriter(open(String(file), "w")),
@@ -191,7 +191,7 @@ fn test_delim_reader_writer_dicts(file: String) raises:
         write_header=True,
     )
     for item in to_write:
-        writer.serialize(item[])
+        writer.serialize(item)
     writer.flush()
     writer.close()
 
@@ -203,16 +203,11 @@ fn test_delim_reader_writer_dicts(file: String) raises:
     var count = 0
     for item in reader^:
         for header in headers:
-            assert_equal(to_write[count].stuff[header[]], item.stuff[header[]])
+            assert_equal(to_write[count].stuff[header], item.stuff[header])
         count += 1
     assert_equal(count, len(to_write))
     print("Successful delim_writer")
 ```
-
-
-
-
-
 """
 from utils import Writer
 
@@ -233,7 +228,7 @@ trait FromDelimited(Copyable & Movable):
         ...
 
 
-struct DelimReader[RowType: FromDelimited]:
+struct DelimReader[RowType: FromDelimited](Movable):
     """Read delimited data that is delimited by a single bytes.
 
     The `RowType` must implement `FromBytes` which is passed an iterator over the split up line.
@@ -338,7 +333,7 @@ trait ToDelimited:
         ...
 
 
-struct DelimWriter[W: MovableWriter]:
+struct DelimWriter[W: MovableWriter](Movable):
     """Write delimited data."""
 
     var delim: String
@@ -398,7 +393,9 @@ struct DelimWriter[W: MovableWriter]:
             else:
                 self.writer.write(self.delim)
 
-        args.each_idx[write_elem]()
+        @parameter
+        for i in range(0, args.__len__()):
+            write_elem[i](args[i])
 
     fn write_field[T: Writable](mut self, column: T, *, is_last: Bool) raises:
         """Write a single field, delimited by the configured delimiter."""
