@@ -1,0 +1,54 @@
+context:
+  version: "0.15.0"
+  max_version: ">25.3"
+
+package:
+  name: "extramojo"
+  version: ${{ version }}
+
+source:
+  # - git: https://github.com/ExtraMojo/ExtraMojo.git
+  #   rev: 3282009a7cad20b77072b1cb930d96ea4bb73668
+  path: .
+  use_gitignore: true
+
+build:
+  number: 0
+  script:
+    - mojo package ExtraMojo -o ${{ PREFIX }}/lib/mojo/ExtraMojo.mojopkg
+requirements:
+  host:
+    - max ${{ max_version }}
+  run:
+    - max ${{ max_version }}
+    # - ${{ pin_compatible('max') }}
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - mojo run -I ${{ PREFIX }}/lib/mojo/ExtraMojo.mojopkg tests/test_file.mojo
+          - mojo test -I ${{ PREFIX }}/lib/mojo/ExtraMojo.mojopkg tests/test_regex.mojo
+          - mojo test -I ${{ PREFIX }}/lib/mojo/ExtraMojo.mojopkg tests/test_bstr.mojo
+    requirements:
+      run:
+        - max ${{ max_version }}
+    files:
+      recipe:
+        - tests/test_file.mojo
+        - tests/test_regex.mojo
+        - tests/test_bstr.mojo
+
+about:
+  homepage: https://github.com/ExtraMojo/ExtraMojo
+  license: "Unlicense OR MIT"
+  license_file:
+    - LICENSE-MIT
+    - UNLICENSE
+  summary: Extra functionality not yet in the standard library, mostly focused on strings and file IO.
+  repository: https://github.com/ExtraMojo/ExtraMojo
+
+extra:
+  maintainers:
+    - sstadick
+  project_name: extramojo
