@@ -552,7 +552,7 @@ def test_bitvec_difference():
 
 def test_bitvec_union_update():
     var bv1 = BitVec(length=12, fill=False)
-    for i in [2, 4, 6, 8, 10, 12]:
+    for i in [2, 4, 6, 8, 10, 11]:
         bv1.set(i)
     var bv2 = BitVec(length=10, fill=False)
     for i in [1, 3, 5, 7, 9]:
@@ -586,7 +586,7 @@ def test_bitvec_union_update():
 
 def test_bitvec_intersection_update():
     var bv1 = BitVec(length=12, fill=False)
-    for i in [2, 3, 6, 8, 10, 12]:
+    for i in [2, 3, 6, 8, 10, 11]:
         bv1.set(i)
     var bv2 = BitVec(length=10, fill=False)
     for i in [1, 3, 5, 7, 9]:
@@ -620,7 +620,7 @@ def test_bitvec_intersection_update():
 
 def test_bitvec_difference_update():
     var bv1 = BitVec(length=12, fill=False)
-    for i in [2, 3, 6, 8, 10, 12]:
+    for i in [2, 3, 6, 8, 10, 11]:
         bv1.set(i)
     var bv2 = BitVec(length=10, fill=False)
     for i in [1, 3, 5, 7, 9]:
@@ -717,6 +717,7 @@ def test_bitvec_adhoc():
     either |= ts
     assert_equal(either.count_set_bits(), 26)
     assert_equal(none.count_set_bits() + either.count_set_bits(), len(example))
+    assert_true(periods != spaces)
 
     var test = either & none
     assert_equal(test.count_set_bits(), 0)
@@ -730,6 +731,21 @@ def test_bitvec_adhoc():
     assert_equal(either.count_set_bits(), 26)
     test = either - ts
     assert_equal(test.count_set_bits(), 24)
+
+
+def test_bitvec_equal():
+    var bv1 = BitVec(length=65, fill=False)
+    var bv2 = BitVec(length=65, fill=False)
+    bv1.set(64)
+    bv2.set(64)
+
+    assert_true(bv1 == bv2)
+
+    var bv3 = BitVec(length=65, fill=False)
+    var bv4 = BitVec(length=65, fill=False)
+    bv3.set(64)
+
+    assert_true(bv3 != bv4)
 
 
 def main():

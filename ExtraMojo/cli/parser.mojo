@@ -31,7 +31,7 @@ from collections import Dict
 import sys
 
 
-struct OptKind(Copyable, Movable, ExplicitlyCopyable, Stringable):
+struct OptKind(Copyable, ExplicitlyCopyable, Movable, Stringable):
     """The viable types for an option to have."""
 
     var value: UInt8
@@ -501,7 +501,7 @@ struct OptParser(Copyable, ExplicitlyCopyable, Movable):
         return result
 
 
-struct Subcommand(Hashable, Copyable, ExplicitlyCopyable, Movable):
+struct Subcommand(Copyable, ExplicitlyCopyable, Hashable, Movable):
     """A subcommand.
 
     The name of the subcommand is the `OptParser.name`.
