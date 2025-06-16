@@ -5,7 +5,7 @@
 - Support for 0.25.4
 - Removed ir_utils
 - Added bitvec
-
+- Remove regex lib
 ## v0.14.0
 
 - Support for 0.25.3
