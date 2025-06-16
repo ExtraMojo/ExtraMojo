@@ -18,7 +18,7 @@ Example:
 from algorithm import vectorize
 from bit import log2_floor, pop_count
 from math import ceildiv
-from memory import UnsafePointer, memcpy, memset, memset_zero
+from memory import UnsafePointer, pack_bits, memcpy, memset, memset_zero
 from os import abort
 from sys.info import is_gpu, simdwidthof
 
@@ -368,6 +368,39 @@ struct BitVec(Boolable, ExplicitlyCopyable, Movable, Sized):
     fn __iand__(mut self, read other: Self):
         self.intersection_update(other)
 
+    fn __eq__(read self, read other: Self) -> Bool:
+        alias width = simdwidthof[Scalar[self.WORD_DTYPE]]()
+
+        if len(self) != len(other):
+            return False
+
+        var equal = True
+
+        @parameter
+        @always_inline
+        fn equality[simd_width: Int](offset: Int):
+            # TODO: is there a better way to skip this work?
+            if equal:
+                var lhs = SIMD[self.WORD_DTYPE, simd_width]()
+                var rhs = SIMD[self.WORD_DTYPE, simd_width]()
+
+                equal = Bool(Scalar[self.WORD_DTYPE](pack_bits(lhs == rhs)))
+
+        # Leave the last word off to handle specially
+        var words = _elts[self.WORD_DTYPE](len(self))
+        vectorize[equality, width](words - 1)
+
+        if equal:
+            var mask = len(self) % self.WORD_DTYPE.bitwidth()
+            equal = (self.data[words - 1] & mask) == (
+                other.data[words - 1] & mask
+            )
+
+        return equal
+
+    fn __ne__(read self, read other: Self) -> Bool:
+        return not (self == other)
+
     # --------------------------------------------------------------------- #
     # Methods
     # --------------------------------------------------------------------- #
@@ -521,8 +554,9 @@ struct BitVec(Boolable, ExplicitlyCopyable, Movable, Sized):
         debug_assert(
             not self.is_empty(), "Called `pop_back` on an empty BitVec"
         )
+        var ret = self[self._len - 1]
         self._len -= 1
-        return self[self._len]
+        return ret
 
     @always_inline
     fn count_set_bits(read self) -> UInt:

@@ -345,7 +345,7 @@ struct BufferedReader(Movable):
         return self.buffer_len
 
 
-struct BufferedWriter[W: MovableWriter](Writer, Movable):
+struct BufferedWriter[W: MovableWriter](Movable, Writer):
     """A BufferedWriter.
 
     ## Example

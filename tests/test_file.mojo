@@ -130,7 +130,7 @@ fn test_for_each_line(file: Path, expected_lines: List[String]) raises:
 
 
 @value
-struct SerDerStruct(ToDelimited, FromDelimited):
+struct SerDerStruct(FromDelimited, ToDelimited):
     var index: Int
     var name: String
 
@@ -180,7 +180,7 @@ fn test_delim_reader_writer(file: Path) raises:
 
 
 @value
-struct ThinWrapper(ToDelimited, FromDelimited):
+struct ThinWrapper(FromDelimited, ToDelimited):
     var stuff: Dict[String, Int]
 
     fn write_to_delimited(read self, mut writer: DelimWriter) raises:

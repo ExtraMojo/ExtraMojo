@@ -9,7 +9,7 @@ from random import random_ui64
 
 
 struct ReservoirSampler[T: Copyable & Movable](
-    Copyable, Movable, ExplicitlyCopyable
+    Copyable, ExplicitlyCopyable, Movable
 ):
     """Sample N items from a stream of unknown length.
 
