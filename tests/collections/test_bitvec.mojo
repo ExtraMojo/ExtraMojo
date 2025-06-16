@@ -717,6 +717,7 @@ def test_bitvec_adhoc():
     either |= ts
     assert_equal(either.count_set_bits(), 26)
     assert_equal(none.count_set_bits() + either.count_set_bits(), len(example))
+    assert_true(periods != spaces)
 
     var test = either & none
     assert_equal(test.count_set_bits(), 0)
@@ -730,6 +731,21 @@ def test_bitvec_adhoc():
     assert_equal(either.count_set_bits(), 26)
     test = either - ts
     assert_equal(test.count_set_bits(), 24)
+
+
+def test_bitvec_equal():
+    var bv1 = BitVec(length=65, fill=False)
+    var bv2 = BitVec(length=65, fill=False)
+    bv1.set(64)
+    bv2.set(64)
+
+    assert_true(bv1 == bv2)
+
+    var bv3 = BitVec(length=65, fill=False)
+    var bv4 = BitVec(length=65, fill=False)
+    bv3.set(64)
+
+    assert_true(bv3 != bv4)
 
 
 def main():

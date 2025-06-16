@@ -258,9 +258,9 @@ fn find(haystack: Span[UInt8], needle: Span[UInt8]) -> Optional[Int]:
     return None
 
 
-@value
+@fieldwise_init
 @register_passable
-struct _StartEnd:
+struct _StartEnd(Copyable, Movable):
     """Helper struct for tracking start/end coords in `SplitIterator`"""
 
     var start: Int
