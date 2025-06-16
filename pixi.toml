@@ -25,7 +25,11 @@ rattler-build = "*"
 [tasks]
 # Dev tasks 
 build = "pixi run mojo package ExtraMojo -o ExtraMojo.mojopkg"
-test = "pixi run mojo test -I . && pixi run mojo run -I . tests/test_file.mojo"
+r = { cmd = "pixi run mojo run -I . " }
+t = { cmd = "pixi run mojo test -I ." }
+test = { cmd = "pixi run mojo run -I . tests/test_file.mojo", depends-on = [
+    "t",
+] }
 format = "pixi run mojo format ./"
 
 # rattler-build tasks

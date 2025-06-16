@@ -4,6 +4,7 @@
 
 - Support for 0.25.4
 - Removed ir_utils
+- Added bitvec
 
 ## v0.14.0
 
