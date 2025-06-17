@@ -425,10 +425,14 @@ struct BitVec(Boolable, ExplicitlyCopyable, Movable, Sized):
     fn clear(mut self):
         """Clear the BitVec.
 
-        This sets the length to 0, and all bits to false.
+        This sets the length to 0.
         """
-        memset_zero(self.data, self._capacity)
         self._len = 0
+
+    @always_inline
+    fn zero_all(mut self):
+        """Set all bits to zero."""
+        memset_zero(self.data, _elts[self.WORD_DTYPE](self._len))
 
     @always_inline
     fn set_and_check(mut self, idx: UInt) -> Bool:

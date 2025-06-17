@@ -94,7 +94,6 @@ def test_bitvec_clear():
     assert_true(bv.data[1] != 0)
     assert_true(len(bv) == 514)
     bv.clear()
-    assert_true(bv.data[1] == 0)
     assert_true(len(bv) == 0)
 
 
