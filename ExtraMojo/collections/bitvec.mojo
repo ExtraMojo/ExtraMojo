@@ -73,7 +73,7 @@ fn _bit_mask[dtype: DType](idx: UInt) -> Scalar[dtype]:
     return Scalar[dtype](1) << Scalar[dtype]((idx & (_WORD_BITS - 1)))
 
 
-struct BitVec(Boolable, ExplicitlyCopyable, Movable, Sized):
+struct BitVec(Boolable, Copyable, ExplicitlyCopyable, Movable, Sized):
     """A growable bitfield.
 
     This uses one bit per bool for storage.
