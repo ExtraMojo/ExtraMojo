@@ -212,7 +212,6 @@ fn test_delim_reader_writer_dicts(file: String) raises:
 from utils import Writer
 
 from ExtraMojo.bstr.bstr import SplitIterator
-from ExtraMojo.io import MovableWriter
 from ExtraMojo.io.buffered import BufferedReader, BufferedWriter
 
 
@@ -333,7 +332,7 @@ trait ToDelimited:
         ...
 
 
-struct DelimWriter[W: MovableWriter](Movable):
+struct DelimWriter[W: Movable & Writer](Movable):
     """Write delimited data."""
 
     var delim: String

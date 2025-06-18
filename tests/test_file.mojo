@@ -129,8 +129,8 @@ fn test_for_each_line(file: Path, expected_lines: List[String]) raises:
     print("Successful for_each_line")
 
 
-@value
-struct SerDerStruct(FromDelimited, ToDelimited):
+@fieldwise_init
+struct SerDerStruct(Copyable, FromDelimited, Movable, ToDelimited):
     var index: Int
     var name: String
 
@@ -179,8 +179,8 @@ fn test_delim_reader_writer(file: Path) raises:
     print("Successful delim_writer")
 
 
-@value
-struct ThinWrapper(FromDelimited, ToDelimited):
+@fieldwise_init
+struct ThinWrapper(Copyable, FromDelimited, ToDelimited):
     var stuff: Dict[String, Int]
 
     fn write_to_delimited(read self, mut writer: DelimWriter) raises:
