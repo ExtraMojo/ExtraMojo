@@ -9,6 +9,64 @@ def test_bitvec_from_list_literal():
     assert_equal(bv.count_set_bits(), 3)
 
 
+@fieldwise_init
+struct RankTestCase(Copyable, Movable):
+    var pos: UInt
+    var expected: UInt
+
+
+def test_bitvec_count_set_bits():
+    var bv = BitVec(length=1500, fill=False)
+    bv.set(1000)
+    bv.set(1025)
+    assert_equal(bv.count_set_bits(), 2)
+    assert_equal(bv.rank(1024), 1)
+    assert_equal(bv.rank(1025), 1)
+    assert_equal(bv.rank(1026), 2)  # fails here <-
+
+    var bv1 = BitVec(length=65, fill=True)
+    assert_equal(bv1._capacity, 2)
+    var bit_offset = bv1._len % bv.WORD_DTYPE.bitwidth()
+    assert_equal(bit_offset, 1)
+    var mask = (1 << bit_offset) - 1
+    assert_equal(mask, 1)
+    assert_equal(mask & UInt64.MAX, 1)
+    assert_equal(
+        bv1.data[1],
+        1,
+        String("data: {}, mask {}").format(bin(bv1.data[1]), bin(mask)),
+    )
+    assert_equal(bv1.count_set_bits(), 65)
+
+    var bv3 = BitVec(length=128, fill=False)
+    bv3.set(0)
+    bv3.set(1)
+    bv3.set(2)
+    bv3.set(64)
+    bv3.set(65)
+    bv3.set(127)
+    var cases: List[RankTestCase] = [
+        {0, 0},
+        {1, 1},
+        {2, 2},
+        {3, 3},
+        {63, 3},
+        {64, 3},
+        {65, 4},
+        {66, 5},
+        {127, 5},
+    ]
+    for kase in cases:
+        var got = bv3.rank(kase.pos)
+        assert_equal(
+            got,
+            kase.expected,
+            String("for {}, got {}, expected {}").format(
+                kase.pos, got, kase.expected
+            ),
+        )
+
+
 def test_bitvec_init_with_capacity():
     var bv = BitVec(capacity=1024)
     assert_equal(bv.capacity(), 1024)
@@ -33,8 +91,9 @@ def test_bitvec_init_length_fill_true():
     var bv = BitVec(length=65, fill=True)
     assert_equal(len(bv), 65)
 
-    for i in range(0, bv.word_len()):
+    for i in range(0, bv.word_len() - 1):
         assert_equal(bv.data[i], ~0)
+    assert_equal(bv.data[bv.word_len() - 1], 1)
 
     var last_bits = 65 % bv.WORD_DTYPE.bitwidth()
     var mask = (1 << last_bits) - 1
@@ -69,8 +128,9 @@ def test_bitvec_resize_grow_fill_true():
     assert_true((bv.data[0] & upper_mask) == upper_mask)
 
     # Check new words are set to 0xFFFFFFFF
-    for i in range(1, bv.word_len()):
+    for i in range(1, bv.word_len() - 1):
         assert_equal(bv.data[i], ~0)
+    assert_true(bv.data[bv.word_len() - 1] != ~0)
 
 
 def test_bitvec_resize_shrink():
@@ -749,6 +809,7 @@ def test_bitvec_equal():
 
 def main():
     test_bitvec_from_list_literal()
+    test_bitvec_count_set_bits()
     test_bitvec_init_with_capacity()
     test_bitvec_capacity_alignment()
     test_bitvec_init_length_fill_false()

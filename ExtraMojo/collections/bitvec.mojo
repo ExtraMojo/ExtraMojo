@@ -73,7 +73,7 @@ fn _bit_mask[dtype: DType](idx: UInt) -> Scalar[dtype]:
     return Scalar[dtype](1) << Scalar[dtype]((idx & (_WORD_BITS - 1)))
 
 
-struct BitVec(Boolable, Copyable, ExplicitlyCopyable, Movable, Sized):
+struct BitVec(Boolable, Copyable, ExplicitlyCopyable, Movable, Sized, Writable):
     """A growable bitfield.
 
     This uses one bit per bool for storage.
@@ -115,6 +115,7 @@ struct BitVec(Boolable, Copyable, ExplicitlyCopyable, Movable, Sized):
             self.data = UnsafePointer[
                 self.WORD, alignment = self.WORD_BYTEWIDTH
             ].alloc(word_cap)
+            memset_zero(self.data, word_cap)
         else:
             self.data = UnsafePointer[
                 self.WORD, alignment = self.WORD_BYTEWIDTH
@@ -156,16 +157,15 @@ struct BitVec(Boolable, Copyable, ExplicitlyCopyable, Movable, Sized):
         for i in range(0, len(elements)):
             self.append(elements[i])
 
-        self._len = len(elements)
-
     # --------------------------------------------------------------------- #
     # Lifecycle methods
     # --------------------------------------------------------------------- #
 
     @always_inline
     fn copy(self) -> Self:
-        var copy = Self(capacity=self._capacity)
-        memcpy(copy.data, self.data, len(self))
+        var copy = Self(capacity=self._len)
+        memcpy(copy.data, self.data, self._capacity)
+        copy._len = self._len
         return copy^
 
     @always_inline
@@ -229,9 +229,11 @@ struct BitVec(Boolable, Copyable, ExplicitlyCopyable, Movable, Sized):
         var new_data = UnsafePointer[
             self.WORD, alignment = self.WORD_BYTEWIDTH
         ].alloc(new_capacity)
-        memcpy(
-            new_data, self.data, ceildiv(self._len, self.WORD_DTYPE.bitwidth())
+        var current_words = _elts[self.WORD_DTYPE](self._len)
+        memset_zero(
+            new_data.offset(current_words), new_capacity - current_words
         )
+        memcpy(new_data, self.data, current_words)
 
         if self.data:
             self.data.free()
@@ -272,6 +274,13 @@ struct BitVec(Boolable, Copyable, ExplicitlyCopyable, Movable, Sized):
             else:
                 # Clear upper bits
                 self.data[old_words - 1] &= mask
+
+        # Set the bits in the last word
+        bit_offset = new_size % self.WORD_DTYPE.bitwidth()
+        if bit_offset != 0 and fill:
+            var mask = (1 << bit_offset) - 1
+            # clear upper bits
+            self.data[self._capacity - 1] &= mask
         self._len = new_size
 
     @always_inline
@@ -563,8 +572,14 @@ struct BitVec(Boolable, Copyable, ExplicitlyCopyable, Movable, Sized):
         return ret
 
     @always_inline
-    fn count_set_bits(read self) -> UInt:
-        """Count the total number of set bits."""
+    fn _count_set_bits(read self, *, up_to: UInt) -> UInt:
+        """Count the total number of set bits where index < up_to.
+
+        Args:
+            up_to: The index to count up to. This index is not included in the count.
+        """
+        # Plus one on the check here because this is an exclusive range
+        _check_index_bounds["count_set_bits"](up_to, self._len + 1)
         alias width = simdwidthof[Scalar[Self.WORD_DTYPE]]()
         var total = 0
 
@@ -574,8 +589,41 @@ struct BitVec(Boolable, Copyable, ExplicitlyCopyable, Movable, Sized):
             var vec = self.data.offset(offset).load[width=simd_width]()
             total += Int(pop_count(vec).reduce_add())
 
-        vectorize[count, width](Int(self._capacity))
+        var num_words = _elts[self.WORD_DTYPE](up_to)
+        if num_words == 0:
+            return 0
+
+        vectorize[count, width](num_words - 1)
+
+        # Now add in the last bits
+        var bit_offset = up_to % self.WORD_DTYPE.bitwidth()
+        if bit_offset != 0:
+            var mask = (1 << bit_offset) - 1
+            total += Int(pop_count(mask & self.data[num_words - 1]))
+        else:
+            # We count everything in the word
+            total += Int(pop_count(self.data[num_words - 1]))
         return total
+
+    @always_inline
+    fn count_set_bits(read self) -> UInt:
+        """Count the total number of set bits."""
+        return self._count_set_bits(up_to=len(self))
+
+    @always_inline
+    fn rank(read self, bit_idx: UInt) -> UInt:
+        """Count the total number of set bits up to (but not including) `bit_idx`.
+
+        Args:
+            bit_idx: Index to get the rank for.
+
+        TODO: implement another struct that builds a rank/select index.
+        # References:
+
+        - https://rob-p.github.io/CMSC858D/static_files/presentations/CMSC858D-Lec08.pdf
+
+        """
+        return self._count_set_bits(up_to=bit_idx)
 
     @always_inline
     fn count_clear_bits(read self) -> UInt:
@@ -958,3 +1006,11 @@ struct BitVec(Boolable, Copyable, ExplicitlyCopyable, Movable, Sized):
             left &= ~right
 
         return Self._mut_vectorize_apply[_difference, False](self, other)
+
+    fn write_to[W: Writer](read self, mut writer: W):
+        writer.write(
+            "BitVec{length=", len(self), " ,words=", self.word_len(), "}\n\t"
+        )
+        for i in range(0, len(self)):
+            writer.write(Int(self[i]))
+        writer.write("\n")

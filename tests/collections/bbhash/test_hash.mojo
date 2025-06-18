@@ -1,8 +1,8 @@
 from ExtraMojo.collections.bbhash.hash import (
-    hash64,
-    level_hash,
-    key_hash,
-    hash,
+    _hash64,
+    _level_hash,
+    _key_hash,
+    _level_key_hash,
     fnv1a,
 )
 
@@ -59,7 +59,7 @@ struct HashCases(Copyable, Movable):
 
 def test_hash64():
     for kase in HashCases.hash64_cases():
-        var got = hash64(0, kase.key.as_bytes())
+        var got = _hash64(0, kase.key.as_bytes())
         assert_equal(got, kase.want, "hash64: Mismatch for key: " + kase.key)
 
 
@@ -71,10 +71,10 @@ def test_fnv1a():
 
 def test_hash():
     for lvl in range(0, 5):
-        var lvl_hash = level_hash(UInt64(lvl))
+        var lvl_hash = _level_hash(UInt64(lvl))
         for key in range(0, 5):
-            var slow_hash = hash(lvl, key)
-            var fast_hash = key_hash(lvl_hash, key)
+            var slow_hash = _level_key_hash(lvl, key)
+            var fast_hash = _key_hash(lvl_hash, key)
             assert_equal(
                 slow_hash,
                 fast_hash,

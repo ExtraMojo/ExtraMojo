@@ -6,6 +6,8 @@
 - Removed ir_utils
 - Added bitvec
 - Remove regex lib
+- Added bbhash
+
 ## v0.14.0
 
 - Support for 0.25.3
