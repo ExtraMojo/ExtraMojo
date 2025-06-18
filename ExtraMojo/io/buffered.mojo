@@ -50,7 +50,6 @@ from sys.info import simdwidthof
 from utils import Writable
 
 
-from ExtraMojo.io import MovableWriter
 from ExtraMojo.bstr.bstr import (
     find_chr_all_occurrences,
 )
@@ -345,7 +344,7 @@ struct BufferedReader(Movable):
         return self.buffer_len
 
 
-struct BufferedWriter[W: MovableWriter](Movable, Writer):
+struct BufferedWriter[W: Movable & Writer](Movable, Writer):
     """A BufferedWriter.
 
     ## Example
