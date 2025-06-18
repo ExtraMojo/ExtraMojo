@@ -109,6 +109,7 @@ struct BBHash:
     # TODO: use wyhash instead of builtin hash / fnv1a, compare them all
     # TODO: switch to fastmod from lemiere?
     # TODO: add the parallel version on the bitvec of atomics
+    # TODO: add a rank-index to bitvecs
     fn _compute[
         K: Copyable & Movable & Hashable
     ](mut self, owned keys: List[K], owned gamma: Float64):

@@ -211,7 +211,7 @@ struct BitVec(Boolable, Copyable, ExplicitlyCopyable, Movable, Sized, Writable):
 
     @always_inline
     fn __bool__(self) -> Bool:
-        """Checks if the bitset is non-empty (contains at least one value).
+        """Checks if the `BitVec` is non-empty (contains at least one value).
 
         Equivalent to `len(self) != 0` or `not self.is_empty()`.
 
@@ -355,29 +355,131 @@ struct BitVec(Boolable, Copyable, ExplicitlyCopyable, Movable, Sized, Writable):
 
     @always_inline
     fn __or__(read self, read other: Self) -> Self:
+        """Returns a new `BitVec` that is the union of `self` and `other`.
+
+        ```
+        A: 0 0 1 1 1 1 1 0
+        B: 1 1 1 0 0
+        |: 1 1 1 1 1 1 1 0
+        ```
+
+        Args:
+            other: The `BitVec` to union with.
+
+        Returns:
+            A new `BitVec` containing all elements from both sets.
+        """
         return self.union(other)
 
     @always_inline
     fn __ior__(mut self, read other: Self):
+        """Modifies `self` to be the union of `self` and `other`.
+
+        ```
+        A: 0 0 1 1 1 1 1 0
+        B: 1 1 1 0 0
+        |= 1 1 1 1 1 1 1 0
+        ```
+
+        If `len(self)`  < `len(other)`, `self` will be resized to match
+        the size of `other` by filling with `0`s
+
+        Args:
+            other: The `BitVec` to union with.
+
+        Notes:
+            This retains `self`s length.
+        """
         self.union_update(other)
 
     @always_inline
     fn __sub__(read self, read other: Self) -> Self:
+        """Returns a new `BitVec` that is the difference of `self` and `other`.
+
+        ```
+        A: 0 0 1 1 1 1 1 0
+        B: 1 1 1 0 0
+        -: 0 0 0 1 1 1 1 0
+        ```
+
+        Args:
+            other: The `BitVec` to subtract from `self`.
+
+        Returns:
+            A new `BitVec` containing elements from `self` that are not in `other`.
+        """
         return self.difference(other)
 
     @always_inline
     fn __isub__(mut self, read other: Self):
+        """Modifies `self` to be the difference of `self` and `other`.
+
+        ```
+        A: 0 0 1 1 1 1 1 0
+        B: 1 1 1 0 0
+        -= 0 0 0 1 1 1 1 0
+        ```
+
+        If `len(self)`  < `len(other)`, `self` will be resized to match
+        the size of `other` by filling with `0`s.
+
+        Args:
+            other: The `BitVec` to subtract from `self`.
+
+        Notes:
+            This retains `self`s length.
+        """
         self.difference_update(other)
 
     @always_inline
     fn __and__(read self, read other: Self) -> Self:
+        """Returns a new `BitVec` that is the intersection of `self` and `other`.
+
+        ```
+        A: 0 0 1 1 1 1 1 0
+        B: 1 1 1 0 0
+        &: 0 0 1 0 0 0 0 0
+        ```
+
+        Args:
+            other: The `BitVec` to intersect with.
+
+        Returns:
+            A new `BitVec` containing only the elements present in both sets.
+        """
         return self.intersection(other)
 
     @always_inline
     fn __iand__(mut self, read other: Self):
+        """Modifies `self` to be the intersection of `self` and `other`.
+
+        ```
+        A: 0 0 1 1 1 1 1 0
+        B: 1 1 1 0 0
+        &= 0 0 1 0 0 0 0 0
+        ```
+
+        If `len(self)`  < `len(other)`, `self` will be resized to match
+        the size of `other` by filling with `0`s.
+
+        Args:
+            other: The `BitVec` to intersect with.
+
+        Notes:
+            This retains `self`s length.
+        """
         self.intersection_update(other)
 
     fn __eq__(read self, read other: Self) -> Bool:
+        """Check the equality of `self` and `other`.
+
+        Args:
+            other: The `BitVec` to compare against.
+
+        Returns:
+            True if equal, False otherwise.
+        """
+
         alias width = simdwidthof[Scalar[self.WORD_DTYPE]]()
 
         if len(self) != len(other):
@@ -408,6 +510,14 @@ struct BitVec(Boolable, Copyable, ExplicitlyCopyable, Movable, Sized, Writable):
         return equal
 
     fn __ne__(read self, read other: Self) -> Bool:
+        """Check the equality of `self` and `other`.
+
+        Args:
+            other: The `BitVec` to compare against.
+
+        Returns:
+            True if not equal, False otherwise.
+        """
         return not (self == other)
 
     # --------------------------------------------------------------------- #
@@ -683,11 +793,11 @@ struct BitVec(Boolable, Copyable, ExplicitlyCopyable, Movable, Sized, Writable):
         @parameter
         @always_inline
         fn _intersect[simd_width: Int](offset: Int):
-            # Initialize SIMD vectors to hold multiple words from each bitset
+            # Initialize SIMD vectors to hold multiple words from each `BitVec`
             var left_vec = SIMD[Self.WORD_DTYPE, simd_width]()
             var right_vec = SIMD[Self.WORD_DTYPE, simd_width]()
 
-            # Load a batch of words from both bitsets into SIMD vectors
+            # Load a batch of words from both `BitVec`s into SIMD vectors
             left_vec = left.data.offset(offset).load[width=simd_width]()
             right_vec = right.data.offset(offset).load[width=simd_width]()
 
@@ -695,7 +805,7 @@ struct BitVec(Boolable, Copyable, ExplicitlyCopyable, Movable, Sized, Writable):
             # vectors
             var result_vec = func(left_vec, right_vec)
 
-            # Store the results back into the result bitset
+            # Store the results back into the result `BitVec`
             res.data.offset(offset).store[width=simd_width](result_vec)
 
         var lhs_len = _elts[Self.WORD_DTYPE](len(left))
@@ -736,7 +846,7 @@ struct BitVec(Boolable, Copyable, ExplicitlyCopyable, Movable, Sized, Writable):
         return res^
 
     fn union(self, other: Self) -> Self:
-        """Returns a new bitset that is the union of `self` and `other`.
+        """Returns a new `BitVec` that is the union of `self` and `other`.
 
         ```
         A: 0 0 1 1 1 1 1 0
@@ -745,10 +855,10 @@ struct BitVec(Boolable, Copyable, ExplicitlyCopyable, Movable, Sized, Writable):
         ```
 
         Args:
-            other: The bitset to union with.
+            other: The `BitVec` to union with.
 
         Returns:
-            A new bitset containing all elements from both sets.
+            A new `BitVec` containing all elements from both sets.
         """
 
         @parameter
@@ -767,7 +877,7 @@ struct BitVec(Boolable, Copyable, ExplicitlyCopyable, Movable, Sized, Writable):
             return Self._vectorize_apply[_union, False](other, self)
 
     fn intersection(self, other: Self) -> Self:
-        """Returns a new bitset that is the intersection of `self` and `other`.
+        """Returns a new `BitVec` that is the intersection of `self` and `other`.
 
         ```
         A: 0 0 1 1 1 1 1 0
@@ -776,10 +886,10 @@ struct BitVec(Boolable, Copyable, ExplicitlyCopyable, Movable, Sized, Writable):
         ```
 
         Args:
-            other: The bitset to intersect with.
+            other: The `BitVec` to intersect with.
 
         Returns:
-            A new bitset containing only the elements present in both sets.
+            A new `BitVec` containing only the elements present in both sets.
         """
 
         @parameter
@@ -798,7 +908,7 @@ struct BitVec(Boolable, Copyable, ExplicitlyCopyable, Movable, Sized, Writable):
             return Self._vectorize_apply[_intersection, True](other, self)
 
     fn difference(self, other: Self) -> Self:
-        """Returns a new bitset that is the difference of `self` and `other`.
+        """Returns a new `BitVec` that is the difference of `self` and `other`.
 
         ```
         A: 0 0 1 1 1 1 1 0
@@ -807,10 +917,10 @@ struct BitVec(Boolable, Copyable, ExplicitlyCopyable, Movable, Sized, Writable):
         ```
 
         Args:
-            other: The bitset to subtract from `self`.
+            other: The `BitVec` to subtract from `self`.
 
         Returns:
-            A new bitset containing elements from `self` that are not in `other`.
+            A new `BitVec` containing elements from `self` that are not in `other`.
         """
 
         @parameter
@@ -872,11 +982,11 @@ struct BitVec(Boolable, Copyable, ExplicitlyCopyable, Movable, Sized, Writable):
         @parameter
         @always_inline
         fn _intersect[simd_width: Int](offset: Int):
-            # Initialize SIMD vectors to hold multiple words from each bitset
+            # Initialize SIMD vectors to hold multiple words from each `BitVec`
             var left_vec = SIMD[Self.WORD_DTYPE, simd_width]()
             var right_vec = SIMD[Self.WORD_DTYPE, simd_width]()
 
-            # Load a batch of words from both bitsets into SIMD vectors
+            # Load a batch of words from both `BitVec`s into SIMD vectors
             left_vec = left.data.offset(offset).load[width=simd_width]()
             right_vec = right.data.offset(offset).load[width=simd_width]()
 
@@ -884,7 +994,7 @@ struct BitVec(Boolable, Copyable, ExplicitlyCopyable, Movable, Sized, Writable):
             # vectors
             func(left_vec, right_vec)
 
-            # Store the results back into the result bitset
+            # Store the results back into the result `BitVec`
             left.data.offset(offset).store[width=simd_width](left_vec)
 
         var lhs_len = _elts[Self.WORD_DTYPE](len(left))
@@ -927,7 +1037,7 @@ struct BitVec(Boolable, Copyable, ExplicitlyCopyable, Movable, Sized, Writable):
         the size of `other` by filling with `0`s
 
         Args:
-            other: The bitset to union with.
+            other: The `BitVec` to union with.
 
         Notes:
             This retains `self`s length.
@@ -958,7 +1068,7 @@ struct BitVec(Boolable, Copyable, ExplicitlyCopyable, Movable, Sized, Writable):
         the size of `other` by filling with `0`s.
 
         Args:
-            other: The bitset to intersect with.
+            other: The `BitVec` to intersect with.
 
         Notes:
             This retains `self`s length.
@@ -989,7 +1099,7 @@ struct BitVec(Boolable, Copyable, ExplicitlyCopyable, Movable, Sized, Writable):
         the size of `other` by filling with `0`s.
 
         Args:
-            other: The bitset to subtract from `self`.
+            other: The `BitVec` to subtract from `self`.
 
         Notes:
             This retains `self`s length.
@@ -1008,6 +1118,7 @@ struct BitVec(Boolable, Copyable, ExplicitlyCopyable, Movable, Sized, Writable):
         return Self._mut_vectorize_apply[_difference, False](self, other)
 
     fn write_to[W: Writer](read self, mut writer: W):
+        """Write the bitvec in a nice format."""
         writer.write(
             "BitVec{length=", len(self), " ,words=", self.word_len(), "}\n\t"
         )
