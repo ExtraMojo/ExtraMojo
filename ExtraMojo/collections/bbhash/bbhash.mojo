@@ -7,7 +7,7 @@ from testing import assert_true, assert_false
 from ExtraMojo.collections.bbhash.bbhash import BBHash
 
 var keys: List[String] = ["fox", "cat", "dog", "mouse", "frog"]
-var bbset = BBHash(keys^, 1.0)
+var bbset = BBHash(keys^, gamma=1.0)
 assert_true(bbset.find(String("fox")))
 assert_false(bbset.find(String("muffin")))
 ```
@@ -99,8 +99,15 @@ struct BBHash:
 
     fn __init__[
         K: Copyable & Movable & Hashable
-    ](out self, owned keys: List[K], gamma: Float64):
-        """ """
+    ](out self, owned keys: List[K], *, gamma: Float64 = 1.0):
+        """Create a `BBHash`.
+
+        Args:
+            keys: The keys to create a minimal perfect hash for.
+            gamma: Tunable param for optimizing between storage size and creation/lookup speed.
+                1.0 will give the best size, larger will result in faster lookups and creation.
+                See publication for details.
+        """
         self.bits = []
         self.ranks = []
         self.reverse_map = []

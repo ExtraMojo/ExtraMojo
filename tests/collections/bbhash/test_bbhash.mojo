@@ -41,7 +41,7 @@ def test_bbhash_simple():
 
     for g in gamma_values:
         var keys = some_star_wars_characters.copy()
-        var bb = BBHash(keys^, g)
+        var bb = BBHash(keys^, gamma=g)
         var key_set: Set[UInt] = {}
 
         for i in range(0, len(some_star_wars_characters)):
@@ -65,7 +65,7 @@ def test_bbhash_simple():
 
 def test_bbhash_example():
     var keys: List[String] = ["fox", "cat", "dog", "mouse", "frog"]
-    var bbset = BBHash(keys^, 1.0)
+    var bbset = BBHash(keys^, gamma=1.0)
     assert_true(bbset.find(String("fox")))
     assert_false(bbset.find(String("muffin")))
 
