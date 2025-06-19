@@ -19,7 +19,7 @@ backend = { name = "pixi-build-rattler-build", version = "0.1.*" }
 
 # These are basically just dev deps, the real deps are specified in the recipe.yaml
 [dependencies]
-modular = ">25.3.0"
+modular = "=25.4.0"
 rattler-build = "*"
 
 [tasks]

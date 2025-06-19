@@ -1,6 +1,6 @@
 context:
   version: "0.15.0"
-  max_version: ">25.3"
+  max_version: "=25.4"
 
 package:
   name: "extramojo"
