@@ -18,7 +18,7 @@ Example:
 from algorithm import vectorize
 from bit import log2_floor, pop_count
 from math import ceildiv
-from memory import UnsafePointer, pack_bits, memcpy, memset, memset_zero
+from memory import UnsafePointer, pack_bits, memcmp, memcpy, memset, memset_zero
 from os import abort
 from sys.info import is_gpu, simdwidthof
 
@@ -49,13 +49,9 @@ fn _check_index_bounds[operation_name: StaticString](idx: UInt, max_size: Int):
 fn _elts[dtype: DType](bits: UInt) -> UInt:
     """Compute the number of elements needed to hold the given number of bits.
     """
+    constrained[dtype is not DType.invalid, "dtype must be a valid DType"]()
     alias bitwidth = dtype.bitwidth()
-
-    @parameter
-    if bitwidth == 0:
-        return 0
-    else:
-        return (bits + bitwidth - 1) // bitwidth
+    return (bits + bitwidth - 1) // bitwidth
 
 
 @always_inline
@@ -485,22 +481,8 @@ struct BitVec(Boolable, Copyable, ExplicitlyCopyable, Movable, Sized, Writable):
         if len(self) != len(other):
             return False
 
-        var equal = True
-
-        @parameter
-        @always_inline
-        fn equality[simd_width: Int](offset: Int):
-            # TODO: is there a better way to skip this work?
-            if equal:
-                var lhs = SIMD[self.WORD_DTYPE, simd_width]()
-                var rhs = SIMD[self.WORD_DTYPE, simd_width]()
-
-                equal = Bool(Scalar[self.WORD_DTYPE](pack_bits(lhs == rhs)))
-
-        # Leave the last word off to handle specially
         var words = _elts[self.WORD_DTYPE](len(self))
-        vectorize[equality, width](words - 1)
-
+        var equal = memcmp(self.data, other.data, words - 1) == 0
         if equal:
             var mask = len(self) % self.WORD_DTYPE.bitwidth()
             equal = (self.data[words - 1] & mask) == (
