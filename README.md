@@ -46,6 +46,18 @@ In your project `mojo run -I "../ExtraMojo" my_example_file.mojo`.
 Note the bit about how to add this project to your LSP so things resolve in VSCode.
 
 
+## Notable Functionality
+
+- Buffered Reading and writing for files
+- CLI opts parser
+- For bytestrings (`List/Span[UInt8]`), SIMD version of: memchr, to_uppercase, to_lowercase, SplitIterator
+- BBHash
+- BitVec
+- `saturating_add` and `saturating_sub` for integral types
+- reservoir sampling
+
+See [docs for details](https://extramojo.github.io/ExtraMojo/)
+
 
 ## Tasks
 
