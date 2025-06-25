@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v0.16.0
+
+- Suggestions from @soraros
+  - `dtype` constraint in `_elts` on `BitVec`
+  - `memcmp` for `BitVec` `__eq__`
+- Support for reverse lookups for BBHash
+
 ## v0.15.0
 
 - Support for 0.25.4

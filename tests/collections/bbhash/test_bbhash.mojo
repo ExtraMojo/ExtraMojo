@@ -1,4 +1,5 @@
 from collections import Set
+from hashlib.hash import hash
 from testing import assert_equal, assert_true, assert_false
 
 from ExtraMojo.collections.bbhash.bbhash import BBHash
@@ -70,6 +71,20 @@ def test_bbhash_example():
     assert_false(bbset.find(String("muffin")))
 
 
+def test_bbhash_revmap():
+    var keys: List[String] = ["fox", "cat", "dog", "mouse", "frog"]
+    var bbset = BBHash[True](keys^, gamma=1.0)
+    var idx = bbset.find(String("fox"))
+    var key_hash = bbset.key(idx)
+    assert_true(key_hash)
+    assert_equal(key_hash.value(), hash(String("fox")))
+
+    idx = bbset.find(String("muffin"))
+    key_hash = bbset.key(idx)
+    assert_false(key_hash)
+
+
 def main():
     test_bbhash_simple()
     test_bbhash_example()
+    test_bbhash_revmap()

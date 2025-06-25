@@ -12,6 +12,23 @@ assert_true(bbset.find(String("fox")))
 assert_false(bbset.find(String("muffin")))
 ```
 
+
+Verify that a returned True value for key matches the key from the original
+input set:
+
+```mojo
+from hashlib.hash import hash
+from testing import assert_true, assert_false
+from ExtraMojo.collections.bbhash.bbhash import BBHash
+
+var keys: List[String] = ["fox", "cat", "dog", "mouse", "frog"]
+var bbset = BBHash[True](keys^, gamma=1.0)
+var idx = bbset.find(String("fox"))
+var key_hash = bbset.key(idx)
+assert_true(key_hash.value() == hash(String("fox")))
+
+```
+
 # References:
 
 - https://github.com/relab/bbhash
@@ -92,7 +109,14 @@ struct _BCVec(Writable):
         writer.write("collisions:", self.c)
 
 
-struct BBHash:
+struct BBHash[compute_reverse_map: Bool = False]:
+    """BBHash represents a minimal perfect hash for a set of keys.
+
+    Parameters:
+        compute_reverse_map: If True, compute the reverse_map which allows looking up the original
+                             key based off an index.
+    """
+
     var bits: List[BitVec]
     var ranks: List[UInt64]
     var reverse_map: List[UInt64]
@@ -111,7 +135,12 @@ struct BBHash:
         self.bits = []
         self.ranks = []
         self.reverse_map = []
-        self._compute(keys, gamma)
+
+        @parameter
+        if not compute_reverse_map:
+            self._compute(keys, gamma)
+        else:
+            self._compute_with_reversemap(keys, gamma)
 
     # TODO: use wyhash instead of builtin hash / fnv1a, compare them all
     # TODO: switch to fastmod from lemiere?
@@ -178,6 +207,82 @@ struct BBHash:
             lvl += 1
         self._compute_level_ranks()
 
+    fn _compute_with_reversemap[
+        K: Copyable & Movable & Hashable
+    ](mut self, owned keys: List[K], owned gamma: Float64):
+        """Compute the minimal perfect hash function.
+
+        Args:
+            keys: The hashable keys.
+            gamma: The gamma factor that can be between >= 1.0
+                tuning data structure size, vs lookup and construction perf.
+
+        Notes:
+            - If a minimal perfect hash can't be created within MAX_ITERS this will abort.
+        """
+        # TODO: log when gamma < 1.0
+        gamma = max(gamma, 1.0)
+        var size = len(keys)
+        var redo = List[K](
+            capacity=size // 2
+        )  # heuristic: only 1/2 of the keys will collide
+
+        # bit vectors for current level: A and C in the paper
+        level_vec = _BCVec(length=UInt(Int(gamma * size)))
+        self.reverse_map = List[UInt64](length=len(keys) + 1, fill=0)
+        var level_keys_map = List[List[UInt64]]()
+
+        # loop exits when there are no more keys to re-hash
+        var lvl = 0
+        while True:
+            # precompute the level hash to speed up the key hashing
+            var lvl_hash = _level_hash(UInt64(lvl))
+
+            # find colliding keys and possible bit vector positions for non-colliding keys
+            for k in keys:
+                var h = _key_hash(lvl_hash, hash(k))
+                # update the bit and collision vectors for the current level
+                level_vec.update(h)
+
+            # remove bit vector position assignments for colliding keys and add them to the redo set
+            # TODO: this look feels like it could be faster?
+            var level_keys = List[UInt64](length=len(level_vec.v), fill=0)
+            for i in range(0, len(keys)):
+                var kh = hash(keys[i])
+                var h = _key_hash(lvl_hash, kh)
+                # Unset the bit vec position for the key if there was a collision
+                if level_vec.unset_collision(h):
+                    # Add the key to redos
+                    redo.append(keys[i])
+                else:
+                    level_keys[h % len(level_vec.v)] = kh
+            level_keys_map.append(level_keys)
+
+            # save the current bit vector for the current level
+            self.bits.append(level_vec.v.copy())
+
+            size = len(redo)
+            if size == 0:
+                break
+
+            # move to the next level and compute the set of keys to re-hash (that had collisions)
+            swap(keys, redo)
+            redo.clear()
+            level_vec.next_level(UInt(Int(gamma * size)))
+
+            if lvl > MAX_ITERS:
+                abort("Unable to find max mph after " + String(lvl) + " tries")
+            lvl += 1
+        self._compute_level_ranks()
+
+        # Compute the reverse map
+        var index = 1
+        for level_keys in level_keys_map:
+            for key in level_keys:
+                if key != 0:
+                    self.reverse_map[index] = key
+                    index += 1
+
     fn _compute_level_ranks(mut self):
         """Computes the total rank of each level.
 
@@ -203,6 +308,10 @@ struct BBHash:
         1. The return value is 0, representing that the key was not in the original key set.
         2. The return value is in the expected range [1, len(keys)], but is a false positive.
 
+        In other words, `find` can return false positives and if "within set" is your question
+        you should then validate the key via the `key` function to ensure that the found key
+        matches the input key.
+
         Args:
             key: The hashable key to check membership for.
 
@@ -216,3 +325,24 @@ struct BBHash:
             if self.bits[lvl].test(UInt(i)):
                 return self.ranks[lvl] + UInt64(self.bits[lvl].rank(UInt(i)))
         return 0
+
+    fn key(read self, idx: UInt64) -> Optional[UInt64]:
+        """Get the hash of the key associated with the given index.
+
+        Args:
+            idx: The index given by `find` for a key.
+
+        Returns:
+            The hash of the key associated with the index, or None if the idx is invalid.
+        """
+        constrained[
+            compute_reverse_map,
+            (
+                "BBHash must be created with `compute_reverse_map=True` to use"
+                " this fn."
+            ),
+        ]()
+
+        if idx == 0 or Int(idx) >= len(self.reverse_map):
+            return None
+        return self.reverse_map[idx]

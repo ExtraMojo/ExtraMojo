@@ -18,7 +18,7 @@ Example:
 from algorithm import vectorize
 from bit import log2_floor, pop_count
 from math import ceildiv
-from memory import UnsafePointer, pack_bits, memcpy, memset, memset_zero
+from memory import UnsafePointer, pack_bits, memcmp, memcpy, memset, memset_zero
 from os import abort
 from sys.info import is_gpu, simdwidthof
 
@@ -49,13 +49,9 @@ fn _check_index_bounds[operation_name: StaticString](idx: UInt, max_size: Int):
 fn _elts[dtype: DType](bits: UInt) -> UInt:
     """Compute the number of elements needed to hold the given number of bits.
     """
+    constrained[dtype is not DType.invalid, "dtype must be a valid DType"]()
     alias bitwidth = dtype.bitwidth()
-
-    @parameter
-    if bitwidth == 0:
-        return 0
-    else:
-        return (bits + bitwidth - 1) // bitwidth
+    return (bits + bitwidth - 1) // bitwidth
 
 
 @always_inline
