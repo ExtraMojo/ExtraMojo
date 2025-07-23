@@ -33,7 +33,7 @@ max = ">=25.1.0,<26"
 then run:
 
 ```bash
-magic add ExtraMojo
+pixi add extramojo
 ```
 
 Or directly by following these instructions.
