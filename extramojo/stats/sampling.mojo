@@ -19,7 +19,7 @@ struct ReservoirSampler[T: Copyable & Movable](
     from random import seed
     from testing import assert_equal
 
-    from ExtraMojo.stats.sampling import ReservoirSampler
+    from extramojo.stats.sampling import ReservoirSampler
 
     # Set the global random seed
     seed(42)

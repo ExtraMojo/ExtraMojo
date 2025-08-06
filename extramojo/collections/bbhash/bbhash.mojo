@@ -4,7 +4,7 @@
 
 ```mojo
 from testing import assert_true, assert_false
-from ExtraMojo.collections.bbhash.bbhash import BBHash
+from extramojo.collections.bbhash.bbhash import BBHash
 
 var keys: List[String] = ["fox", "cat", "dog", "mouse", "frog"]
 var bbset = BBHash(keys^, gamma=1.0)
@@ -19,7 +19,7 @@ input set:
 ```mojo
 from hashlib.hash import hash
 from testing import assert_true, assert_false
-from ExtraMojo.collections.bbhash.bbhash import BBHash
+from extramojo.collections.bbhash.bbhash import BBHash
 
 var keys: List[String] = ["fox", "cat", "dog", "mouse", "frog"]
 var bbset = BBHash[True](keys^, gamma=1.0)
@@ -38,8 +38,8 @@ assert_true(key_hash.value() == hash(String("fox")))
 from hashlib.hash import hash
 from os import abort
 
-from ExtraMojo.collections.bitvec import BitVec, _word_index, _bit_mask, _elts
-from ExtraMojo.collections.bbhash.hash import (
+from extramojo.collections.bitvec import BitVec, _word_index, _bit_mask, _elts
+from extramojo.collections.bbhash.hash import (
     _level_hash,
     _key_hash,
     _level_key_hash,

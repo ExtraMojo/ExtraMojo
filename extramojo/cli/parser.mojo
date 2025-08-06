@@ -2,7 +2,7 @@
 
 ```mojo {doctest="parser" class="no-wrap"}
 from testing import assert_equal, assert_true
-from ExtraMojo.cli.parser import OptParser, OptConfig, OptKind
+from extramojo.cli.parser import OptParser, OptConfig, OptKind
 
 var args = List(String("--file"), String("/path/to/thing"), String("--count"), String("42"), String("--fraction"), String("-0.2"), String("--verbose"), String("ExtraFile.tsv"))
 var program_name = "example"
@@ -27,6 +27,7 @@ assert_true(len(opts.get_help_message()[]) > 0)
 ```
 """
 from collections import Dict
+from hashlib.hasher import Hasher
 
 import sys
 
@@ -514,8 +515,8 @@ struct Subcommand(Copyable, ExplicitlyCopyable, Hashable, Movable):
     fn __init__(out self, owned parser: OptParser):
         self.parser = parser^
 
-    fn __hash__(read self) -> UInt:
-        return self.parser.program_name.__hash__()
+    fn __hash__[H: Hasher](read self, mut hasher: H):
+        self.parser.program_name.__hash__[H](hasher)
 
     fn __eq__(read self, read other: Self) -> Bool:
         return self.parser.program_name == other.parser.program_name
@@ -531,7 +532,7 @@ struct SubcommandParser(Copyable, ExplicitlyCopyable, Movable):
 
     ```mojo
     from testing import assert_equal, assert_true
-    from ExtraMojo.cli.parser import OptParser, OptConfig, OptKind, SubcommandParser, Subcommand
+    from extramojo.cli.parser import OptParser, OptConfig, OptKind, SubcommandParser, Subcommand
 
     var args = List(String("do-work"), String("--file"), String("/path/to/thing"), String("--count"), String("42"), String("--fraction"), String("-0.2"), String("--verbose"))
     var program_name = "example"
