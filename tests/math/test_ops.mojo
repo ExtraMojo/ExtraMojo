@@ -1,6 +1,6 @@
 from testing import assert_equal
 
-from ExtraMojo.math.ops import saturating_add, saturating_sub, fastmod
+from extramojo.math.ops import saturating_add, saturating_sub, fastmod
 
 
 def test_saturating_add():

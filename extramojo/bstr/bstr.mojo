@@ -3,7 +3,7 @@ from algorithm import vectorize
 from memory import UnsafePointer
 from sys.info import simdwidthof
 
-from ExtraMojo.bstr.memchr import memchr
+from extramojo.bstr.memchr import memchr
 
 
 # TODO: split this all out and create similar abstractions as the Rust bstr crate
@@ -18,7 +18,7 @@ fn find_chr_all_occurrences(haystack: Span[UInt8], chr: UInt8) -> List[Int]:
 
     ```mojo
     from testing import assert_equal
-    from ExtraMojo.bstr.bstr import find_chr_all_occurrences
+    from extramojo.bstr.bstr import find_chr_all_occurrences
 
     var haystack = "ATCGACCATCGAGATCATGTTTCAT"
     var expected = List(2, 5, 6, 9, 15, 22)
@@ -65,7 +65,7 @@ fn is_ascii_uppercase(value: UInt8) -> Bool:
 
     ```mojo
     from testing import assert_true, assert_false
-    from ExtraMojo.bstr.bstr import is_ascii_uppercase
+    from extramojo.bstr.bstr import is_ascii_uppercase
 
     for ascii_letter in range(ord("A"), ord("Z")+1):
         assert_true(is_ascii_uppercase(ascii_letter))
@@ -83,7 +83,7 @@ fn is_ascii_lowercase(value: UInt8) -> Bool:
 
     ```mojo
     from testing import assert_true, assert_false
-    from ExtraMojo.bstr.bstr import is_ascii_lowercase
+    from extramojo.bstr.bstr import is_ascii_lowercase
 
     for ascii_letter in range(ord("A"), ord("Z")+1):
         assert_false(is_ascii_lowercase(ascii_letter))
@@ -101,7 +101,7 @@ fn to_ascii_lowercase(mut buffer: List[UInt8, _]):
 
     ```mojo
     from testing import assert_equal
-    from ExtraMojo.bstr.bstr import to_ascii_lowercase
+    from extramojo.bstr.bstr import to_ascii_lowercase
     var test = List("ABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZ".as_bytes())
     var expected = List("abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz".as_bytes())
     to_ascii_lowercase(test)
@@ -159,7 +159,7 @@ fn to_ascii_uppercase(mut buffer: List[UInt8, _]):
 
     ```mojo
     from testing import assert_equal
-    from ExtraMojo.bstr.bstr import to_ascii_uppercase
+    from extramojo.bstr.bstr import to_ascii_uppercase
     var test = List("ABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZ".as_bytes())
     var expected = List("ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ".as_bytes())
     to_ascii_uppercase(test)
@@ -219,7 +219,7 @@ fn find(haystack: Span[UInt8], needle: Span[UInt8]) -> Optional[Int]:
 
     ```mojo
     from testing import assert_equal
-    from ExtraMojo.bstr.bstr import find
+    from extramojo.bstr.bstr import find
 
     var haystack = "ABCDEFGhijklmnop".as_bytes()
     var expected = 4
@@ -277,7 +277,7 @@ struct SplitIterator[is_mutable: Bool, //, origin: Origin[is_mutable]](
 
     ```
     from testing import assert_equal
-    from ExtraMojo.bstr.bstr import SplitIterator
+    from extramojo.bstr.bstr import SplitIterator
     var input = "ABCD\tEFGH\tIJKL\nMNOP".as_bytes()
     var expected = List(
         "ABCD".as_bytes(), "EFGH".as_bytes(), "IJKL\nMNOP".as_bytes()
@@ -292,7 +292,7 @@ struct SplitIterator[is_mutable: Bool, //, origin: Origin[is_mutable]](
     ```
     from collections.string.string_slice import StringSlice
     from testing import assert_equal
-    from ExtraMojo.bstr.bstr import SplitIterator
+    from extramojo.bstr.bstr import SplitIterator
 
     var input = "ABCD\tEFGH\tIJKL\nMNOP".as_bytes()
     var expected = List(

@@ -5,7 +5,7 @@ input:
 
 # Source directories to monitor when running in watch mode.
 source:
-  - ExtraMojo
+  - extramojo
 
 # Full URLs of package sources. Used to create source links.
 source-url:
@@ -47,7 +47,7 @@ templates: [docs/templates]
 pre-run:
   - |
     echo Running 'mojo doc'...
-    pixi run mojo doc -o docs/src/ExtraMojo.json ExtraMojo
+    pixi run mojo doc -o docs/src/extramojo.json extramojo
     echo Done.
 
 # Bash scripts to run before build.

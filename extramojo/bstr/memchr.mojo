@@ -21,7 +21,7 @@ fn memchr[
 
     ```mojo
     from testing import assert_equal
-    from ExtraMojo.bstr.memchr import memchr
+    from extramojo.bstr.memchr import memchr
 
     assert_equal(memchr("enlivened,unleavened,Arnulfo's,Unilever's,unloved|Anouilh,analogue,analogy".as_bytes(), ord("|")), 49)
     ```
@@ -102,7 +102,7 @@ fn memchr_wide(haystack: Span[UInt8], chr: UInt8, start: Int = 0) -> Int:
 
     ```mojo
     from testing import assert_equal
-    from ExtraMojo.bstr.memchr import memchr_wide
+    from extramojo.bstr.memchr import memchr_wide
 
     assert_equal(memchr_wide("enlivened,unleavened,Arnulfo's,Unilever's,unloved|Anouilh,analogue,analogy".as_bytes(), ord("|")), 49)
     ```

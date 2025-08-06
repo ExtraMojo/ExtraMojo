@@ -2,14 +2,14 @@ from pathlib import Path
 from python import Python
 from testing import *
 
-from ExtraMojo.bstr.bstr import SplitIterator
-from ExtraMojo.io.delimited import (
+from extramojo.bstr.bstr import SplitIterator
+from extramojo.io.delimited import (
     DelimReader,
     FromDelimited,
     ToDelimited,
     DelimWriter,
 )
-from ExtraMojo.io.buffered import (
+from extramojo.io.buffered import (
     BufferedReader,
     read_lines,
     for_each_line,

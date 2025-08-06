@@ -2,8 +2,8 @@
 authors = ["Seth Stadick <sstadick@gmail.com>"]
 channels = [
     "conda-forge",
-    #"https://conda.modular.com/max",
-    "https://conda.modular.com/max-nightly",
+    "https://prefix.dev/pixi-build-backends",
+    "https://conda.modular.com/max",
 ]
 description = "Useful things that aren't in the standard library."
 platforms = ["osx-arm64", "linux-64", "linux-aarch64"]
@@ -11,20 +11,29 @@ license = "Unlicense OR MIT"
 preview = ["pixi-build"]
 
 [package]
-name = "ExtraMojo"
-version = "0.16.0"
+name = "extramojo"
+version = "0.17.0"
 
 [package.build]
-backend = { name = "pixi-build-rattler-build", version = "0.1.*" }
+backend = { name = "pixi-build-mojo", version = "0.1.*" }
+
+[package.host-dependencies]
+mojo-compiler = "=25.5.0"
+
+[package.build-dependencies]
+mojo-compiler = "=25.5.0"
+
+[package.run-dependencies]
+mojo-compiler = "=25.5.0"
 
 # These are basically just dev deps, the real deps are specified in the recipe.yaml
 [dependencies]
-modular = "=25.4.0"
-rattler-build = "*"
+mojo = "=25.5.0"
+# extramojo = { path = "." }
 
 [tasks]
-# Dev tasks 
-build = "pixi run mojo package ExtraMojo -o ExtraMojo.mojopkg"
+# Dev tasks
+build = "pixi run mojo package extramojo -o extramojo.mojopkg"
 r = { cmd = "pixi run mojo run -I . " }
 t = { cmd = "pixi run mojo test -I . -D ASSERT=all" }
 test = { cmd = "pixi run mojo run -I . tests/test_file.mojo", depends-on = [

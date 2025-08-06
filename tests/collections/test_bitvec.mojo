@@ -1,6 +1,6 @@
 from testing import assert_equal, assert_true, assert_false
 
-from ExtraMojo.collections.bitvec import BitVec
+from extramojo.collections.bitvec import BitVec
 
 
 def test_bitvec_from_list_literal():
