@@ -1,8 +1,8 @@
-# ⚡ ExtraMojo ⚡
+# ⚡ extramojo ⚡
 
 Extra functionality to extend the Mojo std lib.
 
-*Supports mojo 25.1.0*
+*Supports mojo 25.5.0*
 
 ## Documentation and Examples
 
@@ -27,13 +27,13 @@ version = "0.1.0"
 [tasks]
 
 [dependencies]
-max = ">=25.1.0,<26"
+mojo = "=25.5.0"
 ```
 
 then run:
 
 ```bash
-pixi add ExtraMojo
+pixi add extramojo
 ```
 
 Or directly by following these instructions.
@@ -42,7 +42,7 @@ See docs for [numojo](https://github.com/Mojo-Numerics-and-Algorithms-group/NuMo
 
 tl;dr;
 
-In your project `mojo run -I "../ExtraMojo" my_example_file.mojo`.
+In your project `mojo run -I "../extramojo" my_example_file.mojo`.
 Note the bit about how to add this project to your LSP so things resolve in VSCode.
 
 

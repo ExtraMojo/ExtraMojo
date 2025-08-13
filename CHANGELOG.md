@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.17.0
+
+- Migrated to pixi-build-mojo backend
+- Renamed package from ExtraMojo to extramojo to match conda package name
+- Updates for Mojo 25.5
+
 ## v0.16.0
 
 - Suggestions from @soraros

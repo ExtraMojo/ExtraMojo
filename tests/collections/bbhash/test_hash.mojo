@@ -1,4 +1,4 @@
-from ExtraMojo.collections.bbhash.hash import (
+from extramojo.collections.bbhash.hash import (
     _hash64,
     _level_hash,
     _key_hash,

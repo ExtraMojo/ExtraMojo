@@ -2,7 +2,7 @@ from collections import Set
 from hashlib.hash import hash
 from testing import assert_equal, assert_true, assert_false
 
-from ExtraMojo.collections.bbhash.bbhash import BBHash
+from extramojo.collections.bbhash.bbhash import BBHash
 
 
 def test_bbhash_simple():

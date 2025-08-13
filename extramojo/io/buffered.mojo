@@ -7,7 +7,7 @@ BufferedReader:
 
 ```mojo
 from testing import assert_equal
-from ExtraMojo.io.buffered import BufferedReader
+from extramojo.io.buffered import BufferedReader
 
 fn test_read_until(file: String, expected_lines: List[String]) raises:
     var buffer_capacities = List(10, 100, 200, 500)
@@ -28,7 +28,7 @@ fn test_read_until(file: String, expected_lines: List[String]) raises:
 BufferedWriter:
 
 ```mojo
-from ExtraMojo.io.buffered import BufferedWriter
+from extramojo.io.buffered import BufferedWriter
 
 fn test_buffered_writer(file: String, expected_lines: List[String]) raises:
     var fh = BufferedWriter(open(String(file), "w"), buffer_capacity=128)
@@ -47,13 +47,13 @@ import math
 from algorithm import vectorize
 from memory import UnsafePointer, memcpy
 from sys.info import simdwidthof
-from utils import Writable
+from io import Writable
 
 
-from ExtraMojo.bstr.bstr import (
+from extramojo.bstr.bstr import (
     find_chr_all_occurrences,
 )
-from ExtraMojo.bstr.memchr import memchr
+from extramojo.bstr.memchr import memchr
 
 
 alias NEW_LINE = 10
@@ -169,7 +169,7 @@ struct BufferedReader(Movable):
     ## Example
 
     ```mojo
-    from ExtraMojo.io.buffered import BufferedReader
+    from extramojo.io.buffered import BufferedReader
 
     fn read_bytes(read file: String) raises -> List[UInt8]:
         var fh = open(file, "r")
@@ -350,7 +350,7 @@ struct BufferedWriter[W: Movable & Writer](Movable, Writer):
     ## Example
 
     ```mojo
-    from ExtraMojo.io.buffered import BufferedWriter
+    from extramojo.io.buffered import BufferedWriter
     fn write_to_file(read file: String, read expected_lines: List[String]) raises:
         var fh = BufferedWriter(open(String(file), "w"), buffer_capacity=128)
         for i in range(len(expected_lines)):

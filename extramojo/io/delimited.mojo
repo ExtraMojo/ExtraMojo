@@ -10,13 +10,13 @@ TODO: this should be two different examples, but the doc parser can't seem to ha
 from collections.string import StringSlice
 from testing import assert_equal
 
-from ExtraMojo.bstr.bstr import SplitIterator
-from ExtraMojo.cli.parser import ParsedOpts
-from ExtraMojo.io.buffered import (
+from extramojo.bstr.bstr import SplitIterator
+from extramojo.cli.parser import ParsedOpts
+from extramojo.io.buffered import (
     BufferedReader,
     BufferedWriter,
 )
-from ExtraMojo.io.delimited import (
+from extramojo.io.delimited import (
     DelimReader,
     FromDelimited,
     ToDelimited,
@@ -209,10 +209,10 @@ fn test_delim_reader_writer_dicts(file: String) raises:
     print("Successful delim_writer")
 ```
 """
-from utils import Writer
+from io import Writer
 
-from ExtraMojo.bstr.bstr import SplitIterator
-from ExtraMojo.io.buffered import BufferedReader, BufferedWriter
+from extramojo.bstr.bstr import SplitIterator
+from extramojo.io.buffered import BufferedReader, BufferedWriter
 
 
 trait FromDelimited(Copyable & Movable):

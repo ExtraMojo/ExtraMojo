@@ -1,10 +1,10 @@
-from ExtraMojo.bstr.bstr import (
+from extramojo.bstr.bstr import (
     SplitIterator,
     find,
     to_ascii_lowercase,
     to_ascii_uppercase,
 )
-from ExtraMojo.bstr.memchr import memchr, memchr_wide
+from extramojo.bstr.memchr import memchr, memchr_wide
 from testing import *
 
 
