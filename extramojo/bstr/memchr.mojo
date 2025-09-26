@@ -7,9 +7,9 @@ it should be faster. `memchr` is just vanilla memchr.
 import math
 from bit import count_trailing_zeros
 from memory import pack_bits, UnsafePointer
-from sys.info import simdwidthof
+from sys.info import simd_width_of
 
-alias SIMD_U8_WIDTH: Int = simdwidthof[DType.uint8]()
+alias SIMD_U8_WIDTH: Int = simd_width_of[DType.uint8]()
 
 
 @always_inline("nodebug")
@@ -55,7 +55,7 @@ fn memchr[
     @parameter
     if do_alignment:
         var v = ptr.load[width=SIMD_U8_WIDTH]()
-        var mask = v == chr
+        var mask = v.eq(chr)
 
         var packed = pack_bits(mask)
         if packed:
@@ -76,7 +76,7 @@ fn memchr[
     # Now do aligned reads all through
     for s in range(0, aligned_end, SIMD_U8_WIDTH):
         var v = ptr.load[width=SIMD_U8_WIDTH](s)
-        var mask = v == chr
+        var mask = v.eq(chr)
         var packed = pack_bits(mask)
         if packed:
             var index = Int(count_trailing_zeros(packed))
@@ -124,7 +124,7 @@ fn memchr_wide(haystack: Span[UInt8], chr: UInt8, start: Int = 0) -> Int:
     # Do an unaligned initial read, it doesn't matter that this will overlap the next portion
     var ptr = haystack[start:].unsafe_ptr()
     var v = ptr.load[width=SIMD_U8_WIDTH]()
-    var mask = v == chr
+    var mask = v.eq(chr)
 
     var packed = pack_bits(mask)
     if packed:
@@ -147,10 +147,10 @@ fn memchr_wide(haystack: Span[UInt8], chr: UInt8, start: Int = 0) -> Int:
         var b = aligned_ptr.load[width=SIMD_U8_WIDTH](s + 1 * SIMD_U8_WIDTH)
         var c = aligned_ptr.load[width=SIMD_U8_WIDTH](s + 2 * SIMD_U8_WIDTH)
         var d = aligned_ptr.load[width=SIMD_U8_WIDTH](s + 3 * SIMD_U8_WIDTH)
-        var eqa = a == chr
-        var eqb = b == chr
-        var eqc = c == chr
-        var eqd = d == chr
+        var eqa = a.eq(chr)
+        var eqb = b.eq(chr)
+        var eqc = c.eq(chr)
+        var eqd = d.eq(chr)
         var or1 = eqa | eqb
         var or2 = eqc | eqd
         var or3 = or1 | or2
@@ -181,7 +181,7 @@ fn memchr_wide(haystack: Span[UInt8], chr: UInt8, start: Int = 0) -> Int:
     )  # relative to start + offset
     for s in range(aligned_end, single_simd_end, SIMD_U8_WIDTH):
         var v = aligned_ptr.load[width=SIMD_U8_WIDTH](s)
-        var mask = v == chr
+        var mask = v.eq(chr)
 
         var packed = pack_bits(mask)
         if packed:

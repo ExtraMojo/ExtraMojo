@@ -26,7 +26,7 @@ def test_bitvec_count_set_bits():
 
     var bv1 = BitVec(length=65, fill=True)
     assert_equal(bv1._capacity, 2)
-    var bit_offset = bv1._len % bv.WORD_DTYPE.bitwidth()
+    var bit_offset = bv1._len % bv.WORD_DTYPE.bit_width()
     assert_equal(bit_offset, 1)
     var mask = (1 << bit_offset) - 1
     assert_equal(mask, 1)
@@ -95,7 +95,7 @@ def test_bitvec_init_length_fill_true():
         assert_equal(bv.data[i], ~0)
     assert_equal(bv.data[bv.word_len() - 1], 1)
 
-    var last_bits = 65 % bv.WORD_DTYPE.bitwidth()
+    var last_bits = 65 % bv.WORD_DTYPE.bit_width()
     var mask = (1 << last_bits) - 1
     assert_equal(bv.data[bv._capacity - 1] & mask, mask)
 

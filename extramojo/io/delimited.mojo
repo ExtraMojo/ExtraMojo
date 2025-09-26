@@ -87,9 +87,9 @@ struct Score[
 
     fn __init__(
         out self,
-        owned assembly_name: String,
+        var assembly_name: String,
         assembly_length: Int,
-        owned scores: List[Int32],
+        var scores: List[Int32],
         ref [truth_lengths_origin]truth_lengths: List[Int],
         ref [truth_names_origin]truth_names: List[String],
     ):
@@ -246,7 +246,7 @@ struct DelimReader[RowType: FromDelimited](Movable):
 
     fn __init__(
         out self,
-        owned reader: BufferedReader,
+        var reader: BufferedReader,
         *,
         delim: UInt8,
         has_header: Bool,
@@ -262,7 +262,7 @@ struct DelimReader[RowType: FromDelimited](Movable):
             self._skip_header()
         self._get_next()
 
-    fn __moveinit__(out self, owned existing: Self):
+    fn __moveinit__(out self, deinit existing: Self):
         self.delim = existing.delim
         self.reader = existing.reader^
         self.next_elem = existing.next_elem^
@@ -282,9 +282,9 @@ struct DelimReader[RowType: FromDelimited](Movable):
             raise "Attempting to call past end of iterator"
         var ret = self.next_elem.take()
         self._get_next()
-        return ret
+        return ret^
 
-    fn __iter__(owned self) -> Self:
+    fn __iter__(var self) -> Self:
         return self^
 
     fn _skip_header(mut self) raises:
@@ -299,7 +299,7 @@ struct DelimReader[RowType: FromDelimited](Movable):
         var header_values = List[String]()
         for header in SplitIterator(self.buffer, self.delim):
             header_values.append(String(StringSlice(unsafe_from_utf8=header)))
-        self.header_values = header_values
+        self.header_values = header_values^
 
     fn _get_next(mut self) raises:
         self.buffer.clear()
@@ -346,9 +346,9 @@ struct DelimWriter[W: Movable & Writer](Movable):
 
     fn __init__(
         out self,
-        owned writer: BufferedWriter[W],
+        var writer: BufferedWriter[W],
         *,
-        owned delim: String,
+        var delim: String,
         write_header: Bool,
     ) raises:
         """Create a `DelimWriter`.
@@ -363,13 +363,13 @@ struct DelimWriter[W: Movable & Writer](Movable):
         self.write_header = write_header
         self.needs_to_write_header = write_header
 
-    fn __moveinit__(out self, owned existing: Self):
+    fn __moveinit__(out self, deinit existing: Self):
         self.delim = existing.delim^
         self.writer = existing.writer^
         self.write_header = existing.write_header
         self.needs_to_write_header = existing.needs_to_write_header
 
-    fn __enter__(owned self) -> Self:
+    fn __enter__(var self) -> Self:
         return self^
 
     fn flush(mut self):

@@ -46,7 +46,7 @@ fn test_buffered_writer(file: String, expected_lines: List[String]) raises:
 import math
 from algorithm import vectorize
 from memory import UnsafePointer, memcpy
-from sys.info import simdwidthof
+from sys.info import simd_width_of
 from io import Writable
 
 
@@ -57,7 +57,7 @@ from extramojo.bstr.memchr import memchr
 
 
 alias NEW_LINE = 10
-alias SIMD_U8_WIDTH: Int = simdwidthof[DType.uint8]()
+alias SIMD_U8_WIDTH: Int = simd_width_of[DType.uint8]()
 # 128 KiB: http://git.savannah.gnu.org/gitweb/?p=coreutils.git;a=blob;f=src/ioblksize.h;h=266c209f48fc07cb4527139a2548b6398b75f740;hb=HEAD#l23
 alias BUF_SIZE: Int = 1024 * 128
 
@@ -93,11 +93,11 @@ fn read_lines(
         if len(buffer) < BUF_SIZE:
             break
         file_pos += start
-    return result
+    return result^
 
 
 fn for_each_line[
-    func: fn (Span[UInt8], Int, Int) capturing -> None
+    func: fn (Span[UInt8], Int, Int) capturing [_] -> None
 ](path: String, buf_size: Int = BUF_SIZE) raises:
     """
     Call the provided callback on each line.
@@ -186,7 +186,7 @@ struct BufferedReader(Movable):
             if bytes_read == 0:
                 break
             found_file.extend(buffer[0:bytes_read])
-        return found_file
+        return found_file^
     ```
     """
 
@@ -204,7 +204,7 @@ struct BufferedReader(Movable):
     """Total filled capacity of the buffer."""
 
     fn __init__(
-        out self, owned fh: FileHandle, buffer_capacity: Int = BUF_SIZE
+        out self, var fh: FileHandle, buffer_capacity: Int = BUF_SIZE
     ) raises:
         """Create a `BufferedReader`.
 
@@ -220,17 +220,17 @@ struct BufferedReader(Movable):
         self.buffer_len = 0
         _ = self._fill_buffer()
 
-    fn __del__(owned self):
+    fn __del__(deinit self):
         try:
             self.fh.close()
         except:
             pass
         self.buffer.free()
 
-    fn __enter__(owned self) -> Self:
+    fn __enter__(var self) -> Self:
         return self^
 
-    fn __moveinit__(out self, owned existing: Self):
+    fn __moveinit__(out self, deinit existing: Self):
         self.fh = existing.fh^
         self.file_offset = existing.file_offset
         self.buffer_offset = existing.buffer_offset
@@ -371,7 +371,7 @@ struct BufferedWriter[W: Movable & Writer](Movable, Writer):
     """The number of bytes currently stored in the inner buffer."""
 
     fn __init__(
-        out self, owned writer: W, buffer_capacity: Int = BUF_SIZE
+        out self, var writer: W, buffer_capacity: Int = BUF_SIZE
     ) raises:
         """Create a `BufferedReader`.
 
@@ -384,13 +384,13 @@ struct BufferedWriter[W: Movable & Writer](Movable, Writer):
         self.buffer_capacity = buffer_capacity
         self.buffer_len = 0
 
-    fn __del__(owned self):
+    fn __del__(deinit self):
         self.flush()
 
-    fn __enter__(owned self) -> Self:
+    fn __enter__(var self) -> Self:
         return self^
 
-    fn __moveinit__(out self, owned existing: Self):
+    fn __moveinit__(out self, deinit existing: Self):
         self.inner = existing.inner^
         self.buffer = existing.buffer^
         self.buffer_capacity = existing.buffer_capacity

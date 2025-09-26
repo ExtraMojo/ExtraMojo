@@ -30,7 +30,7 @@ fn strings_for_writing(size: Int) -> List[String]:
         result.append(
             "Line: " + String(i) + " X" + ("-" * 64)
         )  # make lines long
-    return result
+    return result^
 
 
 fn test_read_until(file: Path, expected_lines: List[String]) raises:
@@ -203,7 +203,7 @@ struct ThinWrapper(Copyable, FromDelimited, ToDelimited):
         var result = Dict[String, Int]()
         for header in header_values.value():
             result[header] = Int(StringSlice(unsafe_from_utf8=data.__next__()))
-        return Self(result)
+        return Self(result^)
 
 
 fn test_delim_reader_writer_dicts(file: Path) raises:
@@ -215,7 +215,7 @@ fn test_delim_reader_writer_dicts(file: Path) raises:
         var stuff = Dict[String, Int]()
         for header in headers:
             stuff[header] = i
-        to_write.append(ThinWrapper(stuff))
+        to_write.append(ThinWrapper(stuff^))
     var writer = DelimWriter(
         BufferedWriter(open(String(file), "w")),
         delim="\t",

@@ -32,7 +32,7 @@ from hashlib.hasher import Hasher
 import sys
 
 
-struct OptKind(Copyable, ExplicitlyCopyable, Movable, Stringable):
+struct OptKind(Copyable, ImplicitlyCopyable, Movable, Stringable):
     """The viable types for an option to have."""
 
     var value: UInt8
@@ -63,7 +63,7 @@ struct OptKind(Copyable, ExplicitlyCopyable, Movable, Stringable):
             return "String"
 
 
-struct OptValue(Copyable, ExplicitlyCopyable, Movable):
+struct OptValue(Copyable, Movable):
     """When an option is parsed, it's stored as an OptValue.
 
     To get concrete values out of the `ParsedOpts` prefer to use the
@@ -159,7 +159,7 @@ struct OptValue(Copyable, ExplicitlyCopyable, Movable):
             raise "Unsupported OptKind"
 
 
-struct OptConfig(Copyable, ExplicitlyCopyable, Movable):
+struct OptConfig(Copyable, Movable):
     """Create an option to be added to the `OptParser`."""
 
     var long_name: String
@@ -175,12 +175,12 @@ struct OptConfig(Copyable, ExplicitlyCopyable, Movable):
 
     fn __init__(
         out self,
-        owned long_name: String,
+        var long_name: String,
         value_kind: OptKind,
         *,
         is_flag: Bool = False,
-        owned description: String = "",
-        owned default_value: Optional[String] = None,
+        var description: String = "",
+        var default_value: Optional[String] = None,
     ) raises:
         if is_flag and value_kind != OptKind.BoolLike and default_value:
             raise "If a DefinedArg `is_flag=True`, then the type of the argument must be `OptKind.BoolLike`, and a `default_value` must be supplied."
@@ -191,7 +191,7 @@ struct OptConfig(Copyable, ExplicitlyCopyable, Movable):
         self.default_value = default_value
 
 
-struct ParsedOpts(Copyable, ExplicitlyCopyable, Movable):
+struct ParsedOpts(Copyable, Movable):
     """The parsed CLI options. Access your values with `ParsedOpts.get_string()`, `ParsedOpts.get_int()`, etc.
 
     Access CLI arguments from `ParsedOpts.args`.
@@ -207,7 +207,7 @@ struct ParsedOpts(Copyable, ExplicitlyCopyable, Movable):
     var args: List[String]
     var help_msg: String
 
-    fn __init__(out self, owned help_msg: String = ""):
+    fn __init__(out self, var help_msg: String = ""):
         self.options = Dict[String, OptValue]()
         self.args = List[String]()
         self.help_msg = help_msg
@@ -287,7 +287,7 @@ struct ParsedOpts(Copyable, ExplicitlyCopyable, Movable):
         return bool_value.value()
 
 
-struct OptParser(Copyable, ExplicitlyCopyable, Movable):
+struct OptParser(Copyable, Movable):
     """[`OptParser`] will try to parse your long-form CLI options."""
 
     var options: Dict[String, OptConfig]
@@ -334,9 +334,9 @@ struct OptParser(Copyable, ExplicitlyCopyable, Movable):
         self.min_num_args_expected = n
         self.args_help_msg = args_help_msg
 
-    fn add_opt(mut self, owned arg: OptConfig):
+    fn add_opt(mut self, var arg: OptConfig):
         """Add an [`OptConfig`]."""
-        self.options[arg.long_name] = arg
+        self.options[arg.long_name] = arg^
 
     fn help_msg(read self) -> String:
         """Get the help message string based on the currently added options."""
@@ -422,7 +422,7 @@ struct OptParser(Copyable, ExplicitlyCopyable, Movable):
                 # Even though help can be overridden, we treat it specially
                 var opt_def = self.options.get("help")
                 if opt_def:
-                    var opt_def = opt_def.value()
+                    var opt_def = opt_def.value().copy()
                     if not opt_def.is_flag:
                         j += 1
                         if j >= len(args):
@@ -444,7 +444,7 @@ struct OptParser(Copyable, ExplicitlyCopyable, Movable):
                             .get_bool()
                             .value()
                         )
-                return result
+                return result^
             j += 1
 
         var i = 0
@@ -454,7 +454,7 @@ struct OptParser(Copyable, ExplicitlyCopyable, Movable):
                 var opt = self._strip_leading_dashes(arg)
                 var opt_def = self.options.get(opt)
                 if opt_def:
-                    var opt_def = opt_def.value()
+                    var opt_def = opt_def.value().copy()
                     if not opt_def.is_flag:
                         i += 1
                         if i >= len(args):
@@ -499,10 +499,10 @@ struct OptParser(Copyable, ExplicitlyCopyable, Movable):
                     len(result.args),
                 )
 
-        return result
+        return result^
 
 
-struct Subcommand(Copyable, ExplicitlyCopyable, Hashable, Movable):
+struct Subcommand(Copyable, Hashable, Movable):
     """A subcommand.
 
     The name of the subcommand is the `OptParser.name`.
@@ -512,7 +512,7 @@ struct Subcommand(Copyable, ExplicitlyCopyable, Hashable, Movable):
 
     var parser: OptParser
 
-    fn __init__(out self, owned parser: OptParser):
+    fn __init__(out self, var parser: OptParser):
         self.parser = parser^
 
     fn __hash__[H: Hasher](read self, mut hasher: H):
@@ -525,7 +525,7 @@ struct Subcommand(Copyable, ExplicitlyCopyable, Hashable, Movable):
         return not (self == other)
 
 
-struct SubcommandParser(Copyable, ExplicitlyCopyable, Movable):
+struct SubcommandParser(Copyable, Movable):
     """Subcommands are created by passing in the command, and an `OptParser`.
 
     The parser is for the options for the subcommand.
@@ -544,7 +544,7 @@ struct SubcommandParser(Copyable, ExplicitlyCopyable, Movable):
     # Note that with flags, the OptKind must be BoolLike and there must be a default_value specified.
     parser.add_opt(OptConfig("verbose", OptKind.BoolLike, is_flag=True, default_value=String("False"), description="Turn up the logging."))
 
-    var cmd = Subcommand(parser) # uses the name from the passed in parser
+    var cmd = Subcommand(parser^) # uses the name from the passed in parser
     var cmd_parser = SubcommandParser(name=String("cool-program"), description="Do some cool stuff.")
     cmd_parser.add_command(cmd)
 
@@ -552,7 +552,9 @@ struct SubcommandParser(Copyable, ExplicitlyCopyable, Movable):
     var cmd_and_opts = cmd_parser.parse_args(args)
     if not cmd_and_opts:
         print(cmd_parser.get_help_message())
-    parsed_cmd, opts = cmd_and_opts.value()
+    var parsed = cmd_and_opts.value()
+    var parsed_cmd = parsed[0]
+    var opts = parsed[1].copy()
 
 
     if parsed_cmd == cmd.parser.program_name:
@@ -571,8 +573,8 @@ struct SubcommandParser(Copyable, ExplicitlyCopyable, Movable):
     fn __init__(
         out self,
         *,
-        owned name: String,
-        owned description: String = "",
+        var name: String,
+        var description: String = "",
     ):
         self.name = name^
         self.description = description^
@@ -595,7 +597,7 @@ struct SubcommandParser(Copyable, ExplicitlyCopyable, Movable):
 
     fn add_command(mut self, command: Subcommand):
         """Add a subcommand."""
-        self.commands[command.parser.program_name] = command
+        self.commands[command.parser.program_name] = command.copy()
 
     fn parse_args(
         read self, args: List[String]

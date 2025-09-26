@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.18.0
+
+- Migrate to Mojo 25.6
+
 ## v0.17.0
 
 - Migrated to pixi-build-mojo backend
