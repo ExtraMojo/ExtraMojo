@@ -1,7 +1,7 @@
 import math
 from algorithm import vectorize
 from memory import UnsafePointer
-from sys.info import simdwidthof
+from sys.info import simd_width_of
 
 from extramojo.bstr.memchr import memchr
 
@@ -9,7 +9,7 @@ from extramojo.bstr.memchr import memchr
 # TODO: split this all out and create similar abstractions as the Rust bstr crate
 
 
-alias SIMD_U8_WIDTH: Int = simdwidthof[DType.uint8]()
+alias SIMD_U8_WIDTH: Int = simd_width_of[DType.uint8]()
 
 
 @always_inline
@@ -33,12 +33,12 @@ fn find_chr_all_occurrences(haystack: Span[UInt8], chr: UInt8) -> List[Int]:
         for i in range(0, len(haystack)):
             if haystack[i] == chr:
                 holder.append(i)
-        return holder
+        return holder^
 
     @parameter
     fn inner[simd_width: Int](offset: Int):
         var simd_vec = haystack.unsafe_ptr().load[width=simd_width](offset)
-        var bool_vec = simd_vec == chr
+        var bool_vec = simd_vec.eq(chr)
         if bool_vec.reduce_or():
             # TODO: @unroll
             for i in range(len(bool_vec)):
@@ -46,7 +46,7 @@ fn find_chr_all_occurrences(haystack: Span[UInt8], chr: UInt8) -> List[Int]:
                     holder.append(offset + i)
 
     vectorize[inner, SIMD_U8_WIDTH](len(haystack))
-    return holder
+    return holder^
 
 
 alias CAPITAL_A = SIMD[DType.uint8, SIMD_U8_WIDTH](ord("A"))
@@ -96,7 +96,7 @@ fn is_ascii_lowercase(value: UInt8) -> Bool:
 
 
 @always_inline
-fn to_ascii_lowercase(mut buffer: List[UInt8, _]):
+fn to_ascii_lowercase(mut buffer: List[UInt8]):
     """Lowercase all ascii a-zA-Z characters.
 
     ```mojo
@@ -111,9 +111,7 @@ fn to_ascii_lowercase(mut buffer: List[UInt8, _]):
     if len(buffer) < SIMD_U8_WIDTH * 3:
         for i in range(0, len(buffer)):
             # I'm not sure why casting is needed. UInt8(is_ascii_uppercase) is being seen as a Bool for some reason
-            buffer[i] |= (
-                UInt8(is_ascii_uppercase(buffer[i])).cast[DType.uint8]() * 32
-            )
+            buffer[i] |= UInt8(UInt(is_ascii_uppercase(buffer[i]))) * 32
         return
 
     # Initial unaligned set
@@ -139,22 +137,20 @@ fn to_ascii_lowercase(mut buffer: List[UInt8, _]):
         aligned_ptr.store(s, v)
 
     for i in range(aligned_end + offset, len(buffer)):
-        buffer[i] |= (
-            UInt8(is_ascii_uppercase(buffer[i])).cast[DType.uint8]() * 32
-        )
+        buffer[i] |= UInt8(UInt(is_ascii_uppercase(buffer[i]))) * 32
 
 
 @always_inline
 fn _to_ascii_lowercase_vec(mut v: SIMD[DType.uint8, SIMD_U8_WIDTH]):
     """Convert a vec to ascii lowercase."""
-    var ge_A = v >= CAPITAL_A
-    var le_Z = v <= CAPITAL_Z
+    var ge_A = v.ge(CAPITAL_A)
+    var le_Z = v.le(CAPITAL_Z)
     var is_upper = ge_A.__and__(le_Z)
     v |= ASCII_CASE_MASK * is_upper.cast[DType.uint8]()
 
 
 @always_inline
-fn to_ascii_uppercase(mut buffer: List[UInt8, _]):
+fn to_ascii_uppercase(mut buffer: List[UInt8]):
     """Uppercase all ascii a-zA-Z characters.
 
     ```mojo
@@ -168,9 +164,8 @@ fn to_ascii_uppercase(mut buffer: List[UInt8, _]):
     """
     if len(buffer) < SIMD_U8_WIDTH * 3:
         for i in range(0, len(buffer)):
-            buffer[i] ^= (
-                UInt8(is_ascii_lowercase(buffer[i])).cast[DType.uint8]() * 32
-            )
+            var temp: UInt8 = UInt8(UInt(is_ascii_lowercase(buffer[i]))) * 32
+            buffer[i] ^= temp
         return
 
     # Initial unaligned set
@@ -196,16 +191,14 @@ fn to_ascii_uppercase(mut buffer: List[UInt8, _]):
         aligned_ptr.store(s, v)
 
     for i in range(aligned_end + offset, len(buffer)):
-        buffer[i] ^= (
-            UInt8(is_ascii_lowercase(buffer[i])).cast[DType.uint8]() * 32
-        )
+        buffer[i] ^= UInt8(UInt(is_ascii_lowercase(buffer[i]))) * 32
 
 
 @always_inline
 fn _to_ascii_uppercase_vec(mut v: SIMD[DType.uint8, SIMD_U8_WIDTH]):
     """Convert a vec to ASCII upercase."""
-    var ge_a = v >= LOWER_A
-    var le_z = v <= LOWER_Z
+    var ge_a = v.ge(LOWER_A)
+    var le_z = v.le(LOWER_Z)
     var is_lower = ge_a.__and__(le_z)
     v ^= ASCII_CASE_MASK * is_lower.cast[DType.uint8]()
 
@@ -260,7 +253,7 @@ fn find(haystack: Span[UInt8], needle: Span[UInt8]) -> Optional[Int]:
 
 @fieldwise_init
 @register_passable
-struct _StartEnd(Copyable, Movable):
+struct _StartEnd(Copyable, ImplicitlyCopyable, Movable):
     """Helper struct for tracking start/end coords in `SplitIterator`"""
 
     var start: Int
@@ -268,7 +261,7 @@ struct _StartEnd(Copyable, Movable):
 
 
 struct SplitIterator[is_mutable: Bool, //, origin: Origin[is_mutable]](
-    Copyable, ExplicitlyCopyable, Movable
+    Copyable, Movable
 ):
     """
     Get an iterator the yields the splits from the input `to_split` string.
@@ -322,8 +315,8 @@ struct SplitIterator[is_mutable: Bool, //, origin: Origin[is_mutable]](
         self.next_split = None
         self._find_next_split()
 
-    fn __iter__(self) -> Self:
-        return self
+    fn __iter__(var self) -> Self:
+        return self^
 
     @always_inline
     fn __len__(read self) -> Int:

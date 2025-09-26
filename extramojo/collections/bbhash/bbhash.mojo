@@ -60,7 +60,7 @@ struct _BCVec(Writable):
         """Create with the given number of bits."""
         # Expand out to word boundary, no reason not to
         var full_len = (
-            _elts[BitVec.WORD_DTYPE](length) * BitVec.WORD_DTYPE.bitwidth()
+            _elts[BitVec.WORD_DTYPE](length) * BitVec.WORD_DTYPE.bit_width()
         )
         self.v = BitVec(length=full_len, fill=False)
         self.c = BitVec(length=full_len, fill=False)
@@ -97,7 +97,7 @@ struct _BCVec(Writable):
     fn next_level(mut self, new_size: Int):
         """Setup for the next level, resize and set to zero."""
         var full_len = (
-            _elts[BitVec.WORD_DTYPE](new_size) * BitVec.WORD_DTYPE.bitwidth()
+            _elts[BitVec.WORD_DTYPE](new_size) * BitVec.WORD_DTYPE.bit_width()
         )
         self.c.resize(full_len, fill=False)
         self.c.zero_all()
@@ -123,7 +123,7 @@ struct BBHash[compute_reverse_map: Bool = False]:
 
     fn __init__[
         K: Copyable & Movable & Hashable
-    ](out self, owned keys: List[K], *, gamma: Float64 = 1.0):
+    ](out self, var keys: List[K], *, gamma: Float64 = 1.0):
         """Create a `BBHash`.
 
         Args:
@@ -138,9 +138,9 @@ struct BBHash[compute_reverse_map: Bool = False]:
 
         @parameter
         if not compute_reverse_map:
-            self._compute(keys, gamma)
+            self._compute(keys^, gamma)
         else:
-            self._compute_with_reversemap(keys, gamma)
+            self._compute_with_reversemap(keys^, gamma)
 
     # TODO: use wyhash instead of builtin hash / fnv1a, compare them all
     # TODO: switch to fastmod from lemiere?
@@ -148,7 +148,7 @@ struct BBHash[compute_reverse_map: Bool = False]:
     # TODO: add a rank-index to bitvecs
     fn _compute[
         K: Copyable & Movable & Hashable
-    ](mut self, owned keys: List[K], owned gamma: Float64):
+    ](mut self, var keys: List[K], var gamma: Float64):
         """Compute the minimal perfect hash function.
 
         Args:
@@ -188,7 +188,7 @@ struct BBHash[compute_reverse_map: Bool = False]:
                 # Unset the bit vec position for the key if there was a collision
                 if level_vec.unset_collision(h):
                     # Add the key to redos
-                    redo.append(keys[i])
+                    redo.append(keys[i].copy())
 
             # save the current bit vector for the current level
             self.bits.append(level_vec.v.copy())
@@ -209,7 +209,7 @@ struct BBHash[compute_reverse_map: Bool = False]:
 
     fn _compute_with_reversemap[
         K: Copyable & Movable & Hashable
-    ](mut self, owned keys: List[K], owned gamma: Float64):
+    ](mut self, var keys: List[K], var gamma: Float64):
         """Compute the minimal perfect hash function.
 
         Args:
@@ -253,10 +253,10 @@ struct BBHash[compute_reverse_map: Bool = False]:
                 # Unset the bit vec position for the key if there was a collision
                 if level_vec.unset_collision(h):
                     # Add the key to redos
-                    redo.append(keys[i])
+                    redo.append(keys[i].copy())
                 else:
                     level_keys[h % len(level_vec.v)] = kh
-            level_keys_map.append(level_keys)
+            level_keys_map.append(level_keys^)
 
             # save the current bit vector for the current level
             self.bits.append(level_vec.v.copy())

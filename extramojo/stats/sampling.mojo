@@ -8,9 +8,7 @@ Reservoir sampling on a stream.
 from random import random_ui64
 
 
-struct ReservoirSampler[T: Copyable & Movable](
-    Copyable, ExplicitlyCopyable, Movable
-):
+struct ReservoirSampler[T: Copyable & Movable](Copyable, Movable):
     """Sample N items from a stream of unknown length.
 
     Sample all the elements, this should retain the order since we always automatically take the first N elements.
@@ -90,11 +88,11 @@ struct ReservoirSampler[T: Copyable & Movable](
         The element will be tested for addition to the reservoir.
         """
         if len(self.reservoir) < self.values_to_collect:
-            self.reservoir.append(item)
+            self.reservoir.append(item.copy())
             self.seen_values += 1
             return
 
         var index = random_ui64(0, self.seen_values)
         if index < self.values_to_collect:
-            self.reservoir[Int(index)] = item
+            self.reservoir[Int(index)] = item.copy()
         self.seen_values += 1
