@@ -1,10 +1,6 @@
 [workspace]
 authors = ["Seth Stadick <sstadick@gmail.com>"]
-channels = [
-    "conda-forge",
-    "https://prefix.dev/pixi-build-backends",
-    "https://conda.modular.com/max",
-]
+channels = ["https://prefix.dev/conda-forge", "https://conda.modular.com/max"]
 description = "Useful things that aren't in the standard library."
 platforms = ["osx-arm64", "linux-64", "linux-aarch64"]
 license = "Unlicense OR MIT"
@@ -16,6 +12,10 @@ version = "0.18.0"
 
 [package.build]
 backend = { name = "pixi-build-mojo", version = "0.1.*" }
+channels = [
+    "https://prefix.dev/pixi-build-backends",
+    "https://prefix.dev/conda-forge",
+]
 
 [package.host-dependencies]
 mojo-compiler = "=0.25.6"
