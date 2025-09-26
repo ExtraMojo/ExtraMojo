@@ -8,7 +8,7 @@ on:
 # on:  [push, pull_request]
 
 env:
-  MODO_VERSION: 31b9dfa0792bf18489551338831c538b4efe2db1 # 0.11.10
+  MODO_VERSION: 6fdc6aeef0f7f2ec5481920b621bd3367e67418d # 0.11.12
   HUGO_VERSION: mojo-lexer # 0.140.2
 
 jobs:
