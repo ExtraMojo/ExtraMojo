@@ -1,6 +1,6 @@
 from collections import Set
 from hashlib.hash import hash
-from testing import assert_equal, assert_true, assert_false
+from testing import assert_equal, assert_true, assert_false, TestSuite
 
 from extramojo.collections.bbhash.bbhash import BBHash
 
@@ -85,6 +85,10 @@ def test_bbhash_revmap():
 
 
 def main():
-    test_bbhash_simple()
-    test_bbhash_example()
-    test_bbhash_revmap()
+    TestSuite.discover_tests[__functions_in_module()]().run()
+
+
+# def main():
+#     test_bbhash_simple()
+#     test_bbhash_example()
+#     test_bbhash_revmap()

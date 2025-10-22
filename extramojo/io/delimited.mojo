@@ -289,7 +289,7 @@ struct DelimReader[RowType: FromDelimited](Movable):
 
     fn _skip_header(mut self) raises:
         self.buffer.clear()
-        var bytes_read = self.reader.read_until(self.buffer, ord("\n"))
+        var bytes_read = self.reader.read_until(self.buffer, UInt(ord("\n")))
 
         if bytes_read == 0:
             self.len = 0
@@ -303,7 +303,7 @@ struct DelimReader[RowType: FromDelimited](Movable):
 
     fn _get_next(mut self) raises:
         self.buffer.clear()
-        var bytes_read = self.reader.read_until(self.buffer, ord("\n"))
+        var bytes_read = self.reader.read_until(self.buffer, UInt(ord("\n")))
         var tmp = String()
         tmp.write_bytes(self.buffer)
         if bytes_read == 0:

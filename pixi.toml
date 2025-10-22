@@ -1,6 +1,6 @@
 [workspace]
 authors = ["Seth Stadick <sstadick@gmail.com>"]
-channels = ["https://prefix.dev/conda-forge", "https://conda.modular.com/max"]
+channels = ["https://prefix.dev/conda-forge", "https://conda.modular.com/max-nightly"]
 description = "Useful things that aren't in the standard library."
 platforms = ["osx-arm64", "linux-64", "linux-aarch64"]
 license = "Unlicense OR MIT"
@@ -28,13 +28,13 @@ mojo-compiler = "=0.25.6"
 
 # These are basically just dev deps, the real deps are specified in the recipe.yaml
 [dependencies]
-mojo = "=0.25.6"
-# extramojo = { path = "." }
+mojo = ">=0.25.7.0.dev2025102214,<0.26"
 
 [tasks]
 # Dev tasks
 build = "pixi run mojo package extramojo -o extramojo.mojopkg"
 r = { cmd = "pixi run mojo run -I . " }
+ts = { cmd = "sh -c 'find ./tests -name test_*.mojo | xargs -I % pixi run mojo run -I . -D ASSERT=all %'" }
 t = { cmd = "pixi run mojo test -I . -D ASSERT=all" }
 test = { cmd = "pixi run mojo run -I . tests/test_file.mojo", depends-on = [
     "t",

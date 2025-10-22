@@ -142,7 +142,9 @@ struct OptValue(Copyable, Movable):
         elif value.lower() == "0":
             return Self(False)
 
-        raise String("Attempt to covert invalid bool value of {}").format(value)
+        raise Error(
+            String("Attempt to covert invalid bool value of {}").format(value)
+        )
 
     @staticmethod
     fn parse_kind(kind: OptKind, read value: String) raises -> Self:
@@ -214,7 +216,7 @@ struct ParsedOpts(Copyable, Movable):
 
     fn get_help_message(
         ref self,
-    ) -> Pointer[String, __origin_of(self.help_msg)]:
+    ) -> Pointer[String, origin_of(self.help_msg)]:
         """Get a nicely formatted help string."""
         return Pointer(to=self.help_msg)
 
@@ -225,14 +227,16 @@ struct ParsedOpts(Copyable, Movable):
         """
         var opt = self.options.get(key)
         if not key:
-            raise String.write(key, " not found in options")
+            raise Error(String.write(key, " not found in options"))
 
         var str_value = opt.value().get_string()
         if not str_value:
-            raise String.write(
-                "No string value for ",
-                key,
-                ". Check the specified option type.",
+            raise Error(
+                String.write(
+                    "No string value for ",
+                    key,
+                    ". Check the specified option type.",
+                )
             )
         return str_value.value()
 
@@ -243,12 +247,16 @@ struct ParsedOpts(Copyable, Movable):
         """
         var opt = self.options.get(key)
         if not key:
-            raise String.write(key, " not found in options")
+            raise Error(String.write(key, " not found in options"))
 
         var int_value = opt.value().get_int()
         if not int_value:
-            raise String.write(
-                "No Int value for ", key, ". Check the specified option type."
+            raise Error(
+                String.write(
+                    "No Int value for ",
+                    key,
+                    ". Check the specified option type.",
+                )
             )
         return int_value.value()
 
@@ -259,14 +267,16 @@ struct ParsedOpts(Copyable, Movable):
         """
         var opt = self.options.get(key)
         if not key:
-            raise String.write(key, " not found in options")
+            raise Error(String.write(key, " not found in options"))
 
         var float_value = opt.value().get_float()
         if not float_value:
-            raise String.write(
-                "No Float64 value for ",
-                key,
-                ". Check the specified option type.",
+            raise Error(
+                String.write(
+                    "No Float64 value for ",
+                    key,
+                    ". Check the specified option type.",
+                )
             )
         return float_value.value()
 
@@ -277,12 +287,16 @@ struct ParsedOpts(Copyable, Movable):
         """
         var opt = self.options.get(key)
         if not key:
-            raise String.write(key, " not found in options")
+            raise Error(String.write(key, " not found in options"))
 
         var bool_value = opt.value().get_bool()
         if not bool_value:
-            raise String.write(
-                "No Bool value for ", key, ". Check the specified option type."
+            raise Error(
+                String.write(
+                    "No Bool value for ",
+                    key,
+                    ". Check the specified option type.",
+                )
             )
         return bool_value.value()
 
@@ -426,8 +440,8 @@ struct OptParser(Copyable, Movable):
                     if not opt_def.is_flag:
                         j += 1
                         if j >= len(args):
-                            raise String.write(
-                                "Missing value for option: ", opt
+                            raise Error(
+                                String.write("Missing value for option: ", opt)
                             )
                         var value = args[j]
                         # Get the value from the next string
@@ -458,8 +472,8 @@ struct OptParser(Copyable, Movable):
                     if not opt_def.is_flag:
                         i += 1
                         if i >= len(args):
-                            raise String.write(
-                                "Missing value for option: ", opt
+                            raise Error(
+                                String.write("Missing value for option: ", opt)
                             )
                         var value = args[i]
                         # Get the value from the next string
@@ -477,7 +491,7 @@ struct OptParser(Copyable, Movable):
                             .value()
                         )
                 else:
-                    raise String.write("No such option: ", opt)
+                    raise Error(String.write("No such option: ", opt))
             else:
                 result.args.append(arg)
             i += 1
@@ -487,16 +501,18 @@ struct OptParser(Copyable, Movable):
             if not result.options.get(arg.key):
                 var default = arg.value.default_value
                 if not default:
-                    raise String.write("No value provided for ", arg.key)
+                    raise Error(String.write("No value provided for ", arg.key))
                 result.options[arg.key] = OptValue.parse_kind(
                     arg.value.value_kind, default.value()
                 )
 
         if self.min_num_args_expected:
             if len(result.args) < self.min_num_args_expected.value():
-                raise String("Expected >= {} arguments, found {}").format(
-                    self.min_num_args_expected.value(),
-                    len(result.args),
+                raise Error(
+                    String("Expected >= {} arguments, found {}").format(
+                        self.min_num_args_expected.value(),
+                        len(result.args),
+                    )
                 )
 
         return result^

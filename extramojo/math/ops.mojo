@@ -14,9 +14,9 @@ fn saturating_sub[
 
     @parameter
     if data.is_unsigned():
-        return llvm_intrinsic["llvm.usub.sat", __type_of(lhs)](lhs, rhs)
+        return llvm_intrinsic["llvm.usub.sat", type_of(lhs)](lhs, rhs)
     else:
-        return llvm_intrinsic["llvm.ssub.sat", __type_of(lhs)](lhs, rhs)
+        return llvm_intrinsic["llvm.ssub.sat", type_of(lhs)](lhs, rhs)
 
 
 @always_inline
@@ -32,9 +32,9 @@ fn saturating_add[
 
     @parameter
     if data.is_unsigned():
-        return llvm_intrinsic["llvm.uadd.sat", __type_of(lhs)](lhs, rhs)
+        return llvm_intrinsic["llvm.uadd.sat", type_of(lhs)](lhs, rhs)
     else:
-        return llvm_intrinsic["llvm.sadd.sat", __type_of(lhs)](lhs, rhs)
+        return llvm_intrinsic["llvm.sadd.sat", type_of(lhs)](lhs, rhs)
 
 
 # @always_inline

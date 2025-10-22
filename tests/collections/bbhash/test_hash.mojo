@@ -6,7 +6,7 @@ from extramojo.collections.bbhash.hash import (
     fnv1a,
 )
 
-from testing import assert_equal, assert_true, assert_false
+from testing import assert_equal, assert_true, assert_false, TestSuite
 
 
 @fieldwise_init
@@ -85,6 +85,4 @@ def test_hash():
 
 
 def main():
-    test_hash64()
-    test_fnv1a()
-    test_hash()
+    TestSuite.discover_tests[__functions_in_module()]().run()

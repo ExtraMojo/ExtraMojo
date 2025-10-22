@@ -1,6 +1,6 @@
-from testing import assert_equal
+from testing import assert_equal, TestSuite
 
-from extramojo.math.ops import saturating_add, saturating_sub, fastmod
+from extramojo.math.ops import saturating_add, saturating_sub
 
 
 def test_saturating_add():
@@ -83,4 +83,4 @@ def test_saturating_sub():
 
 
 def main():
-    pass
+    TestSuite.discover_tests[__functions_in_module()]().run()
