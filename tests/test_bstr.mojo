@@ -6,6 +6,7 @@ from extramojo.bstr.bstr import (
 )
 from extramojo.bstr.memchr import memchr, memchr_wide
 from testing import *
+from testing import TestSuite
 
 
 fn s(bytes: Span[UInt8]) -> String:
@@ -31,7 +32,7 @@ fn test_memchr() raises:
 
     @parameter
     for do_alignment in range(0, len(check)):
-        var cases = List[(String, Int)](
+        var cases = List[Tuple[String, Int]](
             (
                 String(
                     "enlivened,unleavened,Arnulfo's,Unilever's,unloved|Anouilh,analogue,analogy"
@@ -63,7 +64,7 @@ fn test_memchr() raises:
 
 
 fn test_memchr_wide() raises:
-    var cases = List[(String, Int)](
+    var cases = List[Tuple[String, Int]](
         (
             String(
                 "enlivened,unleavened,Arnulfo's,Unilever's,unloved|Anouilh,analogue,analogy"
@@ -298,3 +299,7 @@ fn test_spilt_iterator_long() raises:
         output.append(value)
     for i in range(len(expected)):
         assert_equal(s(output[i]), s(expected[i]), "Not equal")
+
+
+def main():
+    TestSuite.discover_tests[__functions_in_module()]().run()

@@ -1,4 +1,4 @@
-from testing import assert_equal, assert_true, assert_false
+from testing import assert_equal, assert_true, assert_false, TestSuite
 
 from extramojo.collections.bitvec import BitVec
 
@@ -26,7 +26,7 @@ def test_bitvec_count_set_bits():
 
     var bv1 = BitVec(length=65, fill=True)
     assert_equal(bv1._capacity, 2)
-    var bit_offset = bv1._len % bv.WORD_DTYPE.bit_width()
+    var bit_offset = bv1._len % UInt(bv.WORD_DTYPE.bit_width())
     assert_equal(bit_offset, 1)
     var mask = (1 << bit_offset) - 1
     assert_equal(mask, 1)
@@ -165,8 +165,8 @@ def test_bitvec_empty():
 
 def test_bitvec_getitem():
     var bv = BitVec(length=600, fill=True)
-    for i in range(0, 600):
-        assert_true(bv[i])
+    for i in range(UInt(0), UInt(600)):
+        assert_true(bv[UInt(i)])
 
 
 def test_bitvec_setitem():
@@ -223,7 +223,7 @@ def test_bitvec_append():
 
     assert_equal(len(bv), 100)
     for i in range(0, 100):
-        assert_true(bv[i])
+        assert_true(bv[UInt(i)])
 
     bv.clear()
     assert_true(bv.is_empty())
@@ -232,7 +232,7 @@ def test_bitvec_append():
 
     assert_equal(len(bv), 1050)
     for i in range(0, 1050):
-        assert_true(bv[i])
+        assert_true(bv[UInt(i)])
 
     bv = BitVec(length=800, fill=True)
     for _i in range(0, 200):
@@ -240,9 +240,9 @@ def test_bitvec_append():
     assert_equal(len(bv), 1000)
 
     for i in range(0, 800):
-        assert_true(bv[i])
+        assert_true(bv[UInt(i)])
     for i in range(800, 1000):
-        assert_false(bv[i])
+        assert_false(bv[UInt(i)])
 
 
 def test_bitvec_pop_back():
@@ -269,10 +269,10 @@ def test_bitvec_clear_and_check():
 def test_bitvec_union():
     # left size longer
     var bvA = BitVec(length=600, fill=False)
-    for i in [0, 64, 550]:
+    for i in [UInt(0), 64, 550]:
         bvA.set(i)
     var bvB = BitVec(length=500, fill=False)
-    for i in [1, 25, 499]:
+    for i in [UInt(1), 25, 499]:
         bvB.set(i)
     var bvC = bvA | bvB
     assert_equal(bvC[499], True)
@@ -281,10 +281,10 @@ def test_bitvec_union():
 
     # left size shorter
     var bvD = BitVec(length=600, fill=False)
-    for i in [0, 64, 550]:
+    for i in [UInt(0), 64, 550]:
         bvD.set(i)
     var bvE = BitVec(length=500, fill=False)
-    for i in [1, 25, 499]:
+    for i in [UInt(1), 25, 499]:
         bvE.set(i)
     var bvF = bvE | bvD
     assert_equal(len(bvF), 600)
@@ -365,10 +365,10 @@ def test_bitvec_union():
 def test_bitvec_intersection():
     # left size longer
     var bvA = BitVec(length=600, fill=False)
-    for i in [0, 25, 550]:
+    for i in [UInt(0), 25, 550]:
         bvA.set(i)
     var bvB = BitVec(length=500, fill=False)
-    for i in [1, 25, 499]:
+    for i in [UInt(1), 25, 499]:
         bvB.set(i)
     var bvC = bvA & bvB
     assert_equal(len(bvC), 600)
@@ -376,10 +376,10 @@ def test_bitvec_intersection():
 
     # left size shorter
     var bvD = BitVec(length=600, fill=False)
-    for i in [0, 25, 550]:
+    for i in [UInt(0), 25, 550]:
         bvD.set(i)
     var bvE = BitVec(length=500, fill=False)
-    for i in [1, 25, 499]:
+    for i in [UInt(1), 25, 499]:
         bvE.set(i)
     var bvF = bvE & bvD
     assert_equal(len(bvF), 600)
@@ -459,10 +459,10 @@ def test_bitvec_intersection():
 def test_bitvec_difference():
     # left size longer
     var bvA = BitVec(length=600, fill=False)
-    for i in [0, 25, 550]:
+    for i in [UInt(0), 25, 550]:
         bvA.set(i)
     var bvB = BitVec(length=500, fill=False)
-    for i in [1, 25, 499]:
+    for i in [UInt(1), 25, 499]:
         bvB.set(i)
     var bvC = bvA - bvB
     assert_equal(len(bvC), 600)
@@ -470,10 +470,10 @@ def test_bitvec_difference():
 
     # left size shorter
     var bvD = BitVec(length=600, fill=False)
-    for i in [0, 25, 550]:
+    for i in [UInt(0), 25, 550]:
         bvD.set(i)
     var bvE = BitVec(length=500, fill=False)
-    for i in [1, 25, 499]:
+    for i in [UInt(1), 25, 499]:
         bvE.set(i)
     var bvF = bvE - bvD
     assert_equal(len(bvF), 600)
@@ -611,10 +611,10 @@ def test_bitvec_difference():
 
 def test_bitvec_union_update():
     var bv1 = BitVec(length=12, fill=False)
-    for i in [2, 4, 6, 8, 10, 11]:
+    for i in [UInt(2), 4, 6, 8, 10, 11]:
         bv1.set(i)
     var bv2 = BitVec(length=10, fill=False)
-    for i in [1, 3, 5, 7, 9]:
+    for i in [UInt(1), 3, 5, 7, 9]:
         bv2.set(i)
     bv1 |= bv2
     assert_equal(len(bv1), 12)
@@ -622,10 +622,10 @@ def test_bitvec_union_update():
 
     # LHS Longer
     var bv3 = BitVec(length=600, fill=False)
-    for i in [0, 64, 550]:
+    for i in [UInt(0), 64, 550]:
         bv3.set(i)
     var bv4 = BitVec(length=500, fill=False)
-    for i in [1, 25, 499]:
+    for i in [UInt(1), 25, 499]:
         bv4.set(i)
     bv3 |= bv4
     assert_equal(len(bv3), 600)
@@ -633,10 +633,10 @@ def test_bitvec_union_update():
 
     # RHS Longer
     var bv5 = BitVec(length=600, fill=False)
-    for i in [0, 64, 550]:
+    for i in [UInt(0), 64, 550]:
         bv5.set(i)
     var bv6 = BitVec(length=500, fill=False)
-    for i in [1, 25, 499]:
+    for i in [UInt(1), 25, 499]:
         bv6.set(i)
     bv6 |= bv5
     assert_equal(len(bv6), 600)
@@ -645,10 +645,10 @@ def test_bitvec_union_update():
 
 def test_bitvec_intersection_update():
     var bv1 = BitVec(length=12, fill=False)
-    for i in [2, 3, 6, 8, 10, 11]:
+    for i in [UInt(2), 3, 6, 8, 10, 11]:
         bv1.set(i)
     var bv2 = BitVec(length=10, fill=False)
-    for i in [1, 3, 5, 7, 9]:
+    for i in [UInt(1), 3, 5, 7, 9]:
         bv2.set(i)
     bv1 &= bv2
     assert_equal(len(bv1), 12)
@@ -656,10 +656,10 @@ def test_bitvec_intersection_update():
 
     # LHS Longer
     var bv3 = BitVec(length=600, fill=False)
-    for i in [0, 64, 550]:
+    for i in [UInt(0), 64, 550]:
         bv3.set(i)
     var bv4 = BitVec(length=500, fill=False)
-    for i in [1, 64, 499]:
+    for i in [UInt(1), 64, 499]:
         bv4.set(i)
     bv3 &= bv4
     assert_equal(len(bv3), 600)
@@ -667,10 +667,10 @@ def test_bitvec_intersection_update():
 
     # RHS Longer
     var bv5 = BitVec(length=600, fill=False)
-    for i in [0, 64, 550]:
+    for i in [UInt(0), 64, 550]:
         bv5.set(i)
     var bv6 = BitVec(length=500, fill=False)
-    for i in [1, 64, 499]:
+    for i in [UInt(1), 64, 499]:
         bv6.set(i)
     bv6 &= bv5
     assert_equal(len(bv6), 600)
@@ -679,10 +679,10 @@ def test_bitvec_intersection_update():
 
 def test_bitvec_difference_update():
     var bv1 = BitVec(length=12, fill=False)
-    for i in [2, 3, 6, 8, 10, 11]:
+    for i in [UInt(2), 3, 6, 8, 10, 11]:
         bv1.set(i)
     var bv2 = BitVec(length=10, fill=False)
-    for i in [1, 3, 5, 7, 9]:
+    for i in [UInt(1), 3, 5, 7, 9]:
         bv2.set(i)
     bv1 -= bv2
     assert_equal(len(bv1), 12)
@@ -690,10 +690,10 @@ def test_bitvec_difference_update():
 
     # LHS Longer
     var bv3 = BitVec(length=600, fill=False)
-    for i in [0, 64, 550]:
+    for i in [UInt(0), 64, 550]:
         bv3.set(i)
     var bv4 = BitVec(length=500, fill=False)
-    for i in [1, 64, 499]:
+    for i in [UInt(1), 64, 499]:
         bv4.set(i)
     bv3 -= bv4
     assert_equal(len(bv3), 600)
@@ -701,10 +701,10 @@ def test_bitvec_difference_update():
 
     # RHS Longer
     var bv5 = BitVec(length=600, fill=False)
-    for i in [0, 64, 550]:
+    for i in [UInt(0), 64, 550]:
         bv5.set(i)
     var bv6 = BitVec(length=500, fill=False)
-    for i in [1, 64, 499]:
+    for i in [UInt(1), 64, 499]:
         bv6.set(i)
     bv6 -= bv5
     assert_equal(len(bv6), 600)
@@ -756,12 +756,12 @@ def test_bitvec_full_overlap_union():
 
 def test_bitvec_adhoc():
     alias example = "As the quick brown fox jumped over the fence a moon was rising in the distance. Then the moon exploded. The End.".as_bytes()
-    var periods = BitVec(length=len(example), fill=False)
-    var spaces = BitVec(length=len(example), fill=False)
-    var ts = BitVec(length=len(example), fill=False)
-    var none = BitVec(length=len(example), fill=False)
+    var periods = BitVec(length=UInt(len(example)), fill=False)
+    var spaces = BitVec(length=UInt(len(example)), fill=False)
+    var ts = BitVec(length=UInt(len(example)), fill=False)
+    var none = BitVec(length=UInt(len(example)), fill=False)
 
-    for i in range(0, len(example)):
+    for i in range(UInt(0), UInt(len(example))):
         if example[i] == ord("."):
             periods.set(i)
         elif example[i] == ord(" "):
@@ -775,16 +775,18 @@ def test_bitvec_adhoc():
     assert_equal(either.count_set_bits(), 24)
     either |= ts
     assert_equal(either.count_set_bits(), 26)
-    assert_equal(none.count_set_bits() + either.count_set_bits(), len(example))
+    assert_equal(
+        none.count_set_bits() + either.count_set_bits(), UInt(len(example))
+    )
     assert_true(periods != spaces)
 
     var test = either & none
     assert_equal(test.count_set_bits(), 0)
-    assert_equal(test.count_clear_bits(), len(example))
+    assert_equal(test.count_clear_bits(), UInt(len(example)))
 
     test &= either
     assert_equal(test.count_set_bits(), 0)
-    assert_equal(test.count_clear_bits(), len(example))
+    assert_equal(test.count_clear_bits(), UInt(len(example)))
 
     either -= test
     assert_equal(either.count_set_bits(), 26)
@@ -808,34 +810,4 @@ def test_bitvec_equal():
 
 
 def main():
-    test_bitvec_from_list_literal()
-    test_bitvec_count_set_bits()
-    test_bitvec_init_with_capacity()
-    test_bitvec_capacity_alignment()
-    test_bitvec_init_length_fill_false()
-    test_bitvec_init_length_fill_true()
-    test_bitvec_resize_grow_fill_false()
-    test_bitvec_resize_grow_fill_true()
-    test_bitvec_resize_shrink()
-    test_bitvec_shrink_to_same_size()
-    test_bitvec_clear()
-    test_bitvec_empty()
-    test_bitvec_getitem()
-    test_bitvec_setitem()
-    test_bitvec_set()
-    test_bitvec_clear_one()
-    test_bitvec_toggle()
-    test_bitvec_append()
-    test_bitvec_pop_back()
-    test_bitvec_set_and_check()
-    test_bitvec_clear_and_check()
-    test_bitvec_union()
-    test_bitvec_intersection()
-    test_bitvec_difference()
-    test_bitvec_union_update()
-    test_bitvec_intersection_update()
-    test_bitvec_difference_update()
-    test_bitvec_partial_union_preserves_tail()
-    test_bitvec_union_update_preserves_tail()
-    test_bitvec_full_overlap_union()
-    test_bitvec_adhoc()
+    TestSuite.discover_tests[__functions_in_module()]().run()

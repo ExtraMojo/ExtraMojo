@@ -59,8 +59,8 @@ struct _BCVec(Writable):
     fn __init__(out self, *, length: UInt):
         """Create with the given number of bits."""
         # Expand out to word boundary, no reason not to
-        var full_len = (
-            _elts[BitVec.WORD_DTYPE](length) * BitVec.WORD_DTYPE.bit_width()
+        var full_len = _elts[BitVec.WORD_DTYPE](length) * UInt(
+            BitVec.WORD_DTYPE.bit_width()
         )
         self.v = BitVec(length=full_len, fill=False)
         self.c = BitVec(length=full_len, fill=False)
@@ -94,10 +94,10 @@ struct _BCVec(Writable):
         # No collisions at index i
         return False
 
-    fn next_level(mut self, new_size: Int):
+    fn next_level(mut self, new_size: UInt):
         """Setup for the next level, resize and set to zero."""
-        var full_len = (
-            _elts[BitVec.WORD_DTYPE](new_size) * BitVec.WORD_DTYPE.bit_width()
+        var full_len = _elts[BitVec.WORD_DTYPE](new_size) * UInt(
+            BitVec.WORD_DTYPE.bit_width()
         )
         self.c.resize(full_len, fill=False)
         self.c.zero_all()

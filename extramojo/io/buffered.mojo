@@ -258,9 +258,9 @@ struct BufferedReader(Movable):
                 self.buffer_len - self.buffer_offset, bytes_to_read
             )
             memcpy(
-                out_buf_ptr,
-                self.buffer.offset(self.buffer_offset),
-                available_bytes,
+                dest=out_buf_ptr,
+                src=self.buffer.offset(self.buffer_offset),
+                count=available_bytes,
             )
             self.buffer_offset += available_bytes
             bytes_to_read -= available_bytes
@@ -296,7 +296,7 @@ struct BufferedReader(Movable):
         while True:
             # Find the next newline in the buffer
             var newline_index = memchr(
-                Span[UInt8, __origin_of(self)](
+                Span[UInt8, origin_of(self)](
                     ptr=self.buffer, length=self.buffer_len
                 ),
                 char,
@@ -308,7 +308,11 @@ struct BufferedReader(Movable):
             var size = end - self.buffer_offset
             buffer.reserve(len(buffer) + size)
             var line_ptr = buffer.unsafe_ptr().offset(len(buffer))
-            memcpy(line_ptr, self.buffer.offset(self.buffer_offset), size)
+            memcpy(
+                dest=line_ptr,
+                src=self.buffer.offset(self.buffer_offset),
+                count=size,
+            )
             # TODO: is there a better way to do this?
             buffer._len += size
 
@@ -335,7 +339,7 @@ struct BufferedReader(Movable):
         """
         var buf_ptr = self.buffer
         var bytes_read = self.fh.read(
-            Span[UInt8, __origin_of(buf_ptr)](
+            Span[UInt8, origin_of(buf_ptr)](
                 ptr=buf_ptr, length=self.buffer_capacity
             )
         )
@@ -412,9 +416,9 @@ struct BufferedWriter[W: Movable & Writer](Movable, Writer):
 
             var to_copy = b[:end]
             memcpy(
-                self.buffer.unsafe_ptr().offset(self.buffer_len),
-                to_copy.unsafe_ptr(),
-                len(to_copy),
+                dest=self.buffer.unsafe_ptr().offset(self.buffer_len),
+                src=to_copy.unsafe_ptr(),
+                count=len(to_copy),
             )
             self.buffer._len += len(to_copy)
             self.buffer_len += len(to_copy)
