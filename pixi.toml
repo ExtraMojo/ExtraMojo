@@ -18,28 +18,25 @@ channels = [
 ]
 
 [package.host-dependencies]
-mojo-compiler = "=0.25.6"
+mojo-compiler = ">=0.25.7.0.dev2025102214,<0.26"
 
 [package.build-dependencies]
-mojo-compiler = "=0.25.6"
+mojo-compiler = ">=0.25.7.0.dev2025102214,<0.26"
 
 [package.run-dependencies]
-mojo-compiler = "=0.25.6"
+mojo-compiler = ">=0.25.7.0.dev2025102214,<0.26"
 
 # These are basically just dev deps, the real deps are specified in the recipe.yaml
 [dependencies]
 mojo = ">=0.25.7.0.dev2025102214,<0.26"
 
 [tasks]
-# Dev tasks
 build = "pixi run mojo package extramojo -o extramojo.mojopkg"
-r = { cmd = "pixi run mojo run -I . " }
-ts = { cmd = "sh -c 'find ./tests -name test_*.mojo | xargs -I % pixi run mojo run -I . -D ASSERT=all %'" }
-t = { cmd = "pixi run mojo test -I . -D ASSERT=all" }
-test = { cmd = "pixi run mojo run -I . tests/test_file.mojo", depends-on = [
-    "t",
-] }
+r = { cmd = "pixi run mojo run -I . " } # run
+t = { cmd = "sh -c 'find ./tests -name test_*.mojo | xargs -I % pixi run mojo run -I . -D ASSERT=all %'" } # test
 format = "pixi run mojo format ./"
+#t = { cmd = "pixi run mojo test -I . -D ASSERT=all" }
+#test = { cmd = "pixi run mojo run -I . tests/test_file.mojo", depends-on = ["t",] }
 
 # rattler-build tasks
 rbuild = "pixi build"
