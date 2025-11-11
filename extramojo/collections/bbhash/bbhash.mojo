@@ -37,6 +37,7 @@ assert_true(key_hash.value() == hash(String("fox")))
 
 from hashlib.hash import hash
 from os import abort
+from sys import bit_width_of
 
 from extramojo.collections.bitvec import BitVec, _word_index, _bit_mask, _elts
 from extramojo.collections.bbhash.hash import (
@@ -60,7 +61,7 @@ struct _BCVec(Writable):
         """Create with the given number of bits."""
         # Expand out to word boundary, no reason not to
         var full_len = _elts[BitVec.WORD_DTYPE](length) * UInt(
-            BitVec.WORD_DTYPE.bit_width()
+            bit_width_of[BitVec.WORD.dtype]()
         )
         self.v = BitVec(length=full_len, fill=False)
         self.c = BitVec(length=full_len, fill=False)
@@ -97,7 +98,7 @@ struct _BCVec(Writable):
     fn next_level(mut self, new_size: UInt):
         """Setup for the next level, resize and set to zero."""
         var full_len = _elts[BitVec.WORD_DTYPE](new_size) * UInt(
-            BitVec.WORD_DTYPE.bit_width()
+            bit_width_of[BitVec.WORD.dtype]()
         )
         self.c.resize(full_len, fill=False)
         self.c.zero_all()
