@@ -20,7 +20,7 @@ from bit import log2_floor, pop_count
 from math import ceildiv
 from memory import UnsafePointer, pack_bits, memcmp, memcpy, memset, memset_zero
 from os import abort
-from sys.info import is_gpu, simd_width_of
+from sys.info import is_gpu, simd_width_of, bit_width_of
 
 
 @always_inline
@@ -50,7 +50,7 @@ fn _elts[dtype: DType](bits: UInt) -> UInt:
     """Compute the number of elements needed to hold the given number of bits.
     """
     constrained[dtype is not DType.invalid, "dtype must be a valid DType"]()
-    alias bitwidth = UInt(dtype.bit_width())
+    alias bitwidth = UInt(bit_width_of[dtype]())
     return (bits + bitwidth - 1) // bitwidth
 
 
@@ -58,14 +58,14 @@ fn _elts[dtype: DType](bits: UInt) -> UInt:
 fn _word_index[dtype: DType](idx: UInt) -> UInt:
     """Computes the 0-based index of the Self.WORD_DTYPE word containg bit `idx`
     """
-    alias _WORD_BITS_LOG2 = UInt(log2_floor(UInt(dtype.bit_width())))
+    alias _WORD_BITS_LOG2 = UInt(log2_floor(UInt(bit_width_of[dtype]())))
     return idx >> _WORD_BITS_LOG2
 
 
 @always_inline
 fn _bit_mask[dtype: DType](idx: UInt) -> Scalar[dtype]:
     """Returns a UInt64 mask with only the bit corresponding to `idx` set."""
-    alias _WORD_BITS = UInt(dtype.bit_width())
+    alias _WORD_BITS = UInt(bit_width_of[dtype]())
     return Scalar[dtype](1) << Scalar[dtype]((idx & (_WORD_BITS - 1)))
 
 
@@ -79,7 +79,7 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
     """
 
     alias WORD_DTYPE = DType.uint64 if not is_gpu() else DType.uint32
-    alias WORD_BYTEWIDTH = Self.WORD_DTYPE.bit_width() // 8
+    alias WORD_BYTEWIDTH = bit_width_of[Self.WORD.dtype]() // 8
     alias WORD = Scalar[Self.WORD_DTYPE]
 
     var data: UnsafePointer[Self.WORD]
@@ -106,7 +106,7 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
         """Capacity measured in bits."""
         # TODO: alignment of 16 on GPU?
         # TODO: allow for using `external_memory` for GPU?
-        var word_cap = _elts[Self.WORD_DTYPE](capacity)
+        var word_cap = Int(_elts[Self.WORD_DTYPE](capacity))
         if capacity:
             self.data = UnsafePointer[self.WORD].alloc[](
                 word_cap, alignment=self.WORD_BYTEWIDTH
@@ -115,7 +115,7 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
         else:
             self.data = UnsafePointer[self.WORD]()
         self._len = 0
-        self._capacity = word_cap
+        self._capacity = UInt(word_cap)
 
     @always_inline
     fn __init__(out self, *, length: UInt, fill: Bool = False):
@@ -158,7 +158,7 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
     @always_inline
     fn copy(self) -> Self:
         var copy = Self(capacity=self._len)
-        memcpy(dest=copy.data, src=self.data, count=self._capacity)
+        memcpy(dest=copy.data, src=self.data, count=Int(self._capacity))
         copy._len = self._len
         return copy^
 
@@ -179,12 +179,12 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
     @always_inline
     fn __len__(self) -> Int:
         """The number of bits in the bitvec."""
-        return self._len
+        return Int(self._len)
 
     @always_inline
     fn capacity(read self) -> UInt:
         """Returns the capacity in bits."""
-        return self._capacity * UInt(self.WORD_DTYPE.bit_width())
+        return self._capacity * UInt(bit_width_of[Self.WORD.dtype]())
 
     @always_inline
     fn word_len(read self) -> UInt:
@@ -221,13 +221,13 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
     fn _realloc(mut self, new_capacity: UInt):
         """Reallocate to for new_capacity, which is in words."""
         var new_data = UnsafePointer[self.WORD].alloc(
-            new_capacity, alignment=self.WORD_BYTEWIDTH
+            Int(new_capacity), alignment=self.WORD_BYTEWIDTH
         )
         var current_words = _elts[self.WORD_DTYPE](self._len)
         memset_zero(
-            new_data.offset(current_words), new_capacity - current_words
+            new_data.offset(current_words), Int(new_capacity - current_words)
         )
-        memcpy(dest=new_data, src=self.data, count=current_words)
+        memcpy(dest=new_data, src=self.data, count=Int(current_words))
 
         if self.data:
             self.data.free()
@@ -255,13 +255,13 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
             memset(
                 self.data.offset(old_words),
                 0xFF if fill else 0x00,
-                self._capacity - old_words,
+                Int(self._capacity - old_words),
             )
 
         # Set the bits in the last word of the old values
-        var bit_offset = old_len % UInt(self.WORD_DTYPE.bit_width())
+        var bit_offset = old_len % UInt(bit_width_of[Self.WORD.dtype]())
         if bit_offset != 0:
-            var mask = (1 << bit_offset) - 1
+            var mask = (UInt(1) << bit_offset) - UInt(1)
             if fill:
                 # Fill upper bits in word to 1
                 self.data[old_words - 1] |= ~mask
@@ -270,9 +270,9 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
                 self.data[old_words - 1] &= mask
 
         # Set the bits in the last word
-        bit_offset = new_size % UInt(self.WORD_DTYPE.bit_width())
+        bit_offset = new_size % UInt(bit_width_of[Self.WORD.dtype]())
         if bit_offset != 0 and fill:
-            var mask = (1 << bit_offset) - 1
+            var mask = (UInt(1) << bit_offset) - UInt(1)
             # clear upper bits
             self.data[self._capacity - 1] &= mask
         self._len = new_size
@@ -480,9 +480,9 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
             return False
 
         var words = _elts[self.WORD_DTYPE](UInt(len(self)))
-        var equal = memcmp(self.data, other.data, words - 1) == 0
+        var equal = memcmp(self.data, other.data, Int(words - 1)) == 0
         if equal:
-            var mask = len(self) % self.WORD_DTYPE.bit_width()
+            var mask = len(self) % bit_width_of[Self.WORD.dtype]()
             equal = (self.data[words - 1] & mask) == (
                 other.data[words - 1] & mask
             )
@@ -531,7 +531,7 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
     @always_inline
     fn zero_all(mut self):
         """Set all bits to zero."""
-        memset_zero(self.data, _elts[self.WORD_DTYPE](self._len))
+        memset_zero(self.data, Int(_elts[self.WORD_DTYPE](self._len)))
 
     @always_inline
     fn set_and_check(mut self, idx: UInt) -> Bool:
@@ -683,12 +683,12 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
         if num_words == 0:
             return 0
 
-        vectorize[count, width](num_words - 1)
+        vectorize[count, width](Int(num_words - 1))
 
         # Now add in the last bits
-        var bit_offset = up_to % UInt(self.WORD_DTYPE.bit_width())
+        var bit_offset = up_to % UInt(bit_width_of[Self.WORD.dtype]())
         if bit_offset != 0:
-            var mask = (1 << bit_offset) - 1
+            var mask = (UInt(1) << bit_offset) - UInt(1)
             total += UInt(pop_count(mask & self.data[num_words - 1]))
         else:
             # We count everything in the word
@@ -790,11 +790,11 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
 
         var lhs_len = _elts[Self.WORD_DTYPE](UInt(len(left)))
         var rhs_len = _elts[Self.WORD_DTYPE](UInt(len(right)))
-        vectorize[_intersect, width](min(lhs_len, rhs_len))
+        vectorize[_intersect, width](Int(min(lhs_len, rhs_len)))
 
         if lhs_len > rhs_len:
-            var bit_offset = Self.WORD_DTYPE.bit_width() - (
-                len(right) % Self.WORD_DTYPE.bit_width()
+            var bit_offset = bit_width_of[Self.WORD.dtype]() - (
+                len(right) % bit_width_of[Self.WORD.dtype]()
             )
 
             if bit_offset != 0:
@@ -815,12 +815,12 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
 
                 @parameter
                 if lhs_zero_out:
-                    memset_zero(res.data.offset(rhs_len), remaining_words)
+                    memset_zero(res.data.offset(rhs_len), Int(remaining_words))
                 else:
                     memcpy(
                         dest=res.data.offset(rhs_len),
                         src=left.data.offset(rhs_len),
-                        count=remaining_words,
+                        count=Int(remaining_words),
                     )
 
         return res^
@@ -982,11 +982,11 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
         if lhs_len < rhs_len:
             left.resize(UInt(len(right)), False)
             lhs_len = rhs_len
-        vectorize[_intersect, width](min(lhs_len, rhs_len))
+        vectorize[_intersect, width](Int(min(lhs_len, rhs_len)))
 
         if lhs_len > rhs_len:
-            var bit_offset = Self.WORD_DTYPE.bit_width() - (
-                len(right) % Self.WORD_DTYPE.bit_width()
+            var bit_offset = bit_width_of[Self.WORD.dtype]() - (
+                len(right) % bit_width_of[Self.WORD.dtype]()
             )
 
             if bit_offset != 0:
@@ -1002,7 +1002,7 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
 
                 @parameter
                 if lhs_zero_out:
-                    memset_zero(left.data.offset(rhs_len), remaining_words)
+                    memset_zero(left.data.offset(rhs_len), Int(remaining_words))
 
     fn union_update(mut self, other: Self):
         """Modifies `self` to be the union of `self` and `other`.

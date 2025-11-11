@@ -1,3 +1,4 @@
+from sys import bit_width_of
 from testing import assert_equal, assert_true, assert_false, TestSuite
 
 from extramojo.collections.bitvec import BitVec
@@ -26,11 +27,11 @@ def test_bitvec_count_set_bits():
 
     var bv1 = BitVec(length=65, fill=True)
     assert_equal(bv1._capacity, 2)
-    var bit_offset = bv1._len % UInt(bv.WORD_DTYPE.bit_width())
+    var bit_offset = bv1._len % UInt(bit_width_of[bv.WORD.dtype]())
     assert_equal(bit_offset, 1)
-    var mask = (1 << bit_offset) - 1
-    assert_equal(mask, 1)
-    assert_equal(mask & UInt64.MAX, 1)
+    var mask = (UInt(1) << bit_offset) - UInt(1)
+    assert_equal(mask, UInt(1))
+    assert_equal(mask & UInt64.MAX, UInt(1))
     assert_equal(
         bv1.data[1],
         1,
@@ -95,7 +96,7 @@ def test_bitvec_init_length_fill_true():
         assert_equal(bv.data[i], ~0)
     assert_equal(bv.data[bv.word_len() - 1], 1)
 
-    var last_bits = 65 % bv.WORD_DTYPE.bit_width()
+    var last_bits = 65 % bit_width_of[bv.WORD.dtype]()
     var mask = (1 << last_bits) - 1
     assert_equal(bv.data[bv._capacity - 1] & mask, mask)
 

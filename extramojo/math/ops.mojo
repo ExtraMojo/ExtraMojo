@@ -57,5 +57,5 @@ fn saturating_add[
 #     )
 
 #     return (
-#         ((hash.cast[upsized]()) * (n.cast[upsized]())) >> dtype.bit_width()
+#         ((hash.cast[upsized]()) * (n.cast[upsized]())) >> bit_width_of[dtype]()
 #     ).cast[dtype]()
