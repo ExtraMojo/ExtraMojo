@@ -8,27 +8,26 @@ preview = ["pixi-build"]
 
 [package]
 name = "extramojo"
-version = "0.18.0"
+version = "0.19.0"
 
 [package.build]
-backend = { name = "pixi-build-mojo", version = "0.*" }
-channels = [
+backend = { name = "pixi-build-mojo", version = "0.*", channels = [
     "https://prefix.dev/pixi-build-backends",
     "https://prefix.dev/conda-forge",
-]
+]}
 
 [package.host-dependencies]
-mojo-compiler = ">=0.25.7.0.dev2025111005,<0.26"
+mojo-compiler = "=0.25.7"
 
 [package.build-dependencies]
-mojo-compiler = ">=0.25.7.0.dev2025111005,<0.26"
+mojo-compiler = "=0.25.7"
 
 [package.run-dependencies]
-mojo-compiler = ">=0.25.7.0.dev2025111005,<0.26"
+mojo-compiler = "=0.25.7"
 
 # These are basically just dev deps, the real deps are specified in the recipe.yaml
 [dependencies]
-mojo = ">=0.25.7.0.dev2025111005,<0.26"
+mojo = "=0.25.7"
 
 [tasks]
 build = "pixi run mojo package extramojo -o extramojo.mojopkg"
