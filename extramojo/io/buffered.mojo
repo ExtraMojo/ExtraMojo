@@ -192,7 +192,7 @@ struct BufferedReader(Movable):
 
     var fh: FileHandle
     """The internal filehandle to read from."""
-    var buffer: UnsafePointer[UInt8]
+    var buffer: UnsafePointer[mut=True, type=UInt8, origin = MutOrigin.external]
     """The internal buffer."""
     var file_offset: Int
     """Current offset into the file."""
@@ -216,7 +216,7 @@ struct BufferedReader(Movable):
         self.file_offset = 0
         self.buffer_offset = 0
         self.buffer_capacity = buffer_capacity
-        self.buffer = UnsafePointer[UInt8].alloc(self.buffer_capacity)
+        self.buffer = alloc[UInt8](self.buffer_capacity)
         self.buffer_len = 0
         _ = self._fill_buffer()
 
@@ -291,14 +291,12 @@ struct BufferedReader(Movable):
             The number of bytes read.
         """
 
-        var bytes_read = 0
+        var bytes_read: Int
 
         while True:
             # Find the next newline in the buffer
             var newline_index = memchr(
-                Span[UInt8, origin_of(self)](
-                    ptr=self.buffer, length=self.buffer_len
-                ),
+                Span[UInt8](ptr=self.buffer, length=self.buffer_len),
                 char,
                 self.buffer_offset,
             )
@@ -318,7 +316,7 @@ struct BufferedReader(Movable):
 
             # Advance our position in our buffer
             self.buffer_offset = newline_index + 1
-            bytes_read = len(buffer) + newline_index + 1
+            bytes_read += len(buffer) + newline_index + 1
 
             # Try to refill the buffer
             if newline_index == -1:
@@ -339,9 +337,7 @@ struct BufferedReader(Movable):
         """
         var buf_ptr = self.buffer
         var bytes_read = self.fh.read(
-            Span[UInt8, origin_of(buf_ptr)](
-                ptr=buf_ptr, length=self.buffer_capacity
-            )
+            Span[UInt8](ptr=buf_ptr, length=self.buffer_capacity)
         )
         self.buffer_len = bytes_read.__int__()
         self.buffer_offset = 0

@@ -82,7 +82,9 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
     alias WORD_BYTEWIDTH = bit_width_of[Self.WORD.dtype]() // 8
     alias WORD = Scalar[Self.WORD_DTYPE]
 
-    var data: UnsafePointer[Self.WORD]
+    var data: UnsafePointer[
+        mut=True, type = Self.WORD, origin = MutOrigin.external
+    ]
     """The data storage."""
 
     var _len: UInt
@@ -97,7 +99,7 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
 
     @always_inline
     fn __init__(out self):
-        self.data = UnsafePointer[self.WORD]()
+        self.data = alloc[self.WORD](0)
         self._len = 0  # in bits
         self._capacity = 0  # in words
 
@@ -108,12 +110,12 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
         # TODO: allow for using `external_memory` for GPU?
         var word_cap = Int(_elts[Self.WORD_DTYPE](capacity))
         if capacity:
-            self.data = UnsafePointer[self.WORD].alloc[](
+            self.data = alloc[self.WORD](
                 word_cap, alignment=self.WORD_BYTEWIDTH
             )
             memset_zero(self.data, word_cap)
         else:
-            self.data = UnsafePointer[self.WORD]()
+            self.data = alloc[self.WORD](0)
         self._len = 0
         self._capacity = UInt(word_cap)
 
@@ -220,7 +222,7 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
 
     fn _realloc(mut self, new_capacity: UInt):
         """Reallocate to for new_capacity, which is in words."""
-        var new_data = UnsafePointer[self.WORD].alloc(
+        var new_data = alloc[self.WORD](
             Int(new_capacity), alignment=self.WORD_BYTEWIDTH
         )
         var current_words = _elts[self.WORD_DTYPE](self._len)
