@@ -21,8 +21,7 @@ jobs:
             - name: Run tests
               run: |
                   export PATH="/home/runner/.pixi/bin:$PATH"
-                  pixi run mojo test --validate-doc-strings --sanitize address -I .
-                  pixi run mojo run -I . ./tests/test_file.mojo
+                  pixi run t
 
             - name: Check formatting
               run: |

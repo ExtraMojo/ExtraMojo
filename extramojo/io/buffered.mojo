@@ -316,7 +316,7 @@ struct BufferedReader(Movable):
 
             # Advance our position in our buffer
             self.buffer_offset = newline_index + 1
-            bytes_read += len(buffer) + newline_index + 1
+            bytes_read = len(buffer) + newline_index + 1
 
             # Try to refill the buffer
             if newline_index == -1:
