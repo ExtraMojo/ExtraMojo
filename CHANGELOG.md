@@ -3,6 +3,7 @@
 ## v0.19.1
 
 - Remove useless assignments
+- Turn off modo doctests
 
 ## v0.19.0
 
