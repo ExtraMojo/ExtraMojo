@@ -776,8 +776,8 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
         @always_inline
         fn _intersect[simd_width: Int](offset: Int):
             # Initialize SIMD vectors to hold multiple words from each `BitVec`
-            var left_vec = SIMD[Self.WORD_DTYPE, simd_width]()
-            var right_vec = SIMD[Self.WORD_DTYPE, simd_width]()
+            var left_vec: SIMD[Self.WORD_DTYPE, simd_width]
+            var right_vec: SIMD[Self.WORD_DTYPE, simd_width]
 
             # Load a batch of words from both `BitVec`s into SIMD vectors
             left_vec = left.data.offset(offset).load[width=simd_width]()
@@ -965,8 +965,8 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
         @always_inline
         fn _intersect[simd_width: Int](offset: Int):
             # Initialize SIMD vectors to hold multiple words from each `BitVec`
-            var left_vec = SIMD[Self.WORD_DTYPE, simd_width]()
-            var right_vec = SIMD[Self.WORD_DTYPE, simd_width]()
+            var left_vec: SIMD[Self.WORD_DTYPE, simd_width]
+            var right_vec: SIMD[Self.WORD_DTYPE, simd_width]
 
             # Load a batch of words from both `BitVec`s into SIMD vectors
             left_vec = left.data.offset(offset).load[width=simd_width]()
