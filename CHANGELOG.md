@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v0.19.1
+
+- Remove useless assignments
+
+## v0.19.0
+
+- Migrate to Mojo 25.7
+
 ## v0.18.0
 
 - Migrate to Mojo 25.6
