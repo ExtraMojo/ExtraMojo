@@ -1,0 +1,83 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ExtraMojo – bstr</title>
+    <link>https://extramojo.github.io/ExtraMojo/extramojo/bstr/</link>
+    <description>Recent content in bstr on ExtraMojo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    
+	  <atom:link href="https://extramojo.github.io/ExtraMojo/extramojo/bstr/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+      
+        
+      
+    
+    
+    <item>
+      <title>bstr</title>
+      <link>https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/</guid>
+      <description>
+        
+        
+        &lt;p&gt;Mojo module &lt;a href=&#34;https://github.com/ExtraMojo/ExtraMojo/blob/main/ExtraMojo/bstr/bstr.mojo&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;🡭&lt;/a&gt;&lt;/p&gt;
+&lt;h1&gt;&lt;code&gt;bstr&lt;/code&gt;&lt;/h1&gt;&lt;h2&gt;Aliases&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;aliases&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#aliases&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;SIMD_U8_WIDTH = simd_width_of[DType.uint8]()&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;CAPITAL_A = SIMD[DType.uint8, SIMD_U8_WIDTH](ord(&amp;quot;A&amp;quot;))&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;CAPITAL_Z = SIMD[DType.uint8, SIMD_U8_WIDTH](ord(&amp;quot;Z&amp;quot;))&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;LOWER_A = SIMD[DType.uint8, SIMD_U8_WIDTH](ord(&amp;quot;a&amp;quot;))&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;LOWER_Z = SIMD[DType.uint8, SIMD_U8_WIDTH](ord(&amp;quot;z&amp;quot;))&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ASCII_CASE_MASK = 32&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ZERO = 0&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Structs&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;structs&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#structs&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/SplitIterator/&#34; &gt;&lt;code&gt;SplitIterator&lt;/code&gt;&lt;/a&gt;:     Get an iterator the yields the splits from the input &lt;code&gt;to_split&lt;/code&gt; string.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Functions&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;functions&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#functions&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/find_chr_all_occurrences/&#34; &gt;&lt;code&gt;find_chr_all_occurrences&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/is_ascii_uppercase/&#34; &gt;&lt;code&gt;is_ascii_uppercase&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/is_ascii_lowercase/&#34; &gt;&lt;code&gt;is_ascii_lowercase&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/to_ascii_lowercase/&#34; &gt;&lt;code&gt;to_ascii_lowercase&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/to_ascii_uppercase/&#34; &gt;&lt;code&gt;to_ascii_uppercase&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/find/&#34; &gt;&lt;code&gt;find&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+      </description>
+    </item>
+    
+    <item>
+      <title>memchr</title>
+      <link>https://extramojo.github.io/ExtraMojo/extramojo/bstr/memchr/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://extramojo.github.io/ExtraMojo/extramojo/bstr/memchr/</guid>
+      <description>
+        
+        
+        &lt;p&gt;Mojo module &lt;a href=&#34;https://github.com/ExtraMojo/ExtraMojo/blob/main/ExtraMojo/bstr/memchr.mojo&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;🡭&lt;/a&gt;&lt;/p&gt;
+&lt;h1&gt;&lt;code&gt;memchr&lt;/code&gt;&lt;/h1&gt;&lt;p&gt;Fast memchr implementations.&lt;/p&gt;
+&lt;p&gt;There are two here, &lt;code&gt;memchr&lt;/code&gt; and &lt;code&gt;memchr_wide&lt;/code&gt;. &lt;code&gt;memchr_wide&lt;/code&gt; will do more comparisons at once,
+but needs to do more loading first. If you know you have some distance between &lt;code&gt;needle&lt;/code&gt;s, then
+it should be faster. &lt;code&gt;memchr&lt;/code&gt; is just vanilla memchr.&lt;/p&gt;
+&lt;h2&gt;Aliases&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;aliases&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#aliases&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;SIMD_U8_WIDTH = simd_width_of[DType.uint8]()&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;LOOP_SIZE = (SIMD_U8_WIDTH * 4)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Functions&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;functions&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#functions&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://extramojo.github.io/ExtraMojo/extramojo/bstr/memchr/memchr/&#34; &gt;&lt;code&gt;memchr&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://extramojo.github.io/ExtraMojo/extramojo/bstr/memchr/memchr_wide/&#34; &gt;&lt;code&gt;memchr_wide&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+      </description>
+    </item>
+    
+  </channel>
+</rss>
