@@ -37,10 +37,10 @@ struct OptKind(Copyable, ImplicitlyCopyable, Movable, Stringable):
 
     var value: UInt8
 
-    alias StringLike = Self(0)
-    alias IntLike = Self(1)
-    alias FloatLike = Self(2)
-    alias BoolLike = Self(3)
+    comptime StringLike = Self(0)
+    comptime IntLike = Self(1)
+    comptime FloatLike = Self(2)
+    comptime BoolLike = Self(3)
 
     fn __init__(out self, value: UInt8):
         self.value = value
@@ -632,7 +632,7 @@ struct SubcommandParser(Copyable, Movable):
 
         return (
             cmd.value().parser.program_name,
-            cmd.value().parser.parse_args(args[1:]),
+            cmd.value().parser.parse_args(List(args[1:])),
         )
 
     fn parse_sys_args(read self) raises -> Optional[Tuple[String, ParsedOpts]]:

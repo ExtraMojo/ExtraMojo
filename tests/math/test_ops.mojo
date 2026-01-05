@@ -4,25 +4,25 @@ from extramojo.math.ops import saturating_add, saturating_sub
 
 
 def test_saturating_add():
-    alias dtypes = List[DType](
+    comptime dtypes = [
         DType.uint8,
         DType.int8,
         DType.uint16,
         DType.int16,
         DType.uint32,
         DType.int32,
-    )
-    alias widths = List[Int](4, 8, 16, 32, 64, 128)
+    ]
+    comptime widths = [4, 8, 16, 32, 64, 128]
 
     @parameter
     for i in range(0, len(dtypes)):
 
         @parameter
         for j in range(0, len(widths)):
-            alias dtype = dtypes[i]
-            alias width = widths[j]
-            alias MIN = Scalar[dtype].MIN
-            alias MAX = Scalar[dtype].MAX
+            comptime dtype = dtypes[i]
+            comptime width = widths[j]
+            comptime MIN = Scalar[dtype].MIN
+            comptime MAX = Scalar[dtype].MAX
 
             var lhs = SIMD[dtype, width](MAX)
             var rhs = SIMD[dtype, width](1)
@@ -34,25 +34,25 @@ def test_saturating_add():
 
 
 def test_saturating_sub():
-    alias dtypes = List[DType](
+    comptime dtypes = [
         DType.uint8,
         DType.int8,
         DType.uint16,
         DType.int16,
         DType.uint32,
         DType.int32,
-    )
-    alias widths = List[Int](4, 8, 16, 32, 64, 128)
+    ]
+    comptime widths = [4, 8, 16, 32, 64, 128]
 
     @parameter
     for i in range(0, len(dtypes)):
 
         @parameter
         for j in range(0, len(widths)):
-            alias dtype = dtypes[i]
-            alias width = widths[j]
-            alias MIN = Scalar[dtype].MIN
-            alias MAX = Scalar[dtype].MAX
+            comptime dtype = dtypes[i]
+            comptime width = widths[j]
+            comptime MIN = Scalar[dtype].MIN
+            comptime MAX = Scalar[dtype].MAX
 
             var lhs = SIMD[dtype, width](MIN)
             var rhs = SIMD[dtype, width](1)
@@ -64,7 +64,7 @@ def test_saturating_sub():
 
 
 # def test_fastmod():
-#     alias types = [
+#     comptime types = [
 #         DType.uint8,
 #         DType.uint16,
 #         DType.uint32,

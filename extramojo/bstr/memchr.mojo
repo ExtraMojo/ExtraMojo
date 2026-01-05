@@ -9,7 +9,7 @@ from bit import count_trailing_zeros
 from memory import pack_bits, UnsafePointer
 from sys.info import simd_width_of
 
-alias SIMD_U8_WIDTH: Int = simd_width_of[DType.uint8]()
+comptime SIMD_U8_WIDTH: Int = simd_width_of[DType.uint8]()
 
 
 @always_inline("nodebug")
@@ -90,7 +90,7 @@ fn memchr[
     return -1
 
 
-alias LOOP_SIZE = SIMD_U8_WIDTH * 4
+comptime LOOP_SIZE = SIMD_U8_WIDTH * 4
 
 
 @always_inline("nodebug")

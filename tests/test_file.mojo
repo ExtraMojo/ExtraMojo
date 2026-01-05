@@ -34,7 +34,7 @@ fn strings_for_writing(size: Int) -> List[String]:
 
 
 fn test_read_until(file: Path, expected_lines: List[String]) raises:
-    var buffer_capacities = List(10, 100, 200, 500)
+    var buffer_capacities = [10, 100, 200, 500]
     for cap in buffer_capacities:
         var fh = open(file, "r")
         var reader = BufferedReader(fh^, buffer_capacity=cap)
@@ -208,9 +208,13 @@ struct ThinWrapper(Copyable, FromDelimited, ToDelimited):
 
 fn test_delim_reader_writer_dicts(file: Path) raises:
     var to_write = List[ThinWrapper]()
-    var headers = List(
-        String("a"), String("b"), String("c"), String("d"), String("e")
-    )
+    var headers = [
+        String("a"),
+        String("b"),
+        String("c"),
+        String("d"),
+        String("e"),
+    ]
     for i in range(0, 1000):
         var stuff = Dict[String, Int]()
         for header in headers:

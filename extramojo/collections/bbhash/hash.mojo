@@ -6,7 +6,7 @@ from memory import bitcast
 
 from math import trunc
 
-alias m: UInt64 = 0x880355F21E6D1965
+comptime m: UInt64 = 0x880355F21E6D1965
 
 
 @always_inline
@@ -65,8 +65,8 @@ fn _hash64(seed: UInt64, buffer: Span[UInt8]) -> UInt64:
     return _mix(h)
 
 
-alias FNV_OFFSET: UInt64 = 14695981039346656037
-alias FNV_PRIME: UInt64 = 1099511628211
+comptime FNV_OFFSET: UInt64 = 14695981039346656037
+comptime FNV_PRIME: UInt64 = 1099511628211
 
 
 @always_inline

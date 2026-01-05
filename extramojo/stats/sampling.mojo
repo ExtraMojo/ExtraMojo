@@ -8,7 +8,9 @@ Reservoir sampling on a stream.
 from random import random_ui64
 
 
-struct ReservoirSampler[T: Copyable & Movable](Copyable, Movable):
+struct ReservoirSampler[T: Copyable & ImplicitlyDestructible](
+    Copyable, ImplicitlyDestructible
+):
     """Sample N items from a stream of unknown length.
 
     Sample all the elements, this should retain the order since we always automatically take the first N elements.
@@ -24,7 +26,7 @@ struct ReservoirSampler[T: Copyable & Movable](Copyable, Movable):
 
     var sampler = ReservoirSampler[Int](10)
 
-    var items = List(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+    var items = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     for item in items:
         sampler.insert(item)
     assert_equal(sampler.reservoir, items)
@@ -38,7 +40,7 @@ struct ReservoirSampler[T: Copyable & Movable](Copyable, Movable):
     for item in items:
         sampler.insert(item)
     assert_equal(len(sampler.reservoir), 5)
-    assert_equal(sampler.reservoir, List(0, 9, 2, 3, 7))
+    assert_equal(sampler.reservoir, [0, 9, 2, 3, 7])
     ```
 
     Sample only a single element.
@@ -49,7 +51,7 @@ struct ReservoirSampler[T: Copyable & Movable](Copyable, Movable):
     for item in items:
         sampler.insert(item)
     assert_equal(len(sampler.reservoir), 1)
-    assert_equal(sampler.reservoir, List(6))
+    assert_equal(sampler.reservoir, [6])
     ```
 
     Sample more elements than are in the input stream.
@@ -73,16 +75,16 @@ struct ReservoirSampler[T: Copyable & Movable](Copyable, Movable):
     ```
     """
 
-    var reservoir: List[T]
+    var reservoir: List[Self.T]
     var values_to_collect: Int
     var seen_values: Int
 
     fn __init__(out self, values_to_collect: Int):
         self.seen_values = 0
-        self.reservoir = List[T](capacity=values_to_collect)
+        self.reservoir = List[Self.T](capacity=values_to_collect)
         self.values_to_collect = values_to_collect
 
-    fn insert(mut self, read item: T):
+    fn insert(mut self, read item: Self.T):
         """Add an element.
 
         The element will be tested for addition to the reservoir.

@@ -56,10 +56,10 @@ from extramojo.bstr.bstr import (
 from extramojo.bstr.memchr import memchr
 
 
-alias NEW_LINE = 10
-alias SIMD_U8_WIDTH: Int = simd_width_of[DType.uint8]()
+comptime NEW_LINE = 10
+comptime SIMD_U8_WIDTH: Int = simd_width_of[DType.uint8]()
 # 128 KiB: http://git.savannah.gnu.org/gitweb/?p=coreutils.git;a=blob;f=src/ioblksize.h;h=266c209f48fc07cb4527139a2548b6398b75f740;hb=HEAD#l23
-alias BUF_SIZE: Int = 1024 * 128
+comptime BUF_SIZE: Int = 1024 * 128
 
 
 fn read_lines(
@@ -87,7 +87,7 @@ fn read_lines(
         var start = 0
         for i in range(0, len(newlines)):
             var newline = newlines[i]
-            result.append(buffer[start:newline])
+            result.append(List(buffer[start:newline]))
             start = newline + 1
 
         if len(buffer) < BUF_SIZE:
@@ -136,7 +136,7 @@ fn for_each_line[
 
 @always_inline
 fn get_next_line[
-    is_mutable: Bool, //, origin: Origin[is_mutable]
+    is_mutable: Bool, //, origin: Origin[mut=is_mutable]
 ](buffer: Span[UInt8, origin], start: Int) -> Span[UInt8, origin]:
     """Function to get the next line using either SIMD instruction (default) or iteratively.
 
@@ -361,7 +361,7 @@ struct BufferedWriter[W: Movable & Writer](Movable, Writer):
     ```
     """
 
-    var inner: W
+    var inner: Self.W
     """The inner file handle to write to."""
     var buffer: List[UInt8]
     """The inner buffer."""
@@ -371,7 +371,7 @@ struct BufferedWriter[W: Movable & Writer](Movable, Writer):
     """The number of bytes currently stored in the inner buffer."""
 
     fn __init__(
-        out self, var writer: W, buffer_capacity: Int = BUF_SIZE
+        out self, var writer: Self.W, buffer_capacity: Int = BUF_SIZE
     ) raises:
         """Create a `BufferedReader`.
 

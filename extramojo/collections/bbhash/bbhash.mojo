@@ -47,7 +47,7 @@ from extramojo.collections.bbhash.hash import (
 )
 
 
-alias MAX_ITERS = 100
+comptime MAX_ITERS = 100
 
 
 @fieldwise_init
@@ -138,7 +138,7 @@ struct BBHash[compute_reverse_map: Bool = False]:
         self.reverse_map = []
 
         @parameter
-        if not compute_reverse_map:
+        if not Self.compute_reverse_map:
             self._compute(keys^, gamma)
         else:
             self._compute_with_reversemap(keys^, gamma)
@@ -337,7 +337,7 @@ struct BBHash[compute_reverse_map: Bool = False]:
             The hash of the key associated with the index, or None if the idx is invalid.
         """
         constrained[
-            compute_reverse_map,
+            Self.compute_reverse_map,
             (
                 "BBHash must be created with `compute_reverse_map=True` to use"
                 " this fn."

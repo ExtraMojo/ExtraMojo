@@ -48,7 +48,7 @@ fn saturating_add[
 #         dtype is not DType.uint256, "dtype must be smaller than UInt256"
 #     ]()
 
-#     alias upsized = (
+#     comptime upsized = (
 #         DType.uint16 if dtype
 #         is DType.uint8 else DType.uint32 if dtype
 #         is dtype.uint16 else DType.uint64 if dtype
