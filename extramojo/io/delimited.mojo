@@ -238,7 +238,7 @@ struct DelimReader[RowType: FromDelimited](Movable):
 
     var delim: UInt8
     var reader: BufferedReader
-    var next_elem: Optional[RowType]
+    var next_elem: Optional[Self.RowType]
     var buffer: List[UInt8]
     var len: Int
     var has_header: Bool
@@ -277,7 +277,7 @@ struct DelimReader[RowType: FromDelimited](Movable):
     fn __has_next__(read self) -> Bool:
         return self.__len__() > 0
 
-    fn __next__(mut self) raises -> RowType:
+    fn __next__(mut self) raises -> Self.RowType:
         if not self.next_elem:
             raise "Attempting to call past end of iterator"
         var ret = self.next_elem.take()
@@ -311,7 +311,9 @@ struct DelimReader[RowType: FromDelimited](Movable):
             self.next_elem = None
             return
         var iterator = SplitIterator(self.buffer, self.delim)
-        self.next_elem = RowType.from_delimited(iterator, self.header_values)
+        self.next_elem = Self.RowType.from_delimited(
+            iterator, self.header_values
+        )
 
 
 trait ToDelimited:
@@ -337,7 +339,7 @@ struct DelimWriter[W: Movable & Writer](Movable):
 
     var delim: String
     """The delimiter to use."""
-    var writer: BufferedWriter[W]
+    var writer: BufferedWriter[Self.W]
     """The `BufferedWriter` to write to."""
     var write_header: Bool
     """Whether or not to write headers."""
@@ -346,7 +348,7 @@ struct DelimWriter[W: Movable & Writer](Movable):
 
     fn __init__(
         out self,
-        var writer: BufferedWriter[W],
+        var writer: BufferedWriter[Self.W],
         *,
         var delim: String,
         write_header: Bool,

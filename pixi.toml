@@ -1,6 +1,9 @@
 [workspace]
 authors = ["Seth Stadick <sstadick@gmail.com>"]
-channels = ["https://prefix.dev/conda-forge", "https://conda.modular.com/max-nightly"]
+channels = [
+    "https://prefix.dev/conda-forge",
+    "https://conda.modular.com/max-nightly",
+]
 description = "Useful things that aren't in the standard library."
 platforms = ["osx-arm64", "linux-64", "linux-aarch64"]
 license = "Unlicense OR MIT"
@@ -11,10 +14,11 @@ name = "extramojo"
 version = "0.19.0"
 
 [package.build]
-backend = { name = "pixi-build-mojo", version = "0.*", channels = [
+backend = { name = "pixi-build-mojo", version = "0.*" }
+channels = [
     "https://prefix.dev/pixi-build-backends",
     "https://prefix.dev/conda-forge",
-]}
+]
 
 [package.host-dependencies]
 mojo-compiler = "=0.25.7"
@@ -27,11 +31,11 @@ mojo-compiler = "=0.25.7"
 
 # These are basically just dev deps, the real deps are specified in the recipe.yaml
 [dependencies]
-mojo = "=0.25.7"
+mojo = ">0.26"
 
 [tasks]
 build = "pixi run mojo package extramojo -o extramojo.mojopkg"
-r = { cmd = "pixi run mojo run -I . " } # run
+r = { cmd = "pixi run mojo run -I . " }                                                                    # run
 t = { cmd = "sh -c 'find ./tests -name test_*.mojo | xargs -I % pixi run mojo run -I . -D ASSERT=all %'" } # test
 format = "pixi run mojo format ./"
 #t = { cmd = "pixi run mojo test -I . -D ASSERT=all" }

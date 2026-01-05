@@ -28,11 +28,11 @@ fn s(bytes: Span[UInt8]) -> String:
 
 
 fn test_memchr() raises:
-    alias check = InlineArray[Bool, 2](True, False)
+    comptime check = InlineArray[Bool, 2](True, False)
 
     @parameter
     for do_alignment in range(0, len(check)):
-        var cases = List[Tuple[String, Int]](
+        var cases: List[Tuple[String, Int]] = [
             (
                 String(
                     "enlivened,unleavened,Arnulfo's,Unilever's,unloved|Anouilh,analogue,analogy"
@@ -45,7 +45,7 @@ fn test_memchr() raises:
                 ),
                 124,
             ),
-        )
+        ]
 
         for kase, i in cases:
             var index = memchr[do_alignment = check[do_alignment]](
@@ -64,7 +64,7 @@ fn test_memchr() raises:
 
 
 fn test_memchr_wide() raises:
-    var cases = List[Tuple[String, Int]](
+    var cases: List[Tuple[String, Int]] = [
         (
             String(
                 "enlivened,unleavened,Arnulfo's,Unilever's,unloved|Anouilh,analogue,analogy"
@@ -77,7 +77,7 @@ fn test_memchr_wide() raises:
             ),
             124,
         ),
-    )
+    ]
 
     for kase, i in cases:
         var index = memchr_wide(kase.as_bytes(), ord("|"))
@@ -176,9 +176,11 @@ fn test_find_long_variable_start() raises:
 
 fn test_spilt_iterator() raises:
     var input = "ABCD\tEFGH\tIJKL\nMNOP".as_bytes()
-    var expected = List(
-        "ABCD".as_bytes(), "EFGH".as_bytes(), "IJKL\nMNOP".as_bytes()
-    )
+    var expected = [
+        "ABCD".as_bytes(),
+        "EFGH".as_bytes(),
+        "IJKL\nMNOP".as_bytes(),
+    ]
     var output = List[Span[UInt8, StaticConstantOrigin]]()
     for value in SplitIterator(input, ord("\t")):
         output.append(value)
@@ -188,9 +190,11 @@ fn test_spilt_iterator() raises:
 
 fn test_spilt_iterator_peek() raises:
     var input = "ABCD\tEFGH\tIJKL\nMNOP".as_bytes()
-    var expected = List(
-        "ABCD".as_bytes(), "EFGH".as_bytes(), "IJKL\nMNOP".as_bytes()
-    )
+    var expected = [
+        "ABCD".as_bytes(),
+        "EFGH".as_bytes(),
+        "IJKL\nMNOP".as_bytes(),
+    ]
     var iter = SplitIterator(input, ord("\t"))
     var first = iter.__next__()
     var peek = iter.peek()
@@ -202,7 +206,7 @@ fn test_spilt_iterator_peek() raises:
 
 fn test_spilt_iterator_long() raises:
     var input = "ABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ\tABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ\tABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ\tABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ\tABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ\tABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ\tABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ\tABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ\tABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ\tABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ\tABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ\tABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ\tABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ\tABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ\tABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ\tABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ\tABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ\tABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ".as_bytes()
-    var expected = List(
+    var expected = [
         "ABCD".as_bytes(),
         "EFGH".as_bytes(),
         "IJKL\nMNOP".as_bytes(),
@@ -293,7 +297,7 @@ fn test_spilt_iterator_long() raises:
         "IJKL\nMNOP".as_bytes(),
         "QRST".as_bytes(),
         "UVWXYZ".as_bytes(),
-    )
+    ]
     var output = List[Span[UInt8, StaticConstantOrigin]]()
     for value in SplitIterator(input, ord("\t")):
         output.append(value)

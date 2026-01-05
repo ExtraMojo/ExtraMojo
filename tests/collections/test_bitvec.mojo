@@ -756,7 +756,7 @@ def test_bitvec_full_overlap_union():
 
 
 def test_bitvec_adhoc():
-    alias example = "As the quick brown fox jumped over the fence a moon was rising in the distance. Then the moon exploded. The End.".as_bytes()
+    comptime example = "As the quick brown fox jumped over the fence a moon was rising in the distance. Then the moon exploded. The End.".as_bytes()
     var periods = BitVec(length=UInt(len(example)), fill=False)
     var spaces = BitVec(length=UInt(len(example)), fill=False)
     var ts = BitVec(length=UInt(len(example)), fill=False)

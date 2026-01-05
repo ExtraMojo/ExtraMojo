@@ -50,7 +50,7 @@ fn _elts[dtype: DType](bits: UInt) -> UInt:
     """Compute the number of elements needed to hold the given number of bits.
     """
     constrained[dtype is not DType.invalid, "dtype must be a valid DType"]()
-    alias bitwidth = UInt(bit_width_of[dtype]())
+    comptime bitwidth = UInt(bit_width_of[dtype]())
     return (bits + bitwidth - 1) // bitwidth
 
 
@@ -58,14 +58,14 @@ fn _elts[dtype: DType](bits: UInt) -> UInt:
 fn _word_index[dtype: DType](idx: UInt) -> UInt:
     """Computes the 0-based index of the Self.WORD_DTYPE word containg bit `idx`
     """
-    alias _WORD_BITS_LOG2 = UInt(log2_floor(UInt(bit_width_of[dtype]())))
+    comptime _WORD_BITS_LOG2 = UInt(log2_floor(UInt(bit_width_of[dtype]())))
     return idx >> _WORD_BITS_LOG2
 
 
 @always_inline
 fn _bit_mask[dtype: DType](idx: UInt) -> Scalar[dtype]:
     """Returns a UInt64 mask with only the bit corresponding to `idx` set."""
-    alias _WORD_BITS = UInt(bit_width_of[dtype]())
+    comptime _WORD_BITS = UInt(bit_width_of[dtype]())
     return Scalar[dtype](1) << Scalar[dtype]((idx & (_WORD_BITS - 1)))
 
 
@@ -78,9 +78,9 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
     for compactness and speed.
     """
 
-    alias WORD_DTYPE = DType.uint64 if not is_gpu() else DType.uint32
-    alias WORD_BYTEWIDTH = bit_width_of[Self.WORD.dtype]() // 8
-    alias WORD = Scalar[Self.WORD_DTYPE]
+    comptime WORD_DTYPE = DType.uint64 if not is_gpu() else DType.uint32
+    comptime WORD_BYTEWIDTH = bit_width_of[Self.WORD.dtype]() // 8
+    comptime WORD = Scalar[Self.WORD_DTYPE]
 
     var data: UnsafePointer[
         mut=True, type = Self.WORD, origin = MutOrigin.external
@@ -476,7 +476,7 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
             True if equal, False otherwise.
         """
 
-        alias width = simd_width_of[Scalar[self.WORD_DTYPE]]()
+        comptime width = simd_width_of[Scalar[self.WORD_DTYPE]]()
 
         if len(self) != len(other):
             return False
@@ -672,12 +672,11 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
         """
         # Plus one on the check here because this is an exclusive range
         _check_index_bounds["count_set_bits"](up_to, self._len + 1)
-        alias width = simd_width_of[Scalar[Self.WORD_DTYPE]]()
+        comptime width = simd_width_of[Scalar[Self.WORD_DTYPE]]()
         var total: UInt = 0
 
-        @parameter
         @always_inline
-        fn count[simd_width: Int](offset: Int):
+        fn count[simd_width: Int](offset: Int) unified {mut total, read self}:
             var vec = self.data.offset(offset).load[width=simd_width]()
             total += UInt(pop_count(vec).reduce_add())
 
@@ -685,7 +684,7 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
         if num_words == 0:
             return 0
 
-        vectorize[count, width](Int(num_words - 1))
+        vectorize[width](Int(num_words - 1), count)
 
         # Now add in the last bits
         var bit_offset = up_to % UInt(bit_width_of[Self.WORD.dtype]())
@@ -765,16 +764,17 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
         Notes:
             The length of left must be >= length of right.
         """
-        alias width = simd_width_of[Self.WORD_DTYPE]()
+        comptime width = simd_width_of[Self.WORD_DTYPE]()
         debug_assert(
             len(left) >= len(right), "Length of left must be >= length of right"
         )
         var res = Self(length=UInt(len(left)), fill=False)
 
         # Define a vectorized operation that processes multiple words at once
-        @parameter
         @always_inline
-        fn _intersect[simd_width: Int](offset: Int):
+        fn _intersect[
+            simd_width: Int
+        ](offset: Int) unified {mut res, read left, read right}:
             # Initialize SIMD vectors to hold multiple words from each `BitVec`
             var left_vec: SIMD[Self.WORD_DTYPE, simd_width]
             var right_vec: SIMD[Self.WORD_DTYPE, simd_width]
@@ -792,7 +792,7 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
 
         var lhs_len = _elts[Self.WORD_DTYPE](UInt(len(left)))
         var rhs_len = _elts[Self.WORD_DTYPE](UInt(len(right)))
-        vectorize[_intersect, width](Int(min(lhs_len, rhs_len)))
+        vectorize[width](Int(min(lhs_len, rhs_len)), _intersect)
 
         if lhs_len > rhs_len:
             var bit_offset = bit_width_of[Self.WORD.dtype]() - (
@@ -958,12 +958,13 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
             right: The second BitVec operand.
 
         """
-        alias width = simd_width_of[Self.WORD_DTYPE]()
+        comptime width = simd_width_of[Self.WORD_DTYPE]()
 
         # Define a vectorized operation that processes multiple words at once
-        @parameter
         @always_inline
-        fn _intersect[simd_width: Int](offset: Int):
+        fn _intersect[
+            simd_width: Int
+        ](offset: Int) unified {mut left, read right}:
             # Initialize SIMD vectors to hold multiple words from each `BitVec`
             var left_vec: SIMD[Self.WORD_DTYPE, simd_width]
             var right_vec: SIMD[Self.WORD_DTYPE, simd_width]
@@ -984,7 +985,7 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
         if lhs_len < rhs_len:
             left.resize(UInt(len(right)), False)
             lhs_len = rhs_len
-        vectorize[_intersect, width](Int(min(lhs_len, rhs_len)))
+        vectorize[width](Int(min(lhs_len, rhs_len)), _intersect)
 
         if lhs_len > rhs_len:
             var bit_offset = bit_width_of[Self.WORD.dtype]() - (

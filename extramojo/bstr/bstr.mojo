@@ -9,7 +9,7 @@ from extramojo.bstr.memchr import memchr
 # TODO: split this all out and create similar abstractions as the Rust bstr crate
 
 
-alias SIMD_U8_WIDTH: Int = simd_width_of[DType.uint8]()
+comptime SIMD_U8_WIDTH: Int = simd_width_of[DType.uint8]()
 
 
 @always_inline
@@ -21,7 +21,7 @@ fn find_chr_all_occurrences(haystack: Span[UInt8], chr: UInt8) -> List[Int]:
     from extramojo.bstr.bstr import find_chr_all_occurrences
 
     var haystack = "ATCGACCATCGAGATCATGTTTCAT"
-    var expected = List(2, 5, 6, 9, 15, 22)
+    var expected: List[Int] = [2, 5, 6, 9, 15, 22]
     assert_equal(find_chr_all_occurrences(haystack.as_bytes(), ord("C")), expected)
     ```
     """
@@ -35,8 +35,7 @@ fn find_chr_all_occurrences(haystack: Span[UInt8], chr: UInt8) -> List[Int]:
                 holder.append(i)
         return holder^
 
-    @parameter
-    fn inner[simd_width: Int](offset: Int):
+    fn inner[simd_width: Int](offset: Int) unified {mut}:
         var simd_vec = haystack.unsafe_ptr().load[width=simd_width](offset)
         var bool_vec = simd_vec.eq(chr)
         if bool_vec.reduce_or():
@@ -45,18 +44,18 @@ fn find_chr_all_occurrences(haystack: Span[UInt8], chr: UInt8) -> List[Int]:
                 if bool_vec[i]:
                     holder.append(offset + i)
 
-    vectorize[inner, SIMD_U8_WIDTH](len(haystack))
+    vectorize[SIMD_U8_WIDTH](len(haystack), inner)
     return holder^
 
 
-alias CAPITAL_A = SIMD[DType.uint8, SIMD_U8_WIDTH](ord("A"))
-alias CAPITAL_Z = SIMD[DType.uint8, SIMD_U8_WIDTH](ord("Z"))
-alias LOWER_A = SIMD[DType.uint8, SIMD_U8_WIDTH](ord("a"))
-alias LOWER_Z = SIMD[DType.uint8, SIMD_U8_WIDTH](ord("z"))
-alias ASCII_CASE_MASK = SIMD[DType.uint8, SIMD_U8_WIDTH](
+comptime CAPITAL_A = SIMD[DType.uint8, SIMD_U8_WIDTH](ord("A"))
+comptime CAPITAL_Z = SIMD[DType.uint8, SIMD_U8_WIDTH](ord("Z"))
+comptime LOWER_A = SIMD[DType.uint8, SIMD_U8_WIDTH](ord("a"))
+comptime LOWER_Z = SIMD[DType.uint8, SIMD_U8_WIDTH](ord("z"))
+comptime ASCII_CASE_MASK = SIMD[DType.uint8, SIMD_U8_WIDTH](
     32
 )  # The diff between a and A is just the sixth bit set
-alias ZERO = SIMD[DType.uint8, SIMD_U8_WIDTH](0)
+comptime ZERO = SIMD[DType.uint8, SIMD_U8_WIDTH](0)
 
 
 @always_inline
@@ -260,7 +259,7 @@ struct _StartEnd(Copyable, ImplicitlyCopyable, Movable):
     var end: Int
 
 
-struct SplitIterator[is_mutable: Bool, //, origin: Origin[is_mutable]](
+struct SplitIterator[is_mutable: Bool, //, origin: Origin[mut=is_mutable]](
     Copyable, Movable
 ):
     """
@@ -301,13 +300,13 @@ struct SplitIterator[is_mutable: Bool, //, origin: Origin[is_mutable]](
     ```
     """
 
-    var inner: Span[UInt8, origin]
+    var inner: Span[UInt8, Self.origin]
     var split_on: UInt8
     var current: Int
     var len: Int
     var next_split: Optional[_StartEnd]
 
-    fn __init__(out self, to_split: Span[UInt8, origin], split_on: UInt8):
+    fn __init__(out self, to_split: Span[UInt8, Self.origin], split_on: UInt8):
         self.inner = to_split
         self.split_on = split_on
         self.current = 0
@@ -326,7 +325,7 @@ struct SplitIterator[is_mutable: Bool, //, origin: Origin[is_mutable]](
     fn __has_next__(read self) -> Bool:
         return self.__len__() > 0
 
-    fn __next__(mut self) -> Span[UInt8, origin]:
+    fn __next__(mut self) -> Span[UInt8, Self.origin]:
         var ret = self.next_split.value()
 
         self._find_next_split()
@@ -347,7 +346,7 @@ struct SplitIterator[is_mutable: Bool, //, origin: Origin[is_mutable]](
             self.next_split = _StartEnd(self.current, len(self.inner))
             self.current = len(self.inner) + 1
 
-    fn peek(read self) -> Optional[Span[UInt8, origin]]:
+    fn peek(read self) -> Optional[Span[UInt8, Self.origin]]:
         """Peek ahead at the next split result."""
         if self.next_split:
             var split = self.next_split.value()
