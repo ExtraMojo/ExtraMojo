@@ -252,11 +252,15 @@ fn find(haystack: Span[UInt8], needle: Span[UInt8]) -> Optional[Int]:
 
 @fieldwise_init
 @register_passable
-struct _StartEnd(Copyable, ImplicitlyCopyable, Movable):
+struct StartEnd(Copyable, Defaultable, ImplicitlyCopyable, Movable):
     """Helper struct for tracking start/end coords in `SplitIterator`"""
 
     var start: Int
     var end: Int
+
+    fn __init__(out self):
+        self.start = 0
+        self.end = 0
 
 
 struct SplitIterator[is_mutable: Bool, //, origin: Origin[mut=is_mutable]](
@@ -304,52 +308,75 @@ struct SplitIterator[is_mutable: Bool, //, origin: Origin[mut=is_mutable]](
     var split_on: UInt8
     var current: Int
     var len: Int
-    var next_split: Optional[_StartEnd]
 
     fn __init__(out self, to_split: Span[UInt8, Self.origin], split_on: UInt8):
         self.inner = to_split
         self.split_on = split_on
         self.current = 0
         self.len = 1
-        self.next_split = None
-        self._find_next_split()
 
     fn __iter__(var self) -> Self:
         return self^
 
-    @always_inline
-    fn __len__(read self) -> Int:
-        return self.len
-
-    @always_inline
-    fn __has_next__(read self) -> Bool:
-        return self.__len__() > 0
-
-    fn __next__(mut self) -> Span[UInt8, Self.origin]:
-        var ret = self.next_split.value()
-
-        self._find_next_split()
-        return self.inner[ret.start : ret.end]
-
-    fn _find_next_split(mut self):
+    fn __next__(mut self) raises StopIteration -> Span[UInt8, Self.origin]:
         if self.current >= len(self.inner):
-            self.next_split = None
             self.len = 0
-            return
+            raise StopIteration()
 
         var end = memchr(self.inner, self.split_on, self.current)
 
+        var start_end: StartEnd
         if end != -1:
-            self.next_split = _StartEnd(self.current, end)
+            start_end = StartEnd(self.current, end)
             self.current = end + 1
         else:
-            self.next_split = _StartEnd(self.current, len(self.inner))
+            start_end = StartEnd(self.current, len(self.inner))
             self.current = len(self.inner) + 1
 
-    fn peek(read self) -> Optional[Span[UInt8, Self.origin]]:
-        """Peek ahead at the next split result."""
-        if self.next_split:
-            var split = self.next_split.value()
-            return self.inner[split.start : split.end]
+        return self.inner[start_end.start : start_end.end]
+
+    fn next(mut self) raises StopIteration -> Span[UInt8, Self.origin]:
+        return self.__next__()
+
+
+struct SplitIteratorPos[is_mutable: Bool, //, origin: Origin[mut=is_mutable]](
+    Copyable, Iterable, Iterator, Movable
+):
+    var inner: Span[UInt8, Self.origin]
+    var split_on: UInt8
+    var current: Int
+    var len: Int
+
+    comptime IteratorType[
+        iterable_mut: Bool, //, iterable_origin: Origin[mut=iterable_mut]
+    ]: Iterator = Self
+    comptime Element = StartEnd
+
+    fn __init__(out self, to_split: Span[UInt8, Self.origin], split_on: UInt8):
+        self.inner = to_split
+        self.split_on = split_on
+        self.current = 0
+        self.len = 1
+
+    fn __iter__(ref self) -> Self.IteratorType[origin_of(self)]:
+        return self.copy()
+
+    fn __next__(mut self) raises StopIteration -> Self.Element:
+        if self.current >= len(self.inner):
+            self.len = 0
+            raise StopIteration()
+
+        var end = memchr(self.inner, self.split_on, self.current)
+
+        var start_end: StartEnd
+        if end != -1:
+            start_end = StartEnd(self.current, end)
+            self.current = end + 1
         else:
-            return None
+            start_end = StartEnd(self.current, len(self.inner))
+            self.current = len(self.inner) + 1
+
+        return start_end
+
+    fn next(mut self) raises StopIteration -> StartEnd:
+        return self.__next__()

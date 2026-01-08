@@ -49,7 +49,7 @@ fn _check_index_bounds[operation_name: StaticString](idx: UInt, max_size: UInt):
 fn _elts[dtype: DType](bits: UInt) -> UInt:
     """Compute the number of elements needed to hold the given number of bits.
     """
-    constrained[dtype is not DType.invalid, "dtype must be a valid DType"]()
+    constrained[dtype != DType.invalid, "dtype must be a valid DType"]()
     comptime bitwidth = UInt(bit_width_of[dtype]())
     return (bits + bitwidth - 1) // bitwidth
 
