@@ -83,7 +83,7 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
     comptime WORD = Scalar[Self.WORD_DTYPE]
 
     var data: UnsafePointer[
-        mut=True, type = Self.WORD, origin = MutOrigin.external
+        mut=True, type = Self.WORD, origin = ExternalOrigin[mut=True]
     ]
     """The data storage."""
 

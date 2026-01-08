@@ -192,7 +192,9 @@ struct BufferedReader(Movable):
 
     var fh: FileHandle
     """The internal filehandle to read from."""
-    var buffer: UnsafePointer[mut=True, type=UInt8, origin = MutOrigin.external]
+    var buffer: UnsafePointer[
+        mut=True, type=UInt8, origin = ExternalOrigin[mut=True]
+    ]
     """The internal buffer."""
     var file_offset: Int
     """Current offset into the file."""
@@ -399,6 +401,9 @@ struct BufferedWriter[W: Movable & Writer](Movable, Writer):
     fn close(mut self) raises:
         self.flush()
         # self.fh.close()
+
+    fn write_string(mut self, string: StringSlice):
+        self.write_bytes(string.as_bytes())
 
     fn write_bytes(mut self, bytes: Span[UInt8]):
         """Write bytes to this writer.

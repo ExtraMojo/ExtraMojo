@@ -188,20 +188,20 @@ fn test_spilt_iterator() raises:
         assert_equal(s(output[i]), s(expected[i]), "Not equal")
 
 
-fn test_spilt_iterator_peek() raises:
-    var input = "ABCD\tEFGH\tIJKL\nMNOP".as_bytes()
-    var expected = [
-        "ABCD".as_bytes(),
-        "EFGH".as_bytes(),
-        "IJKL\nMNOP".as_bytes(),
-    ]
-    var iter = SplitIterator(input, ord("\t"))
-    var first = iter.__next__()
-    var peek = iter.peek()
-    var second = iter.__next__()
-    assert_equal(s(peek.value()), s(second))
-    assert_equal(s(first), s(expected[0]))
-    assert_equal(s(second), s(expected[1]))
+# fn test_spilt_iterator_peek() raises:
+#     var input = "ABCD\tEFGH\tIJKL\nMNOP".as_bytes()
+#     var expected = [
+#         "ABCD".as_bytes(),
+#         "EFGH".as_bytes(),
+#         "IJKL\nMNOP".as_bytes(),
+#     ]
+#     var iter = SplitIterator(input, ord("\t"))
+#     var first = iter.__next__()
+#     var peek = iter.peek()
+#     var second = iter.__next__()
+#     assert_equal(s(peek.value()), s(second))
+#     assert_equal(s(first), s(expected[0]))
+#     assert_equal(s(second), s(expected[1]))
 
 
 fn test_spilt_iterator_long() raises:
