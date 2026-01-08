@@ -21,17 +21,17 @@ channels = [
 ]
 
 [package.host-dependencies]
-mojo-compiler = "=0.25.7"
+mojo-compiler = ">=0.26.1.0.dev2025112705,<0.27"
 
 [package.build-dependencies]
-mojo-compiler = "=0.25.7"
+mojo-compiler = ">=0.26.1.0.dev2025112705,<0.27"
 
 [package.run-dependencies]
-mojo-compiler = "=0.25.7"
+mojo-compiler = ">=0.26.1.0.dev2025112705,<0.27"
 
 # These are basically just dev deps, the real deps are specified in the recipe.yaml
 [dependencies]
-mojo = ">0.26"
+mojo = ">=0.26.1.0.dev2025112705,<0.27"
 
 [tasks]
 build = "pixi run mojo package extramojo -o extramojo.mojopkg"
