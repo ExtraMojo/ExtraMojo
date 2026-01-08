@@ -27,7 +27,7 @@ from extramojo.io.delimited import (
 # Example with compile-time known fields.
 # #########################################
 
-@value
+@fieldwise_init
 struct SerDerStruct(ToDelimited, FromDelimited):
     var index: Int
     var name: String
