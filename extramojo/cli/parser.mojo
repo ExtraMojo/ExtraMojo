@@ -632,7 +632,7 @@ struct SubcommandParser(Copyable, Movable):
 
         return (
             cmd.value().parser.program_name,
-            cmd.value().parser.parse_args(List(args[1:])),
+            cmd.value().parser.parse_args(args[1:]),
         )
 
     fn parse_sys_args(read self) raises -> Optional[Tuple[String, ParsedOpts]]:
