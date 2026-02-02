@@ -121,7 +121,7 @@ fn to_ascii_lowercase(mut buffer: List[UInt8]):
 
     # Now get an aligned pointer
     var offset = SIMD_U8_WIDTH - (ptr.__int__() & (SIMD_U8_WIDTH - 1))
-    var aligned_ptr = ptr.offset(offset)
+    var aligned_ptr = ptr + offset
 
     # Find the last aligned read possible
     var buffer_len = len(buffer) - offset
@@ -175,7 +175,7 @@ fn to_ascii_uppercase(mut buffer: List[UInt8]):
 
     # Now get an aligned pointer
     var offset = SIMD_U8_WIDTH - (ptr.__int__() & (SIMD_U8_WIDTH - 1))
-    var aligned_ptr = ptr.offset(offset)
+    var aligned_ptr = ptr + offset
 
     # Find the last aligned read possible
     var buffer_len = len(buffer) - offset

@@ -11,7 +11,7 @@ preview = ["pixi-build"]
 
 [package]
 name = "extramojo"
-version = "0.19.0"
+version = "0.20.0"
 
 [package.build]
 backend = { name = "pixi-build-mojo", version = "0.*" }
@@ -21,17 +21,17 @@ channels = [
 ]
 
 [package.host-dependencies]
-mojo-compiler = ">=0.26.1.0.dev2025112705,<0.27"
+mojo-compiler = "=0.26.1"
 
 [package.build-dependencies]
-mojo-compiler = ">=0.26.1.0.dev2025112705,<0.27"
+mojo-compiler = "=0.26.1"
 
 [package.run-dependencies]
-mojo-compiler = ">=0.26.1.0.dev2025112705,<0.27"
+mojo-compiler = "=0.26.1"
 
 # These are basically just dev deps, the real deps are specified in the recipe.yaml
 [dependencies]
-mojo = ">=0.26.1.0.dev2025112705,<0.27"
+mojo = "=0.26.1"
 
 [tasks]
 build = "pixi run mojo package extramojo -o extramojo.mojopkg"

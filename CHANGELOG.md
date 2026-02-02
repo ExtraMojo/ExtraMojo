@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.20.0
+
+- Small changes to keep up with Mojo versions, no large features or fixes
+
 ## v0.19.1
 
 - Remove useless assignments
