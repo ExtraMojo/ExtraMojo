@@ -65,7 +65,7 @@ fn memchr[
         # Now get the alignment
         offset = SIMD_U8_WIDTH - (ptr.__int__() & (SIMD_U8_WIDTH - 1))
         # var aligned_ptr = ptr.offset(offset)
-        ptr = ptr.offset(offset)
+        ptr = ptr + offset
 
     # Find the last aligned end
     var haystack_len = len(haystack) - (start + offset)

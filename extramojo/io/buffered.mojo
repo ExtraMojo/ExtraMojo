@@ -254,14 +254,14 @@ struct BufferedReader(Movable):
         var bytes_read = 0
 
         while bytes_to_read > 0:
-            var out_buf_ptr = buffer.unsafe_ptr().offset(bytes_read)
+            var out_buf_ptr = buffer.unsafe_ptr() + bytes_read
             # Copy as much as possible into the buffer
             var available_bytes = min(
                 self.buffer_len - self.buffer_offset, bytes_to_read
             )
             memcpy(
                 dest=out_buf_ptr,
-                src=self.buffer.offset(self.buffer_offset),
+                src=self.buffer + self.buffer_offset,
                 count=available_bytes,
             )
             self.buffer_offset += available_bytes
@@ -299,7 +299,7 @@ struct BufferedReader(Movable):
             # Find the next newline in the buffer
             var newline_index = memchr(
                 Span[UInt8](ptr=self.buffer, length=self.buffer_len),
-                char,
+                UInt8(char),
                 self.buffer_offset,
             )
 
@@ -307,10 +307,10 @@ struct BufferedReader(Movable):
             var end = newline_index if newline_index != -1 else self.buffer_len
             var size = end - self.buffer_offset
             buffer.reserve(len(buffer) + size)
-            var line_ptr = buffer.unsafe_ptr().offset(len(buffer))
+            var line_ptr = buffer.unsafe_ptr() + len(buffer)
             memcpy(
                 dest=line_ptr,
-                src=self.buffer.offset(self.buffer_offset),
+                src=self.buffer + self.buffer_offset,
                 count=size,
             )
             # TODO: is there a better way to do this?
@@ -417,7 +417,7 @@ struct BufferedWriter[W: Movable & Writer](Movable, Writer):
 
             var to_copy = b[:end]
             memcpy(
-                dest=self.buffer.unsafe_ptr().offset(self.buffer_len),
+                dest=self.buffer.unsafe_ptr() + self.buffer_len,
                 src=to_copy.unsafe_ptr(),
                 count=len(to_copy),
             )

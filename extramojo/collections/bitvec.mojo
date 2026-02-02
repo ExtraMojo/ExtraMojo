@@ -226,9 +226,7 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
             Int(new_capacity), alignment=self.WORD_BYTEWIDTH
         )
         var current_words = _elts[self.WORD_DTYPE](self._len)
-        memset_zero(
-            new_data.offset(current_words), Int(new_capacity - current_words)
-        )
+        memset_zero(new_data + current_words, Int(new_capacity - current_words))
         memcpy(dest=new_data, src=self.data, count=Int(current_words))
 
         if self.data:
@@ -255,7 +253,7 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
         # set new mem
         if self._capacity > old_words:
             memset(
-                self.data.offset(old_words),
+                self.data + old_words,
                 0xFF if fill else 0x00,
                 Int(self._capacity - old_words),
             )
@@ -263,7 +261,9 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
         # Set the bits in the last word of the old values
         var bit_offset = old_len % UInt(bit_width_of[Self.WORD.dtype]())
         if bit_offset != 0:
-            var mask = (UInt(1) << bit_offset) - UInt(1)
+            var mask = Scalar[Self.WORD.dtype](
+                (UInt(1) << bit_offset) - UInt(1)
+            )
             if fill:
                 # Fill upper bits in word to 1
                 self.data[old_words - 1] |= ~mask
@@ -274,7 +274,9 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
         # Set the bits in the last word
         bit_offset = new_size % UInt(bit_width_of[Self.WORD.dtype]())
         if bit_offset != 0 and fill:
-            var mask = (UInt(1) << bit_offset) - UInt(1)
+            var mask = Scalar[Self.WORD.dtype](
+                (UInt(1) << bit_offset) - UInt(1)
+            )
             # clear upper bits
             self.data[self._capacity - 1] &= mask
         self._len = new_size
@@ -677,7 +679,7 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
 
         @always_inline
         fn count[simd_width: Int](offset: Int) unified {mut total, read self}:
-            var vec = self.data.offset(offset).load[width=simd_width]()
+            var vec = (self.data + offset).load[width=simd_width]()
             total += UInt(pop_count(vec).reduce_add())
 
         var num_words = _elts[self.WORD_DTYPE](up_to)
@@ -689,7 +691,9 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
         # Now add in the last bits
         var bit_offset = up_to % UInt(bit_width_of[Self.WORD.dtype]())
         if bit_offset != 0:
-            var mask = (UInt(1) << bit_offset) - UInt(1)
+            var mask = Scalar[Self.WORD.dtype](
+                (UInt(1) << bit_offset) - UInt(1)
+            )
             total += UInt(pop_count(mask & self.data[num_words - 1]))
         else:
             # We count everything in the word
@@ -780,15 +784,15 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
             var right_vec: SIMD[Self.WORD_DTYPE, simd_width]
 
             # Load a batch of words from both `BitVec`s into SIMD vectors
-            left_vec = left.data.offset(offset).load[width=simd_width]()
-            right_vec = right.data.offset(offset).load[width=simd_width]()
+            left_vec = (left.data + offset).load[width=simd_width]()
+            right_vec = (right.data + offset).load[width=simd_width]()
 
             # Apply the provided operation (union, intersection, etc.) to the
             # vectors
             var result_vec = func(left_vec, right_vec)
 
             # Store the results back into the result `BitVec`
-            res.data.offset(offset).store[width=simd_width](result_vec)
+            (res.data + offset).store[width=simd_width](result_vec)
 
         var lhs_len = _elts[Self.WORD_DTYPE](UInt(len(left)))
         var rhs_len = _elts[Self.WORD_DTYPE](UInt(len(right)))
@@ -817,11 +821,11 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
 
                 @parameter
                 if lhs_zero_out:
-                    memset_zero(res.data.offset(rhs_len), Int(remaining_words))
+                    memset_zero(res.data + rhs_len, Int(remaining_words))
                 else:
                     memcpy(
-                        dest=res.data.offset(rhs_len),
-                        src=left.data.offset(rhs_len),
+                        dest=res.data + rhs_len,
+                        src=left.data + rhs_len,
                         count=Int(remaining_words),
                     )
 
@@ -970,15 +974,15 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
             var right_vec: SIMD[Self.WORD_DTYPE, simd_width]
 
             # Load a batch of words from both `BitVec`s into SIMD vectors
-            left_vec = left.data.offset(offset).load[width=simd_width]()
-            right_vec = right.data.offset(offset).load[width=simd_width]()
+            left_vec = (left.data + offset).load[width=simd_width]()
+            right_vec = (right.data + offset).load[width=simd_width]()
 
             # Apply the provided operation (union, intersection, etc.) to the
             # vectors
             func(left_vec, right_vec)
 
             # Store the results back into the result `BitVec`
-            left.data.offset(offset).store[width=simd_width](left_vec)
+            (left.data + offset).store[width=simd_width](left_vec)
 
         var lhs_len = _elts[Self.WORD_DTYPE](UInt(len(left)))
         var rhs_len = _elts[Self.WORD_DTYPE](UInt(len(right)))
@@ -1005,7 +1009,7 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
 
                 @parameter
                 if lhs_zero_out:
-                    memset_zero(left.data.offset(rhs_len), Int(remaining_words))
+                    memset_zero(left.data + rhs_len, Int(remaining_words))
 
     fn union_update(mut self, other: Self):
         """Modifies `self` to be the union of `self` and `other`.

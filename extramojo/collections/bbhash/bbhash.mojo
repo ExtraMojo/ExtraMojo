@@ -294,7 +294,7 @@ struct BBHash[compute_reverse_map: Bool = False]:
         self.ranks = List[UInt64](length=len(self.bits), fill=0)
         for i in range(0, len(self.bits)):
             self.ranks[i] = rank
-            rank += self.bits[i].count_set_bits()
+            rank += UInt64(self.bits[i].count_set_bits())
 
     fn find[K: Hashable](read self, key: K) -> UInt64:
         """Find returns a unique index representing the key in the minimal hash set.

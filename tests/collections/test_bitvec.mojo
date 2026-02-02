@@ -29,9 +29,11 @@ def test_bitvec_count_set_bits():
     assert_equal(bv1._capacity, 2)
     var bit_offset = bv1._len % UInt(bit_width_of[bv.WORD.dtype]())
     assert_equal(bit_offset, 1)
-    var mask = (UInt(1) << bit_offset) - UInt(1)
-    assert_equal(mask, UInt(1))
-    assert_equal(mask & UInt64.MAX, UInt(1))
+    var mask = Scalar[BitVec.WORD.dtype]((UInt(1) << bit_offset) - UInt(1))
+    assert_equal(mask, Scalar[BitVec.WORD.dtype](1))
+    assert_equal(
+        mask & Scalar[BitVec.WORD.dtype].MAX, Scalar[BitVec.WORD.dtype](1)
+    )
     assert_equal(
         bv1.data[1],
         1,
