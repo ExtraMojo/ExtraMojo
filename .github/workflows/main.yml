@@ -18,6 +18,11 @@ jobs:
                   export PATH="/home/runner/.pixi/bin:$PATH"
                   pixi install --locked
 
+            - name: Run build
+              run: |
+                  export PATH="/home/runner/.pixi/bin:$PATH"
+                  pixi run build
+
             - name: Run tests
               run: |
                   export PATH="/home/runner/.pixi/bin:$PATH"
