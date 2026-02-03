@@ -133,7 +133,7 @@ fn memchr_wide(haystack: Span[UInt8], chr: UInt8, start: Int = 0) -> Int:
 
     # Now get the alignment
     var offset = SIMD_U8_WIDTH - (ptr.__int__() & (SIMD_U8_WIDTH - 1))
-    var aligned_ptr = ptr.offset(offset)
+    var aligned_ptr = ptr + offset
 
     # Find the last aligned end
     var haystack_len = len(haystack) - (start + offset)

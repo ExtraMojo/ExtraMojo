@@ -253,7 +253,7 @@ fn find(haystack: Span[UInt8], needle: Span[UInt8]) -> Optional[Int]:
 @fieldwise_init
 @register_passable
 struct StartEnd(Copyable, Defaultable, ImplicitlyCopyable, Movable):
-    """Helper struct for tracking start/end coords in `SplitIterator`"""
+    """Helper struct for tracking start/end coords in `SplitIterator`."""
 
     var start: Int
     var end: Int

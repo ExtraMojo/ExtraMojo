@@ -404,7 +404,7 @@ struct OptParser(Copyable, Movable):
         # TODO: use a string slice or something better here
         var i = 0
         while i < len(arg):
-            if arg[i] != "-":
+            if arg.__getitem__(byte=i) != "-":
                 break
             i += 1
         return String(arg[i:])

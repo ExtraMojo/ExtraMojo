@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.20.1
+
+- Fixes for build issues not caught by tests
+
 ## v0.20.0
 
 - Small changes to keep up with Mojo versions, no large features or fixes
@@ -57,7 +61,7 @@
 - Added example of reading / writing similar to dictreader / dictwriter
 - BREAKING: Removed the call to `buffer.clear()` in `read_until`. That needs to be manually called by the callee now.
 
-## v0.10.0 
+## v0.10.0
 
 - Added `MovableWriter` trait so that all writers can take things that implement that, allowing them to take FileHandles, or FileDescriptors
   as well as anything else that can be written to.
