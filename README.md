@@ -2,8 +2,6 @@
 
 Extra functionality to extend the Mojo std lib.
 
-*Supports mojo 25.5.0*
-
 ## Documentation and Examples
 
 [ExtraMojo Docs](https://extramojo.github.io/ExtraMojo/)
