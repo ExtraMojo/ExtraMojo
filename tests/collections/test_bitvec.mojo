@@ -1,10 +1,10 @@
-from sys import bit_width_of
-from testing import assert_equal, assert_true, assert_false, TestSuite
+from std.sys import bit_width_of
+from std.testing import assert_equal, assert_true, assert_false, TestSuite
 
 from extramojo.collections.bitvec import BitVec
 
 
-def test_bitvec_from_list_literal():
+def test_bitvec_from_list_literal() raises:
     var bv: BitVec = [True, True, False, False, False, True]
     assert_equal(len(bv), 6)
     assert_equal(bv.count_set_bits(), 3)
@@ -16,7 +16,7 @@ struct RankTestCase(Copyable, Movable):
     var expected: UInt
 
 
-def test_bitvec_count_set_bits():
+def test_bitvec_count_set_bits() raises:
     var bv = BitVec(length=1500, fill=False)
     bv.set(1000)
     bv.set(1025)
@@ -70,18 +70,18 @@ def test_bitvec_count_set_bits():
         )
 
 
-def test_bitvec_init_with_capacity():
+def test_bitvec_init_with_capacity() raises:
     var bv = BitVec(capacity=1024)
     assert_equal(bv.capacity(), 1024)
 
 
-def test_bitvec_capacity_alignment():
+def test_bitvec_capacity_alignment() raises:
     var bv = BitVec(capacity=130)  # Should allocate ceil(130 / word_size)
     assert_true(bv.capacity() >= 130)
     assert_equal(len(bv), 0)
 
 
-def test_bitvec_init_length_fill_false():
+def test_bitvec_init_length_fill_false() raises:
     var bv = BitVec(length=65, fill=False)
     assert_equal(len(bv), 65)
 
@@ -90,7 +90,7 @@ def test_bitvec_init_length_fill_false():
         assert_equal(bv.data[i], 0)
 
 
-def test_bitvec_init_length_fill_true():
+def test_bitvec_init_length_fill_true() raises:
     var bv = BitVec(length=65, fill=True)
     assert_equal(len(bv), 65)
 
@@ -99,18 +99,18 @@ def test_bitvec_init_length_fill_true():
     assert_equal(bv.data[bv.word_len() - 1], 1)
 
     var last_bits = 65 % bit_width_of[bv.WORD.dtype]()
-    var mask = (1 << last_bits) - 1
+    var mask = Scalar[BitVec.WORD_DTYPE]((1 << last_bits) - 1)
     assert_equal(bv.data[bv._capacity - 1] & mask, mask)
 
 
-def test_bitvec_resize_grow_fill_false():
+def test_bitvec_resize_grow_fill_false() raises:
     var bv = BitVec(length=10, fill=True)
     bv.resize(130, fill=False)
     assert_equal(len(bv), 130)
 
     # Check bits from original words
     var first_word = bv.data[0]
-    var first_word_mask = (1 << 10) - 1
+    var first_word_mask = Scalar[BitVec.WORD_DTYPE]((1 << 10) - 1)
     assert_equal(first_word & first_word_mask, first_word_mask)
 
     # Check new words are cleared
@@ -118,7 +118,7 @@ def test_bitvec_resize_grow_fill_false():
         assert_equal(bv.data[i], 0)
 
 
-def test_bitvec_resize_grow_fill_true():
+def test_bitvec_resize_grow_fill_true() raises:
     var bv = BitVec(length=10, fill=False)
     bv.resize(130, fill=True)
     assert_equal(len(bv), 130)
@@ -127,7 +127,7 @@ def test_bitvec_resize_grow_fill_true():
     assert_equal(bv.data[0] & ((1 << 10) - 1), 0)
 
     # Check that upper bits of first word are set
-    var upper_mask = ~((1 << 10) - 1)
+    var upper_mask = Scalar[BitVec.WORD_DTYPE](~((1 << 10) - 1))
     assert_true((bv.data[0] & upper_mask) == upper_mask)
 
     # Check new words are set to 0xFFFFFFFF
@@ -136,7 +136,7 @@ def test_bitvec_resize_grow_fill_true():
     assert_true(bv.data[bv.word_len() - 1] != ~0)
 
 
-def test_bitvec_resize_shrink():
+def test_bitvec_resize_shrink() raises:
     var bv = BitVec(length=130, fill=True)
     bv.resize(64, fill=False)  # should shrink and mask the last word
     assert_equal(len(bv), 64)
@@ -145,14 +145,14 @@ def test_bitvec_resize_shrink():
     assert_equal(bv.data[0], mask)
 
 
-def test_bitvec_shrink_to_same_size():
+def test_bitvec_shrink_to_same_size() raises:
     var bv = BitVec(length=64, fill=True)
     bv.shrink(64)  # no-op
     assert_equal(len(bv), 64)
     assert_equal(bv.data[0], ~0)
 
 
-def test_bitvec_clear():
+def test_bitvec_clear() raises:
     var bv = BitVec(length=514, fill=True)
     assert_true(bv.data[1] != 0)
     assert_true(len(bv) == 514)
@@ -160,19 +160,19 @@ def test_bitvec_clear():
     assert_true(len(bv) == 0)
 
 
-def test_bitvec_empty():
+def test_bitvec_empty() raises:
     var bv = BitVec(length=1, fill=False)
     assert_true(Bool(bv))
     assert_false(bv.is_empty())
 
 
-def test_bitvec_getitem():
+def test_bitvec_getitem() raises:
     var bv = BitVec(length=600, fill=True)
     for i in range(UInt(0), UInt(600)):
         assert_true(bv[UInt(i)])
 
 
-def test_bitvec_setitem():
+def test_bitvec_setitem() raises:
     var bv = BitVec(length=1200, fill=False)
     bv[600] = True
     assert_true(bv[600])
@@ -182,7 +182,7 @@ def test_bitvec_setitem():
     assert_true(bv[1199])
 
 
-def test_bitvec_set():
+def test_bitvec_set() raises:
     var bv = BitVec(length=1200, fill=False)
     bv.set(600)
     assert_true(bv[600])
@@ -192,7 +192,7 @@ def test_bitvec_set():
     assert_true(bv[1199])
 
 
-def test_bitvec_clear_one():
+def test_bitvec_clear_one() raises:
     var bv = BitVec(length=1200, fill=True)
     bv.clear(600)
     assert_false(bv[600])
@@ -202,7 +202,7 @@ def test_bitvec_clear_one():
     assert_false(bv[1199])
 
 
-def test_bitvec_toggle():
+def test_bitvec_toggle() raises:
     var bv = BitVec(length=1200, fill=True)
     bv.toggle(600)
     assert_false(bv[600])
@@ -219,7 +219,7 @@ def test_bitvec_toggle():
     assert_true(bv[1199])
 
 
-def test_bitvec_append():
+def test_bitvec_append() raises:
     var bv = BitVec()
     for _i in range(0, 100):
         bv.append(True)
@@ -248,28 +248,28 @@ def test_bitvec_append():
         assert_false(bv[UInt(i)])
 
 
-def test_bitvec_pop_back():
+def test_bitvec_pop_back() raises:
     var bv = BitVec(length=1000, fill=True)
     for _i in range(0, 1000):
         assert_true(bv.pop_back())
     assert_true(bv.is_empty())
 
 
-def test_bitvec_set_and_check():
+def test_bitvec_set_and_check() raises:
     var bv = BitVec(length=1000, fill=True)
     assert_false(bv.set_and_check(512))
     bv.append(False)
     assert_true(bv.set_and_check(1000))
 
 
-def test_bitvec_clear_and_check():
+def test_bitvec_clear_and_check() raises:
     var bv = BitVec(length=1000, fill=True)
     assert_true(bv.clear_and_check(512))
     bv.append(False)
     assert_false(bv.clear_and_check(1000))
 
 
-def test_bitvec_union():
+def test_bitvec_union() raises:
     # left size longer
     var bvA = BitVec(length=600, fill=False)
     for i in [UInt(0), 64, 550]:
@@ -365,7 +365,7 @@ def test_bitvec_union():
     assert_true(bv11.test(70), msg="Union: Across words bit 70")
 
 
-def test_bitvec_intersection():
+def test_bitvec_intersection() raises:
     # left size longer
     var bvA = BitVec(length=600, fill=False)
     for i in [UInt(0), 25, 550]:
@@ -459,7 +459,7 @@ def test_bitvec_intersection():
     assert_false(bv11.test(75), msg="Intersection: Across words bit 75")
 
 
-def test_bitvec_difference():
+def test_bitvec_difference() raises:
     # left size longer
     var bvA = BitVec(length=600, fill=False)
     for i in [UInt(0), 25, 550]:
@@ -612,7 +612,7 @@ def test_bitvec_difference():
     )
 
 
-def test_bitvec_union_update():
+def test_bitvec_union_update() raises:
     var bv1 = BitVec(length=12, fill=False)
     for i in [UInt(2), 4, 6, 8, 10, 11]:
         bv1.set(i)
@@ -646,7 +646,7 @@ def test_bitvec_union_update():
     assert_equal(bv6.count_set_bits(), 6)
 
 
-def test_bitvec_intersection_update():
+def test_bitvec_intersection_update() raises:
     var bv1 = BitVec(length=12, fill=False)
     for i in [UInt(2), 3, 6, 8, 10, 11]:
         bv1.set(i)
@@ -680,7 +680,7 @@ def test_bitvec_intersection_update():
     assert_equal(bv6.count_set_bits(), 1)
 
 
-def test_bitvec_difference_update():
+def test_bitvec_difference_update() raises:
     var bv1 = BitVec(length=12, fill=False)
     for i in [UInt(2), 3, 6, 8, 10, 11]:
         bv1.set(i)
@@ -714,7 +714,7 @@ def test_bitvec_difference_update():
     assert_equal(bv6.count_set_bits(), 2)
 
 
-def test_bitvec_partial_union_preserves_tail():
+def test_bitvec_partial_union_preserves_tail() raises:
     var a = BitVec(length=130, fill=False)
     a.set(0)
     a.set(129)  # tail bit
@@ -731,7 +731,7 @@ def test_bitvec_partial_union_preserves_tail():
     assert_equal(c[129], True)  # tail preserved
 
 
-def test_bitvec_union_update_preserves_tail():
+def test_bitvec_union_update_preserves_tail() raises:
     var a = BitVec(length=130, fill=False)
     a.set(5)
     a.set(129)
@@ -747,7 +747,7 @@ def test_bitvec_union_update_preserves_tail():
     assert_equal(a[129], True)  # tail preserved
 
 
-def test_bitvec_full_overlap_union():
+def test_bitvec_full_overlap_union() raises:
     var a = BitVec(length=64, fill=False)
     var b = BitVec(length=64, fill=False)
     b.set(7)
@@ -757,7 +757,7 @@ def test_bitvec_full_overlap_union():
     assert_equal(c[7], True)
 
 
-def test_bitvec_adhoc():
+def test_bitvec_adhoc() raises:
     comptime example = "As the quick brown fox jumped over the fence a moon was rising in the distance. Then the moon exploded. The End.".as_bytes()
     var periods = BitVec(length=UInt(len(example)), fill=False)
     var spaces = BitVec(length=UInt(len(example)), fill=False)
@@ -765,11 +765,11 @@ def test_bitvec_adhoc():
     var none = BitVec(length=UInt(len(example)), fill=False)
 
     for i in range(UInt(0), UInt(len(example))):
-        if example[i] == ord("."):
+        if example[i] == UInt8(ord(".")):
             periods.set(i)
-        elif example[i] == ord(" "):
+        elif example[i] == UInt8(ord(" ")):
             spaces.set(i)
-        elif example[i] == ord("T"):
+        elif example[i] == UInt8(ord("T")):
             ts.set(i)
         else:
             none.set(i)
@@ -797,7 +797,7 @@ def test_bitvec_adhoc():
     assert_equal(test.count_set_bits(), 24)
 
 
-def test_bitvec_equal():
+def test_bitvec_equal() raises:
     var bv1 = BitVec(length=65, fill=False)
     var bv2 = BitVec(length=65, fill=False)
     bv1.set(64)
@@ -812,5 +812,5 @@ def test_bitvec_equal():
     assert_true(bv3 != bv4)
 
 
-def main():
+def main() raises:
     TestSuite.discover_tests[__functions_in_module()]().run()

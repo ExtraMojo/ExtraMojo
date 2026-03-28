@@ -5,14 +5,14 @@ from extramojo.bstr.bstr import (
     to_ascii_uppercase,
 )
 from extramojo.bstr.memchr import memchr, memchr_wide
-from testing import *
-from testing import TestSuite
+from std.testing import *
+from std.testing import TestSuite
 
 
-fn s(bytes: Span[UInt8]) -> String:
+fn s(bytes: Span[UInt8, _]) -> String:
     """Convert bytes to a String."""
     var buffer = String()
-    buffer.write_bytes(bytes)
+    buffer.write_string(StringSlice(unsafe_from_utf8=bytes))
     return buffer
 
 
@@ -28,10 +28,9 @@ fn s(bytes: Span[UInt8]) -> String:
 
 
 fn test_memchr() raises:
-    comptime check = InlineArray[Bool, 2](True, False)
+    comptime check: InlineArray[Bool, 2] = [True, False]
 
-    @parameter
-    for do_alignment in range(0, len(check)):
+    comptime for do_alignment in range(0, len(check)):
         var cases: List[Tuple[String, Int]] = [
             (
                 String(
@@ -48,8 +47,8 @@ fn test_memchr() raises:
         ]
 
         for kase, i in cases:
-            var index = memchr[do_alignment = check[do_alignment]](
-                kase.as_bytes(), ord("|")
+            var index = memchr[do_alignment=check[do_alignment]](
+                kase.as_bytes(), UInt8(ord("|"))
             )
             assert_equal(
                 index,
@@ -80,7 +79,7 @@ fn test_memchr_wide() raises:
     ]
 
     for kase, i in cases:
-        var index = memchr_wide(kase.as_bytes(), ord("|"))
+        var index = memchr_wide(kase.as_bytes(), UInt8(ord("|")))
         assert_equal(
             index,
             i,
@@ -166,7 +165,7 @@ fn test_find_long() raises:
 fn test_find_long_variable_start() raises:
     var haystack = "ABCDEFGhijklmnop0123456789TheKindIguana\nJumpedOver the angry weird fense as it ran away from the seething moon that was swooping down to scoop it up and bring it to outer space.\nThen a really weird thing happened and suddenly 64 moons were swooping down at the Iguana. It tried to turn and tell them it was scalar, but they didn't care all tried to scoop it at once, which resulted in a massive IguanaZ lock contention.".as_bytes()
     for i in range(0, len(haystack)):
-        var answer = memchr(haystack, ord("Z"), i)
+        var answer = memchr(haystack, UInt8(ord("Z")), i)
         if i <= 401:
             assert_equal(401, answer)
         else:
@@ -182,7 +181,7 @@ fn test_spilt_iterator() raises:
         "IJKL\nMNOP".as_bytes(),
     ]
     var output = List[Span[UInt8, StaticConstantOrigin]]()
-    for value in SplitIterator(input, ord("\t")):
+    for value in SplitIterator(input, UInt8(ord("\t"))):
         output.append(value)
     for i in range(len(expected)):
         assert_equal(s(output[i]), s(expected[i]), "Not equal")
@@ -299,11 +298,11 @@ fn test_spilt_iterator_long() raises:
         "UVWXYZ".as_bytes(),
     ]
     var output = List[Span[UInt8, StaticConstantOrigin]]()
-    for value in SplitIterator(input, ord("\t")):
+    for value in SplitIterator(input, UInt8(ord("\t"))):
         output.append(value)
     for i in range(len(expected)):
         assert_equal(s(output[i]), s(expected[i]), "Not equal")
 
 
-def main():
+def main() raises:
     TestSuite.discover_tests[__functions_in_module()]().run()

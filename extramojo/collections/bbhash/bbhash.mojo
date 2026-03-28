@@ -35,9 +35,9 @@ assert_true(key_hash.value() == hash(String("fox")))
 - https://arxiv.org/abs/1702.03154
 """
 
-from hashlib.hash import hash
-from os import abort
-from sys import bit_width_of
+from std.hashlib.hash import hash
+from std.os import abort
+from std.sys import bit_width_of
 
 from extramojo.collections.bitvec import BitVec, _word_index, _bit_mask, _elts
 from extramojo.collections.bbhash.hash import (
@@ -73,7 +73,7 @@ struct _BCVec(Writable):
         """
         # TODO arguably fastmod should be fine here?
         # var x = fastmod(h, len(self.v))
-        var x = h % len(self.v)
+        var x = h % UInt64(len(self.v))
         var w = _word_index[BitVec.WORD_DTYPE](UInt(x))
         var mask = _bit_mask[BitVec.WORD_DTYPE](UInt(x))
 
@@ -85,7 +85,7 @@ struct _BCVec(Writable):
         self.v.data[w] |= mask
 
     fn unset_collision(mut self, h: UInt64) -> Bool:
-        var x = h % len(self.v)
+        var x = h % UInt64(len(self.v))
         var w = _word_index[BitVec.WORD_DTYPE](UInt(x))
         var mask = _bit_mask[BitVec.WORD_DTYPE](UInt(x))
         if self.c.data[w] & mask != 0:
@@ -110,6 +110,9 @@ struct _BCVec(Writable):
         writer.write("collisions:", self.c)
 
 
+comptime Keyable = Copyable & Movable & Hashable & ImplicitlyDestructible
+
+
 struct BBHash[compute_reverse_map: Bool = False]:
     """BBHash represents a minimal perfect hash for a set of keys.
 
@@ -123,7 +126,7 @@ struct BBHash[compute_reverse_map: Bool = False]:
     var reverse_map: List[UInt64]
 
     fn __init__[
-        K: Copyable & Movable & Hashable
+        K: Keyable
     ](out self, var keys: List[K], *, gamma: Float64 = 1.0):
         """Create a `BBHash`.
 
@@ -137,8 +140,7 @@ struct BBHash[compute_reverse_map: Bool = False]:
         self.ranks = []
         self.reverse_map = []
 
-        @parameter
-        if not Self.compute_reverse_map:
+        comptime if not Self.compute_reverse_map:
             self._compute(keys^, gamma)
         else:
             self._compute_with_reversemap(keys^, gamma)
@@ -147,9 +149,7 @@ struct BBHash[compute_reverse_map: Bool = False]:
     # TODO: switch to fastmod from lemiere?
     # TODO: add the parallel version on the bitvec of atomics
     # TODO: add a rank-index to bitvecs
-    fn _compute[
-        K: Copyable & Movable & Hashable
-    ](mut self, var keys: List[K], var gamma: Float64):
+    fn _compute[K: Keyable](mut self, var keys: List[K], var gamma: Float64):
         """Compute the minimal perfect hash function.
 
         Args:
@@ -168,7 +168,7 @@ struct BBHash[compute_reverse_map: Bool = False]:
         )  # heuristic: only 1/2 of the keys will collide
 
         # bit vectors for current level: A and C in the paper
-        level_vec = _BCVec(length=UInt(Int(gamma * size)))
+        level_vec = _BCVec(length=UInt(Int(gamma * Float64(size))))
 
         # loop exits when there are no more keys to re-hash
         var lvl = 0
@@ -201,7 +201,7 @@ struct BBHash[compute_reverse_map: Bool = False]:
             # move to the next level and compute the set of keys to re-hash (that had collisions)
             swap(keys, redo)
             redo.clear()
-            level_vec.next_level(UInt(Int(gamma * size)))
+            level_vec.next_level(UInt(Int(gamma * Float64(size))))
 
             if lvl > MAX_ITERS:
                 abort("Unable to find max mph after " + String(lvl) + " tries")
@@ -209,7 +209,7 @@ struct BBHash[compute_reverse_map: Bool = False]:
         self._compute_level_ranks()
 
     fn _compute_with_reversemap[
-        K: Copyable & Movable & Hashable
+        K: Keyable
     ](mut self, var keys: List[K], var gamma: Float64):
         """Compute the minimal perfect hash function.
 
@@ -229,7 +229,7 @@ struct BBHash[compute_reverse_map: Bool = False]:
         )  # heuristic: only 1/2 of the keys will collide
 
         # bit vectors for current level: A and C in the paper
-        level_vec = _BCVec(length=UInt(Int(gamma * size)))
+        level_vec = _BCVec(length=UInt(Int(gamma * Float64(size))))
         self.reverse_map = List[UInt64](length=len(keys) + 1, fill=0)
         var level_keys_map = List[List[UInt64]]()
 
@@ -256,7 +256,7 @@ struct BBHash[compute_reverse_map: Bool = False]:
                     # Add the key to redos
                     redo.append(keys[i].copy())
                 else:
-                    level_keys[h % len(level_vec.v)] = kh
+                    level_keys[h % UInt64(len(level_vec.v))] = kh
             level_keys_map.append(level_keys^)
 
             # save the current bit vector for the current level
@@ -269,7 +269,7 @@ struct BBHash[compute_reverse_map: Bool = False]:
             # move to the next level and compute the set of keys to re-hash (that had collisions)
             swap(keys, redo)
             redo.clear()
-            level_vec.next_level(UInt(Int(gamma * size)))
+            level_vec.next_level(UInt(Int(gamma * Float64(size))))
 
             if lvl > MAX_ITERS:
                 abort("Unable to find max mph after " + String(lvl) + " tries")
@@ -320,8 +320,8 @@ struct BBHash[compute_reverse_map: Bool = False]:
             The unique index of the key, or 0 if it isn't in the set.
         """
         for lvl in range(0, len(self.bits)):
-            var i = _level_key_hash(UInt64(lvl), hash(key)) % len(
-                self.bits[lvl]
+            var i = _level_key_hash(UInt64(lvl), hash(key)) % UInt64(
+                len(self.bits[lvl])
             )
             if self.bits[lvl].test(UInt(i)):
                 return self.ranks[lvl] + UInt64(self.bits[lvl].rank(UInt(i)))
@@ -336,13 +336,10 @@ struct BBHash[compute_reverse_map: Bool = False]:
         Returns:
             The hash of the key associated with the index, or None if the idx is invalid.
         """
-        constrained[
-            Self.compute_reverse_map,
-            (
-                "BBHash must be created with `compute_reverse_map=True` to use"
-                " this fn."
-            ),
-        ]()
+        comptime assert Self.compute_reverse_map, (
+            "BBHash must be created with `compute_reverse_map=True` to use"
+            " this fn."
+        )
 
         if idx == 0 or Int(idx) >= len(self.reverse_map):
             return None

@@ -2,9 +2,9 @@
 
 These are all for `BBHash`, with the exception of fnv1a.
 """
-from memory import bitcast
+from std.math import trunc
+from std.memory import bitcast
 
-from math import trunc
 
 comptime m: UInt64 = 0x880355F21E6D1965
 
@@ -43,7 +43,7 @@ fn _mix(h_in: UInt64) -> UInt64:
 
 # todo: try u128
 @always_inline
-fn _hash64(seed: UInt64, buffer: Span[UInt8]) -> UInt64:
+fn _hash64(seed: UInt64, buffer: Span[UInt8, _]) -> UInt64:
     var buf = buffer[:]
     var h = seed ^ (UInt64(len(buf)) * m)
 
@@ -58,7 +58,7 @@ fn _hash64(seed: UInt64, buffer: Span[UInt8]) -> UInt64:
 
     var v: UInt64 = 0
     for i in range(0, len(buf)):
-        v |= UInt64(buf[i]) << (8 * i)
+        v |= UInt64(buf[i]) << UInt64(8 * i)
     if len(buf) > 0:
         h ^= _mix(v)
         h *= m
@@ -70,7 +70,7 @@ comptime FNV_PRIME: UInt64 = 1099511628211
 
 
 @always_inline
-fn fnv1a(buf: Span[UInt8]) -> UInt64:
+fn fnv1a(buf: Span[UInt8, _]) -> UInt64:
     """Classic FNV1a hash function."""
     var h = FNV_OFFSET
     for b in buf:

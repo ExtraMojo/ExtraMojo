@@ -43,11 +43,11 @@ fn test_buffered_writer(file: String, expected_lines: List[String]) raises:
 ```
 
 """
-import math
-from algorithm import vectorize
-from memory import UnsafePointer, memcpy
-from sys.info import simd_width_of
-from io import Writable
+from std import math
+from std.algorithm import vectorize
+from std.memory import UnsafePointer, memcpy
+from std.sys.info import simd_width_of
+from std.io import Writable
 
 
 from extramojo.bstr.bstr import (
@@ -78,17 +78,17 @@ fn read_lines(
     # TODO: make this an iterator
     var fh = open(path, "r")
     var result = List[List[UInt8]]()
-    var file_pos = 0
+    var file_pos: UInt64 = 0
 
     while True:
         _ = fh.seek(file_pos)
         var buffer = fh.read_bytes(buf_size)
         var newlines = find_chr_all_occurrences(buffer, NEW_LINE)
-        var start = 0
+        var start: UInt64 = 0
         for i in range(0, len(newlines)):
             var newline = newlines[i]
-            result.append(List(buffer[start:newline]))
-            start = newline + 1
+            result.append(List(buffer[Int(start) : newline]))
+            start = UInt64(newline + 1)
 
         if len(buffer) < BUF_SIZE:
             break
@@ -97,7 +97,7 @@ fn read_lines(
 
 
 fn for_each_line[
-    func: fn (Span[UInt8], Int, Int) capturing [_] -> None
+    func: fn(Span[UInt8, _], Int, Int) capturing[_] -> None
 ](path: String, buf_size: Int = BUF_SIZE) raises:
     """
     Call the provided callback on each line.
@@ -114,7 +114,7 @@ fn for_each_line[
     """
     var fh = open(path, "r")
     # var result = List[Tensor[DType.int8]]()
-    var file_pos = 0
+    var file_pos: UInt64 = 0
 
     while True:
         _ = fh.seek(file_pos)
@@ -129,7 +129,7 @@ fn for_each_line[
             func(buffer, buffer_index, newline)
             buffer_index = newline + 1
 
-        file_pos += buffer_index
+        file_pos += UInt64(buffer_index)
         if len(buffer) < BUF_SIZE:
             break
 
@@ -193,7 +193,7 @@ struct BufferedReader(Movable):
     var fh: FileHandle
     """The internal filehandle to read from."""
     var buffer: UnsafePointer[
-        mut=True, type=UInt8, origin = ExternalOrigin[mut=True]
+        mut=True, type=UInt8, origin=ExternalOrigin[mut=True]
     ]
     """The internal buffer."""
     var file_offset: Int
@@ -232,13 +232,13 @@ struct BufferedReader(Movable):
     fn __enter__(var self) -> Self:
         return self^
 
-    fn __moveinit__(out self, deinit existing: Self):
-        self.fh = existing.fh^
-        self.file_offset = existing.file_offset
-        self.buffer_offset = existing.buffer_offset
-        self.buffer = existing.buffer
-        self.buffer_capacity = existing.buffer_capacity
-        self.buffer_len = existing.buffer_len
+    fn __moveinit__(out self, deinit take: Self):
+        self.fh = take.fh^
+        self.file_offset = take.file_offset
+        self.buffer_offset = take.buffer_offset
+        self.buffer = take.buffer
+        self.buffer_capacity = take.buffer_capacity
+        self.buffer_len = take.buffer_len
 
     fn read_bytes(mut self, mut buffer: List[UInt8]) raises -> Int:
         """Read up to `len(buffer)` bytes.
@@ -392,11 +392,11 @@ struct BufferedWriter[W: Movable & Writer](Movable, Writer):
     fn __enter__(var self) -> Self:
         return self^
 
-    fn __moveinit__(out self, deinit existing: Self):
-        self.inner = existing.inner^
-        self.buffer = existing.buffer^
-        self.buffer_capacity = existing.buffer_capacity
-        self.buffer_len = existing.buffer_len
+    fn __moveinit__(out self, deinit take: Self):
+        self.inner = take.inner^
+        self.buffer = take.buffer^
+        self.buffer_capacity = take.buffer_capacity
+        self.buffer_len = take.buffer_len
 
     fn close(mut self) raises:
         self.flush()
@@ -405,7 +405,7 @@ struct BufferedWriter[W: Movable & Writer](Movable, Writer):
     fn write_string(mut self, string: StringSlice):
         self.write_bytes(string.as_bytes())
 
-    fn write_bytes(mut self, bytes: Span[UInt8]):
+    fn write_bytes(mut self, bytes: Span[UInt8, _]):
         """Write bytes to this writer.
 
         Args:
@@ -440,13 +440,13 @@ struct BufferedWriter[W: Movable & Writer](Movable, Writer):
         fn write_arg[T: Writable](arg: T):
             arg.write_to(self)
 
-        @parameter
-        for i in range(0, args.__len__()):
+        comptime for i in range(0, args.__len__()):
             write_arg(args[i])
 
     fn flush(mut self):
         """Write any remaining bytes in the current buffer, then clear the buffer.
         """
-        self.inner.write_bytes(Span(self.buffer))
+        # TODO: replace the inner writer with something of our own
+        self.inner.write_string(StringSlice(unsafe_from_utf8=Span(self.buffer)))
         self.buffer_len = 0
         self.buffer.clear()

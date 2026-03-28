@@ -1,6 +1,6 @@
-from pathlib import Path
-from python import Python
-from testing import *
+from std.pathlib import Path
+from std.python import Python
+from std.testing import *
 
 from extramojo.bstr.bstr import SplitIterator
 from extramojo.io.delimited import (
@@ -17,10 +17,10 @@ from extramojo.io.buffered import (
 )
 
 
-fn s(bytes: Span[UInt8]) -> String:
+fn s(bytes: Span[UInt8, _]) -> String:
     """Convert bytes to a String."""
     var buffer = String()
-    buffer.write_bytes(bytes)
+    buffer.write_string(StringSlice(unsafe_from_utf8=bytes))
     return buffer
 
 
@@ -119,7 +119,7 @@ fn test_for_each_line(file: Path, expected_lines: List[String]) raises:
     var found_bad = False
 
     @parameter
-    fn inner(buffer: Span[UInt8], start: Int, end: Int) capturing -> None:
+    fn inner(buffer: Span[UInt8, _], start: Int, end: Int) capturing -> None:
         if s(buffer[start:end]) != expected_lines[counter]:
             found_bad = True
         counter += 1
@@ -146,10 +146,8 @@ struct SerDerStruct(Copyable, FromDelimited, Movable, ToDelimited):
         read header_values: Optional[List[String]] = None,
     ) raises -> Self:
         var index = Int(StringSlice(unsafe_from_utf8=data.__next__()))
-        var name = (
-            String()
-        )  # String constructor expected nul terminated byte span
-        name.write_bytes(data.__next__())
+        var name = String()
+        name.write_string(StringSlice(unsafe_from_utf8=data.__next__()))
         return Self(index, name)
 
 
@@ -167,7 +165,7 @@ fn test_delim_reader_writer(file: Path) raises:
 
     var reader = DelimReader[SerDerStruct](
         BufferedReader(open(String(file), "r")),
-        delim=ord("\t"),
+        delim=UInt8(UInt8(ord("\t"))),
         has_header=True,
     )
     var count = 0
@@ -232,7 +230,7 @@ fn test_delim_reader_writer_dicts(file: Path) raises:
 
     var reader = DelimReader[ThinWrapper](
         BufferedReader(open(String(file), "r")),
-        delim=ord("\t"),
+        delim=UInt8(ord("\t")),
         has_header=True,
     )
     var count = 0
