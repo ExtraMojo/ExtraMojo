@@ -26,13 +26,12 @@ assert_equal(opts.get_bool("verbose"), True)
 assert_true(len(opts.get_help_message()[]) > 0)
 ```
 """
-from collections import Dict
-from hashlib.hasher import Hasher
+from std import sys
+from std.collections import Dict
+from std.hashlib.hasher import Hasher
 
-import sys
 
-
-struct OptKind(Copyable, ImplicitlyCopyable, Movable, Stringable):
+struct OptKind(Copyable, ImplicitlyCopyable, Movable, Writable):
     """The viable types for an option to have."""
 
     var value: UInt8
@@ -404,10 +403,10 @@ struct OptParser(Copyable, Movable):
         # TODO: use a string slice or something better here
         var i = 0
         while i < len(arg):
-            if arg.__getitem__(byte=i) != "-":
+            if arg.as_bytes()[i] != UInt8(ord("-")):
                 break
             i += 1
-        return String(arg[i:])
+        return String(arg[byte=i:])
 
     fn parse_sys_args(mut self) raises -> ParsedOpts:
         """Parse the arguments from `sys.argv()`."""
@@ -415,12 +414,12 @@ struct OptParser(Copyable, Movable):
 
         var exe = args[0]
         if not self.program_name:
-            self.program_name = exe.__str__()
+            self.program_name = String(exe)
 
         var fixed = List[String]()
         var i = 1  # Skip the first arg
         while i < len(args):
-            fixed.append(args[i].__str__())
+            fixed.append(String(args[i]))
             i += 1
         return self.parse_args(fixed)
 
@@ -642,6 +641,6 @@ struct SubcommandParser(Copyable, Movable):
         var fixed = List[String]()
         var i = 1  # Skip the first arg which is the exe
         while i < len(args):
-            fixed.append(args[i].__str__())
+            fixed.append(String(args[i]))
             i += 1
         return self.parse_args(fixed)

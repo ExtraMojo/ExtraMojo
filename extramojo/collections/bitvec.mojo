@@ -15,12 +15,19 @@ Example:
     print(bv.count_set_bits())  # Prints 0.
 ```
 """
-from algorithm import vectorize
-from bit import log2_floor, pop_count
-from math import ceildiv
-from memory import UnsafePointer, pack_bits, memcmp, memcpy, memset, memset_zero
-from os import abort
-from sys.info import is_gpu, simd_width_of, bit_width_of
+from std.algorithm import vectorize
+from std.bit import log2_floor, pop_count
+from std.math import ceildiv
+from std.memory import (
+    UnsafePointer,
+    pack_bits,
+    memcmp,
+    memcpy,
+    memset,
+    memset_zero,
+)
+from std.os import abort
+from std.sys.info import is_gpu, simd_width_of, bit_width_of
 
 
 @always_inline
@@ -49,7 +56,7 @@ fn _check_index_bounds[operation_name: StaticString](idx: UInt, max_size: UInt):
 fn _elts[dtype: DType](bits: UInt) -> UInt:
     """Compute the number of elements needed to hold the given number of bits.
     """
-    constrained[dtype != DType.invalid, "dtype must be a valid DType"]()
+    comptime assert dtype != DType.invalid, "dtype must be a valid DType"
     comptime bitwidth = UInt(bit_width_of[dtype]())
     return (bits + bitwidth - 1) // bitwidth
 
@@ -83,7 +90,7 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
     comptime WORD = Scalar[Self.WORD_DTYPE]
 
     var data: UnsafePointer[
-        mut=True, type = Self.WORD, origin = ExternalOrigin[mut=True]
+        mut=True, type=Self.WORD, origin=ExternalOrigin[mut=True]
     ]
     """The data storage."""
 
@@ -141,7 +148,7 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
         """
         self = Self(elements=values^)
 
-    fn __init__(out self, *, var elements: VariadicListMem[Bool, _]):
+    fn __init__(out self, *, var elements: VariadicList[Bool, _]):
         """Constructs a BitVec from the given values.
 
         Args:
@@ -165,10 +172,10 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
         return copy^
 
     @always_inline
-    fn __moveinit__(out self, deinit other: Self):
-        self.data = other.data
-        self._len = other._len
-        self._capacity = other._capacity
+    fn __moveinit__(out self, deinit take: Self):
+        self.data = take.data
+        self._len = take._len
+        self._capacity = take._capacity
 
     @always_inline
     fn __del__(deinit self):
@@ -254,7 +261,7 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
         if self._capacity > old_words:
             memset(
                 self.data + old_words,
-                0xFF if fill else 0x00,
+                UInt8(0xFF) if fill else UInt8(0x00),
                 Int(self._capacity - old_words),
             )
 
@@ -486,7 +493,9 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
         var words = _elts[self.WORD_DTYPE](UInt(len(self)))
         var equal = memcmp(self.data, other.data, Int(words - 1)) == 0
         if equal:
-            var mask = len(self) % bit_width_of[Self.WORD.dtype]()
+            var mask = Scalar[self.WORD_DTYPE](
+                len(self) % bit_width_of[Self.WORD.dtype]()
+            )
             equal = (self.data[words - 1] & mask) == (
                 other.data[words - 1] & mask
             )
@@ -731,7 +740,7 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
     @always_inline
     @staticmethod
     fn _vectorize_apply[
-        func: fn[simd_width: Int] (
+        func: fn[simd_width: Int](
             SIMD[Self.WORD_DTYPE, simd_width],
             SIMD[Self.WORD_DTYPE, simd_width],
         ) capturing -> SIMD[Self.WORD_DTYPE, simd_width],
@@ -805,10 +814,9 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
 
             if bit_offset != 0:
                 var word_idx = rhs_len - 1
-                var mask = (1 << bit_offset) - 1
+                var mask = Scalar[Self.WORD_DTYPE]((1 << bit_offset) - 1)
 
-                @parameter
-                if lhs_zero_out:
+                comptime if lhs_zero_out:
                     res.data[word_idx] &= mask  # clear high bits
                 else:
                     # copy left's word and preserve the low bits
@@ -818,9 +826,7 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
 
             var remaining_words = lhs_len - rhs_len
             if remaining_words > 0:
-
-                @parameter
-                if lhs_zero_out:
+                comptime if lhs_zero_out:
                     memset_zero(res.data + rhs_len, Int(remaining_words))
                 else:
                     memcpy(
@@ -931,7 +937,7 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
     @always_inline
     @staticmethod
     fn _mut_vectorize_apply[
-        func: fn[simd_width: Int] (
+        func: fn[simd_width: Int](
             mut SIMD[Self.WORD_DTYPE, simd_width],
             SIMD[Self.WORD_DTYPE, simd_width],
         ) capturing,
@@ -998,17 +1004,14 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
 
             if bit_offset != 0:
                 var word_idx = rhs_len - 1
-                var mask = (1 << bit_offset) - 1
+                var mask = Scalar[Self.WORD_DTYPE]((1 << bit_offset) - 1)
 
-                @parameter
-                if lhs_zero_out:
+                comptime if lhs_zero_out:
                     left.data[word_idx] &= mask  # clear high bits
 
             var remaining_words = lhs_len - rhs_len
             if remaining_words > 0:
-
-                @parameter
-                if lhs_zero_out:
+                comptime if lhs_zero_out:
                     memset_zero(left.data + rhs_len, Int(remaining_words))
 
     fn union_update(mut self, other: Self):

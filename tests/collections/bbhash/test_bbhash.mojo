@@ -1,11 +1,11 @@
-from collections import Set
-from hashlib.hash import hash
-from testing import assert_equal, assert_true, assert_false, TestSuite
+from std.collections import Set
+from std.hashlib.hash import hash
+from std.testing import assert_equal, assert_true, assert_false, TestSuite
 
 from extramojo.collections.bbhash.bbhash import BBHash
 
 
-def test_bbhash_simple():
+def test_bbhash_simple() raises:
     var some_star_wars_characters: List[String] = [
         "4-LOM",
         "Admiral Thrawn",
@@ -52,7 +52,7 @@ def test_bbhash_simple():
                 "can't find key in set: " + some_star_wars_characters[i],
             )
             assert_true(
-                idx <= len(some_star_wars_characters),
+                idx <= UInt64(len(some_star_wars_characters)),
                 "key mapping out of bounds",
             )
             assert_true(
@@ -64,14 +64,14 @@ def test_bbhash_simple():
             key_set.add(UInt(idx))
 
 
-def test_bbhash_example():
+def test_bbhash_example() raises:
     var keys: List[String] = ["fox", "cat", "dog", "mouse", "frog"]
     var bbset = BBHash(keys^, gamma=1.0)
     assert_true(bbset.find(String("fox")))
     assert_false(bbset.find(String("muffin")))
 
 
-def test_bbhash_revmap():
+def test_bbhash_revmap() raises:
     var keys: List[String] = ["fox", "cat", "dog", "mouse", "frog"]
     var bbset = BBHash[True](keys^, gamma=1.0)
     var idx = bbset.find(String("fox"))
@@ -84,7 +84,7 @@ def test_bbhash_revmap():
     assert_false(key_hash)
 
 
-def main():
+def main() raises:
     TestSuite.discover_tests[__functions_in_module()]().run()
 
 

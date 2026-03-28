@@ -1,7 +1,7 @@
-import math
-from algorithm import vectorize
-from memory import UnsafePointer
-from sys.info import simd_width_of
+from std import math
+from std.algorithm import vectorize
+from std.memory import UnsafePointer
+from std.sys.info import simd_width_of
 
 from extramojo.bstr.memchr import memchr
 
@@ -13,7 +13,7 @@ comptime SIMD_U8_WIDTH: Int = simd_width_of[DType.uint8]()
 
 
 @always_inline
-fn find_chr_all_occurrences(haystack: Span[UInt8], chr: UInt8) -> List[Int]:
+fn find_chr_all_occurrences(haystack: Span[UInt8, _], chr: UInt8) -> List[Int]:
     """Find all the occurrences of `chr` in the input buffer.
 
     ```mojo
@@ -202,7 +202,7 @@ fn _to_ascii_uppercase_vec(mut v: SIMD[DType.uint8, SIMD_U8_WIDTH]):
     v ^= ASCII_CASE_MASK * is_lower.cast[DType.uint8]()
 
 
-fn find(haystack: Span[UInt8], needle: Span[UInt8]) -> Optional[Int]:
+fn find(haystack: Span[UInt8, _], needle: Span[UInt8, _]) -> Optional[Int]:
     """Look for the substring `needle` in the haystack.
 
     This is not a terribly smart find implementation. It will use `memchr` to find
@@ -251,8 +251,9 @@ fn find(haystack: Span[UInt8], needle: Span[UInt8]) -> Optional[Int]:
 
 
 @fieldwise_init
-@register_passable
-struct StartEnd(Copyable, Defaultable, ImplicitlyCopyable, Movable):
+struct StartEnd(
+    Copyable, Defaultable, ImplicitlyCopyable, Movable, RegisterPassable
+):
     """Helper struct for tracking start/end coords in `SplitIterator`."""
 
     var start: Int

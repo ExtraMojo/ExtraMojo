@@ -4,10 +4,10 @@ There are two here, `memchr` and `memchr_wide`. `memchr_wide` will do more compa
 but needs to do more loading first. If you know you have some distance between `needle`s, then
 it should be faster. `memchr` is just vanilla memchr.
 """
-import math
-from bit import count_trailing_zeros
-from memory import pack_bits, UnsafePointer
-from sys.info import simd_width_of
+from std import math
+from std.bit import count_trailing_zeros
+from std.memory import pack_bits, UnsafePointer
+from std.sys.info import simd_width_of
 
 comptime SIMD_U8_WIDTH: Int = simd_width_of[DType.uint8]()
 
@@ -15,7 +15,7 @@ comptime SIMD_U8_WIDTH: Int = simd_width_of[DType.uint8]()
 @always_inline("nodebug")
 fn memchr[
     do_alignment: Bool = False
-](haystack: Span[UInt8], chr: UInt8, start: Int = 0) -> Int:
+](haystack: Span[UInt8, _], chr: UInt8, start: Int = 0) -> Int:
     """
     Function to find the next occurrence of character.
 
@@ -52,8 +52,7 @@ fn memchr[
 
     var offset = 0
 
-    @parameter
-    if do_alignment:
+    comptime if do_alignment:
         var v = ptr.load[width=SIMD_U8_WIDTH]()
         var mask = v.eq(chr)
 
@@ -94,7 +93,7 @@ comptime LOOP_SIZE = SIMD_U8_WIDTH * 4
 
 
 @always_inline("nodebug")
-fn memchr_wide(haystack: Span[UInt8], chr: UInt8, start: Int = 0) -> Int:
+fn memchr_wide(haystack: Span[UInt8, _], chr: UInt8, start: Int = 0) -> Int:
     """
     Function to find the next occurrence of character.
 

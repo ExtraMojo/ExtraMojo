@@ -6,7 +6,7 @@ from extramojo.collections.bbhash.hash import (
     fnv1a,
 )
 
-from testing import assert_equal, assert_true, assert_false, TestSuite
+from std.testing import assert_equal, assert_true, assert_false, TestSuite
 
 
 @fieldwise_init
@@ -57,22 +57,22 @@ struct HashCases(Copyable, Movable):
         ]
 
 
-def test_hash64():
+def test_hash64() raises:
     for kase in HashCases.hash64_cases():
         var got = _hash64(0, kase.key.as_bytes())
         assert_equal(got, kase.want, "hash64: Mismatch for key: " + kase.key)
 
 
-def test_fnv1a():
+def test_fnv1a() raises:
     for kase in HashCases.fnv1a_cases():
         var got = fnv1a(kase.key.as_bytes())
         assert_equal(got, kase.want, "fnv1a: Mismatch for key: " + kase.key)
 
 
-def test_hash():
-    for lvl in range(0, 5):
+def test_hash() raises:
+    for lvl in range(UInt64(0), UInt64(5)):
         var lvl_hash = _level_hash(UInt64(lvl))
-        for key in range(0, 5):
+        for key in range(UInt64(0), UInt64(5)):
             var slow_hash = _level_key_hash(lvl, key)
             var fast_hash = _key_hash(lvl_hash, key)
             assert_equal(
@@ -84,5 +84,5 @@ def test_hash():
             )
 
 
-def main():
+def main() raises:
     TestSuite.discover_tests[__functions_in_module()]().run()

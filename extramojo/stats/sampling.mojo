@@ -5,7 +5,7 @@ Reservoir sampling on a stream.
 - Algorithm R: https://en.wikipedia.org/wiki/Reservoir_sampling
 """
 
-from random import random_ui64
+from std.random import random_si64
 
 
 struct ReservoirSampler[T: Copyable & ImplicitlyDestructible](
@@ -94,7 +94,7 @@ struct ReservoirSampler[T: Copyable & ImplicitlyDestructible](
             self.seen_values += 1
             return
 
-        var index = random_ui64(0, self.seen_values)
+        var index = Int(random_si64(0, Int64(self.seen_values)))
         if index < self.values_to_collect:
             self.reservoir[Int(index)] = item.copy()
         self.seen_values += 1

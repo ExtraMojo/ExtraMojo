@@ -209,13 +209,13 @@ fn test_delim_reader_writer_dicts(file: String) raises:
     print("Successful delim_writer")
 ```
 """
-from io import Writer
+from std.io import Writer
 
 from extramojo.bstr.bstr import SplitIterator
 from extramojo.io.buffered import BufferedReader, BufferedWriter
 
 
-trait FromDelimited(Copyable & Movable):
+trait FromDelimited(Copyable & Movable & ImplicitlyDestructible):
     """Create an instance of `Self` from the iterator over `Span[UInt8]` bytes.
     """
 
@@ -262,14 +262,14 @@ struct DelimReader[RowType: FromDelimited](Movable):
             self._skip_header()
         self._get_next()
 
-    fn __moveinit__(out self, deinit existing: Self):
-        self.delim = existing.delim
-        self.reader = existing.reader^
-        self.next_elem = existing.next_elem^
-        self.buffer = existing.buffer^
-        self.len = existing.len
-        self.has_header = existing.has_header
-        self.header_values = existing.header_values^
+    fn __moveinit__(out self, deinit take: Self):
+        self.delim = take.delim
+        self.reader = take.reader^
+        self.next_elem = take.next_elem^
+        self.buffer = take.buffer^
+        self.len = take.len
+        self.has_header = take.has_header
+        self.header_values = take.header_values^
 
     fn __len__(read self) -> Int:
         return self.len
@@ -304,8 +304,6 @@ struct DelimReader[RowType: FromDelimited](Movable):
     fn _get_next(mut self) raises:
         self.buffer.clear()
         var bytes_read = self.reader.read_until(self.buffer, UInt(ord("\n")))
-        var tmp = String()
-        tmp.write_bytes(self.buffer)
         if bytes_read == 0:
             self.len = 0
             self.next_elem = None
@@ -365,11 +363,11 @@ struct DelimWriter[W: Movable & Writer](Movable):
         self.write_header = write_header
         self.needs_to_write_header = write_header
 
-    fn __moveinit__(out self, deinit existing: Self):
-        self.delim = existing.delim^
-        self.writer = existing.writer^
-        self.write_header = existing.write_header
-        self.needs_to_write_header = existing.needs_to_write_header
+    fn __moveinit__(out self, deinit take: Self):
+        self.delim = take.delim^
+        self.writer = take.writer^
+        self.write_header = take.write_header
+        self.needs_to_write_header = take.needs_to_write_header
 
     fn __enter__(var self) -> Self:
         return self^
@@ -388,14 +386,12 @@ struct DelimWriter[W: Movable & Writer](Movable):
         fn write_elem[index: Int, T: Writable](arg: T):
             arg.write_to(self.writer)
 
-            @parameter
-            if index == args.__len__() - 1:
+            comptime if index == args.__len__() - 1:
                 self.writer.write("\n")
             else:
                 self.writer.write(self.delim)
 
-        @parameter
-        for i in range(0, args.__len__()):
+        comptime for i in range(0, args.__len__()):
             write_elem[i](args[i])
 
     fn write_field[T: Writable](mut self, column: T, *, is_last: Bool) raises:
