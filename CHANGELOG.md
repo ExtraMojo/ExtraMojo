@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.21.0
+
+- Updates for 0.26.2
+
 ## v0.20.1
 
 - Fixes for build issues not caught by tests

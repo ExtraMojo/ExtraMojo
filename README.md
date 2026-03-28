@@ -25,7 +25,7 @@ version = "0.1.0"
 [tasks]
 
 [dependencies]
-mojo = "=25.5.0"
+mojo = "=0.26.2"
 ```
 
 then run:
@@ -60,9 +60,7 @@ See [docs for details](https://extramojo.github.io/ExtraMojo/)
 ## Tasks
 
 ```
-magic run test
-magic run format
-magic run build
+pixi run t
 ```
 
 ## Attribution
