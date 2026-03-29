@@ -28,6 +28,13 @@ jobs:
                   export PATH="/home/runner/.pixi/bin:$PATH"
                   pixi run t
 
+            - name: Debug bitvec crash
+              if: failure()
+              run: |
+                  export PATH="/home/runner/.pixi/bin:$PATH"
+                  pixi run mojo build -debug-level=line-tables -I . -D ASSERT=all tests/collections/test_bitvec.mojo -o /tmp/test_bitvec
+                  /tmp/test_bitvec
+
             - name: Check formatting
               run: |
                   export PATH="/home/runner/.pixi/bin:$PATH"
