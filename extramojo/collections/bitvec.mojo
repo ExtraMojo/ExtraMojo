@@ -76,7 +76,7 @@ fn _bit_mask[dtype: DType](idx: UInt) -> Scalar[dtype]:
     return Scalar[dtype](1) << Scalar[dtype]((idx & (_WORD_BITS - 1)))
 
 
-struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
+struct BitVec(Boolable, Copyable, EqualityComparable, Movable, Sized, Writable):
     """A growable bitfield.
 
     This uses one bit per bool for storage.
@@ -485,22 +485,28 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
             True if equal, False otherwise.
         """
 
-        comptime width = simd_width_of[Scalar[self.WORD_DTYPE]]()
-
         if len(self) != len(other):
             return False
 
         var words = _elts[self.WORD_DTYPE](UInt(len(self)))
-        var equal = memcmp(self.data, other.data, Int(words - 1)) == 0
-        if equal:
-            var mask = Scalar[self.WORD_DTYPE](
-                len(self) % bit_width_of[Self.WORD.dtype]()
-            )
-            equal = (self.data[words - 1] & mask) == (
-                other.data[words - 1] & mask
-            )
+        if words == 0:
+            return True
 
-        return equal
+        var s = self.data
+        var o = other.data
+
+        # Compare all full words
+        for i in range(UInt(0), words - 1):
+            if s[i] != o[i]:
+                return False
+
+        # Compare the last word, masking off unused bits
+        var bit_offset = UInt(len(self)) % UInt(bit_width_of[Self.WORD.dtype]())
+        if bit_offset == 0:
+            return s[words - 1] == o[words - 1]
+
+        var mask = Scalar[self.WORD_DTYPE]((UInt(1) << bit_offset) - UInt(1))
+        return (s[words - 1] & mask) == (o[words - 1] & mask)
 
     fn __ne__(read self, read other: Self) -> Bool:
         """Check the equality of `self` and `other`.
