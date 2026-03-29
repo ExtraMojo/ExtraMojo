@@ -307,7 +307,7 @@ struct BufferedReader(Movable):
             var end = newline_index if newline_index != -1 else self.buffer_len
             var size = end - self.buffer_offset
             buffer.reserve(len(buffer) + size)
-            buffer._annotate_increase(n=size) # for asan
+            buffer._annotate_increase(n=size)  # for asan
             var line_ptr = buffer.unsafe_ptr() + len(buffer)
             memcpy(
                 dest=line_ptr,
@@ -417,7 +417,7 @@ struct BufferedWriter[W: Movable & Writer](Movable, Writer):
             var end = min(self.buffer_capacity - self.buffer_len, len(b))
 
             var to_copy = b[:end]
-            self.buffer._annotate_increase(n=len(to_copy)) # for asan
+            self.buffer._annotate_increase(n=len(to_copy))  # for asan
             memcpy(
                 dest=self.buffer.unsafe_ptr() + self.buffer_len,
                 src=to_copy.unsafe_ptr(),
