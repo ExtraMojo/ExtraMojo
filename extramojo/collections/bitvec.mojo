@@ -106,7 +106,7 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
 
     @always_inline
     fn __init__(out self):
-        self.data = alloc[self.WORD](0)
+        self.data = UnsafePointer[Self.WORD]()
         self._len = 0  # in bits
         self._capacity = 0  # in words
 
@@ -122,7 +122,7 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
             )
             memset_zero(self.data, word_cap)
         else:
-            self.data = alloc[self.WORD](0)
+            self.data = UnsafePointer[Self.WORD]()
         self._len = 0
         self._capacity = UInt(word_cap)
 
@@ -179,7 +179,8 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
 
     @always_inline
     fn __del__(deinit self):
-        self.data.free()
+        if self.data:
+            self.data.free()
 
     # --------------------------------------------------------------------- #
     # Capacity queries
