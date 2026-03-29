@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v0.21.1
+
+- Fix out of bounds issue in BitVec copy code
+- fix UB in BitVec `_mut_vectorize_apply`
+
 ## v0.21.0
 
 - Updates for 0.26.2
