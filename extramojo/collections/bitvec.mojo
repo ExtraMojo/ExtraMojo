@@ -76,7 +76,7 @@ fn _bit_mask[dtype: DType](idx: UInt) -> Scalar[dtype]:
     return Scalar[dtype](1) << Scalar[dtype]((idx & (_WORD_BITS - 1)))
 
 
-struct BitVec(Boolable, Copyable, EqualityComparable, Movable, Sized, Writable):
+struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
     """A growable bitfield.
 
     This uses one bit per bool for storage.
@@ -475,7 +475,7 @@ struct BitVec(Boolable, Copyable, EqualityComparable, Movable, Sized, Writable):
         """
         self.intersection_update(other)
 
-    fn __eq__(read self, read other: Self) -> Bool:
+    def __eq__(self, other: Self) -> Bool:
         """Check the equality of `self` and `other`.
 
         Args:
@@ -508,7 +508,7 @@ struct BitVec(Boolable, Copyable, EqualityComparable, Movable, Sized, Writable):
         var mask = Scalar[self.WORD_DTYPE]((UInt(1) << bit_offset) - UInt(1))
         return (s[words - 1] & mask) == (o[words - 1] & mask)
 
-    fn __ne__(read self, read other: Self) -> Bool:
+    def __ne__(self, other: Self) -> Bool:
         """Check the equality of `self` and `other`.
 
         Args:
