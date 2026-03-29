@@ -307,6 +307,7 @@ struct BufferedReader(Movable):
             var end = newline_index if newline_index != -1 else self.buffer_len
             var size = end - self.buffer_offset
             buffer.reserve(len(buffer) + size)
+            buffer._annotate_increase(n=size) # for asan
             var line_ptr = buffer.unsafe_ptr() + len(buffer)
             memcpy(
                 dest=line_ptr,
