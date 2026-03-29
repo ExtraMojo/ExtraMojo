@@ -817,6 +817,21 @@ def test_bitvec_equal() raises:
 
     assert_true(bv3 != bv4)
 
+def test_bitvec_equal_more() raises:
+    # Word-aligned length (len % 64 == 0) - last word must be compared
+    var bv5 = BitVec(length=128, fill=False)
+    var bv6 = BitVec(length=128, fill=False)
+    assert_true(bv5 == bv6)
+    bv5.set(127)
+    assert_true(bv5 != bv6)
+    bv6.set(127)
+    assert_true(bv5 == bv6)
+
+    # Empty bitvecs
+    var bv7 = BitVec()
+    var bv8 = BitVec()
+    assert_true(bv7 == bv8)
+
 
 def main() raises:
     TestSuite.discover_tests[__functions_in_module()]().run()

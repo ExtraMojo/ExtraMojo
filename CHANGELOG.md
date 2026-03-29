@@ -4,6 +4,7 @@
 
 - Fix out of bounds issue in BitVec copy code
 - Fix UB in BitVec `_mut_vectorize_apply`
+- Fix lifetime of bv in tests
 
 ## v0.21.0
 
