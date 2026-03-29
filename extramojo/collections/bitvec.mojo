@@ -167,7 +167,7 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
     @always_inline
     fn copy(self) -> Self:
         var copy = Self(capacity=self._len)
-        memcpy(dest=copy.data, src=self.data, count=Int(self._capacity))
+        memcpy(dest=copy.data, src=self.data, count=Int(copy._capacity))
         copy._len = self._len
         return copy^
 
@@ -808,12 +808,13 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
         vectorize[width](Int(min(lhs_len, rhs_len)), _intersect)
 
         if lhs_len > rhs_len:
-            var bit_offset = bit_width_of[Self.WORD.dtype]() - (
+            var low_bits = UInt(
                 len(right) % bit_width_of[Self.WORD.dtype]()
             )
 
-            if bit_offset != 0:
+            if low_bits != 0:
                 var word_idx = rhs_len - 1
+                var bit_offset = UInt(bit_width_of[Self.WORD.dtype]()) - low_bits
                 var mask = Scalar[Self.WORD_DTYPE]((1 << bit_offset) - 1)
 
                 comptime if lhs_zero_out:
@@ -998,12 +999,13 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
         vectorize[width](Int(min(lhs_len, rhs_len)), _intersect)
 
         if lhs_len > rhs_len:
-            var bit_offset = bit_width_of[Self.WORD.dtype]() - (
+            var low_bits = UInt(
                 len(right) % bit_width_of[Self.WORD.dtype]()
             )
 
-            if bit_offset != 0:
+            if low_bits != 0:
                 var word_idx = rhs_len - 1
+                var bit_offset = UInt(bit_width_of[Self.WORD.dtype]()) - low_bits
                 var mask = Scalar[Self.WORD_DTYPE]((1 << bit_offset) - 1)
 
                 comptime if lhs_zero_out:
