@@ -36,7 +36,7 @@ mojo = "=0.26.2"
 [tasks]
 build = "pixi run mojo package extramojo -o extramojo.mojopkg"
 r = { cmd = "pixi run mojo run -I . " }                                                                    # run
-t = { cmd = "sh -c 'find ./tests -name test_*.mojo | xargs -I % pixi run mojo run -I . -D ASSERT=all %'" } # test
+t = { cmd = "sh -c 'find ./tests -name test_*.mojo | xargs -I % pixi run mojo run -debug-level=line-tables -I . -D ASSERT=all %'" } # test
 format = "pixi run mojo format ./"
 #t = { cmd = "pixi run mojo test -I . -D ASSERT=all" }
 #test = { cmd = "pixi run mojo run -I . tests/test_file.mojo", depends-on = ["t",] }
