@@ -817,6 +817,7 @@ def test_bitvec_equal() raises:
 
     assert_true(bv3 != bv4)
 
+
 def test_bitvec_equal_more() raises:
     # Word-aligned length (len % 64 == 0) - last word must be compared
     var bv5 = BitVec(length=128, fill=False)
