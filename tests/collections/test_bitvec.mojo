@@ -88,6 +88,7 @@ def test_bitvec_init_length_fill_false() raises:
     # Ensure bits are cleared
     for i in range(0, bv.word_len()):
         assert_equal(bv.data[i], 0)
+    _ = bv
 
 
 def test_bitvec_init_length_fill_true() raises:
@@ -101,6 +102,7 @@ def test_bitvec_init_length_fill_true() raises:
     var last_bits = 65 % bit_width_of[bv.WORD.dtype]()
     var mask = Scalar[BitVec.WORD_DTYPE]((1 << last_bits) - 1)
     assert_equal(bv.data[bv._capacity - 1] & mask, mask)
+    _ = bv
 
 
 def test_bitvec_resize_grow_fill_false() raises:
@@ -116,6 +118,7 @@ def test_bitvec_resize_grow_fill_false() raises:
     # Check new words are cleared
     for i in range(1, bv.word_len()):
         assert_equal(bv.data[i], 0)
+    _ = bv
 
 
 def test_bitvec_resize_grow_fill_true() raises:
@@ -134,6 +137,7 @@ def test_bitvec_resize_grow_fill_true() raises:
     for i in range(1, bv.word_len() - 1):
         assert_equal(bv.data[i], ~0)
     assert_true(bv.data[bv.word_len() - 1] != ~0)
+    _ = bv
 
 
 def test_bitvec_resize_shrink() raises:
@@ -143,6 +147,7 @@ def test_bitvec_resize_shrink() raises:
 
     var mask = Scalar[bv.WORD_DTYPE].MAX
     assert_equal(bv.data[0], mask)
+    _ = bv
 
 
 def test_bitvec_shrink_to_same_size() raises:
@@ -150,6 +155,7 @@ def test_bitvec_shrink_to_same_size() raises:
     bv.shrink(64)  # no-op
     assert_equal(len(bv), 64)
     assert_equal(bv.data[0], ~0)
+    _ = bv
 
 
 def test_bitvec_clear() raises:
