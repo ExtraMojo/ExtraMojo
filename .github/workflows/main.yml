@@ -18,24 +18,21 @@ jobs:
                   export PATH="/home/runner/.pixi/bin:$PATH"
                   pixi install --locked
 
+            - name: Install llvm-symbolizer
+              run: |
+                  sudo apt-get install -y llvm
+
             - name: Run build
               run: |
                   export PATH="/home/runner/.pixi/bin:$PATH"
                   pixi run build
 
             - name: Run tests
+              env:
+                  LLVM_SYMBOLIZER_PATH: /usr/bin/llvm-symbolizer
               run: |
                   export PATH="/home/runner/.pixi/bin:$PATH"
-                  pixi run t
-
-            - name: Debug bitvec crash (ASAN)
-              if: failure()
-              run: |
-                  export PATH="/home/runner/.pixi/bin:$PATH"
-                  sudo apt-get install -y llvm
-                  export LLVM_SYMBOLIZER_PATH=$(which llvm-symbolizer)
-                  pixi run mojo build --sanitize address -debug-level=line-tables -I . -D ASSERT=all tests/collections/test_bitvec.mojo -o /tmp/test_bitvec
-                  /tmp/test_bitvec || true
+                  pixi run t-asan
 
             - name: Check formatting
               run: |
