@@ -106,7 +106,9 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
 
     @always_inline
     fn __init__(out self):
-        self.data = UnsafePointer[Self.WORD]()
+        self.data = UnsafePointer[
+            mut=True, type=Self.WORD, origin=ExternalOrigin[mut=True]
+        ]()
         self._len = 0  # in bits
         self._capacity = 0  # in words
 
@@ -122,7 +124,9 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
             )
             memset_zero(self.data, word_cap)
         else:
-            self.data = UnsafePointer[Self.WORD]()
+            self.data = UnsafePointer[
+                mut=True, type=Self.WORD, origin=ExternalOrigin[mut=True]
+            ]()
         self._len = 0
         self._capacity = UInt(word_cap)
 
