@@ -35,8 +35,8 @@ mojo = "=1.0.0b1"
 [tasks]
 build = "pixi run mojo package extramojo -o extramojo.mojopkg"
 r = { cmd = "pixi run mojo run -I . " }                                                                    # run
-t = { cmd = "bash scripts/run_mojo_tests.sh" }                                                             # test
-t-asan = { cmd = "bash scripts/run_mojo_asan_tests.sh" }                                                   # test with ASAN
+t = { cmd = "sh -c 'find ./tests -name test_*.mojo | xargs -I % pixi run mojo run -debug-level=line-tables -I . -D ASSERT=all %'" } # test
+t-asan = { cmd = "sh -c 'target_features=\"\"; if [ \"$(uname -m)\" = \"x86_64\" ]; then target_features=\"--target-features -avx512bf16,-avx512bitalg,-avx512bw,-avx512cd,-avx512dq,-avx512f,-avx512ifma,-avx512vbmi,-avx512vbmi2,-avx512vl,-avx512vnni,-avx512vpopcntdq\"; fi; find ./tests -name test_*.mojo | xargs -I % sh -c \"pixi run mojo build $target_features --sanitize address -debug-level=line-tables -I . -D ASSERT=all % -o /tmp/test_bin && /tmp/test_bin\"'" } # test with ASAN
 format = "pixi run mojo format ./"
 #t = { cmd = "pixi run mojo test -I . -D ASSERT=all" }
 #test = { cmd = "pixi run mojo run -I . tests/test_file.mojo", depends-on = ["t",] }

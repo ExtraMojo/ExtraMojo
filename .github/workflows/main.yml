@@ -30,10 +30,8 @@ jobs:
             - name: Run tests
               env:
                   LLVM_SYMBOLIZER_PATH: /usr/bin/llvm-symbolizer
-                  MOJO_TARGET_FEATURES: -avx512bf16,-avx512bitalg,-avx512bw,-avx512cd,-avx512dq,-avx512f,-avx512ifma,-avx512vbmi,-avx512vbmi2,-avx512vl,-avx512vnni,-avx512vpopcntdq
               run: |
                   export PATH="/home/runner/.pixi/bin:$PATH"
-                  pixi run t
                   pixi run t-asan
 
             - name: Check formatting
