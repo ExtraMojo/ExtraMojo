@@ -2,7 +2,7 @@ from std.sys import llvm_intrinsic
 
 
 @always_inline
-fn saturating_sub[
+def saturating_sub[
     data: DType where data.is_integral(), width: Int
 ](lhs: SIMD[data, width], rhs: SIMD[data, width]) -> SIMD[data, width]:
     """Saturating SIMD subtraction.
@@ -18,7 +18,7 @@ fn saturating_sub[
 
 
 @always_inline
-fn saturating_add[
+def saturating_add[
     data: DType where data.is_integral(), width: Int
 ](lhs: SIMD[data, width], rhs: SIMD[data, width]) -> SIMD[data, width]:
     """Saturating SIMD addition.
@@ -34,7 +34,7 @@ fn saturating_add[
 
 
 # @always_inline
-# fn fastmod[
+# def fastmod[
 #     dtype: DType
 # ](hash: Scalar[dtype], n: Scalar[dtype]) -> Scalar[dtype]:
 #     """https://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/

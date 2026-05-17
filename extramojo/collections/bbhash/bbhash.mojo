@@ -57,7 +57,7 @@ struct _BCVec(Writable):
     var v: BitVec
     var c: BitVec
 
-    fn __init__(out self, *, length: UInt):
+    def __init__(out self, *, length: UInt):
         """Create with the given number of bits."""
         # Expand out to word boundary, no reason not to
         var full_len = _elts[BitVec.WORD_DTYPE](length) * UInt(
@@ -66,7 +66,7 @@ struct _BCVec(Writable):
         self.v = BitVec(length=full_len, fill=False)
         self.c = BitVec(length=full_len, fill=False)
 
-    fn update(mut self, h: UInt64):
+    def update(mut self, h: UInt64):
         """`update` sets the bit for the given hash h, and records a collision if
         the bit was already set. The bit position is determined by h modulo the
         size of the vector.
@@ -84,7 +84,7 @@ struct _BCVec(Writable):
         # No collisions at index; set bit
         self.v.data[w] |= mask
 
-    fn unset_collision(mut self, h: UInt64) -> Bool:
+    def unset_collision(mut self, h: UInt64) -> Bool:
         var x = h % UInt64(len(self.v))
         var w = _word_index[BitVec.WORD_DTYPE](UInt(x))
         var mask = _bit_mask[BitVec.WORD_DTYPE](UInt(x))
@@ -95,7 +95,7 @@ struct _BCVec(Writable):
         # No collisions at index i
         return False
 
-    fn next_level(mut self, new_size: UInt):
+    def next_level(mut self, new_size: UInt):
         """Setup for the next level, resize and set to zero."""
         var full_len = _elts[BitVec.WORD_DTYPE](new_size) * UInt(
             bit_width_of[BitVec.WORD.dtype]()
@@ -105,7 +105,7 @@ struct _BCVec(Writable):
         self.v.resize(full_len, fill=False)
         self.v.zero_all()
 
-    fn write_to[W: Writer](read self, mut writer: W):
+    def write_to[W: Writer](read self, mut writer: W):
         writer.write("bitvec:    ", self.v)
         writer.write("collisions:", self.c)
 
@@ -125,7 +125,7 @@ struct BBHash[compute_reverse_map: Bool = False]:
     var ranks: List[UInt64]
     var reverse_map: List[UInt64]
 
-    fn __init__[
+    def __init__[
         K: Keyable
     ](out self, var keys: List[K], *, gamma: Float64 = 1.0):
         """Create a `BBHash`.
@@ -149,7 +149,7 @@ struct BBHash[compute_reverse_map: Bool = False]:
     # TODO: switch to fastmod from lemiere?
     # TODO: add the parallel version on the bitvec of atomics
     # TODO: add a rank-index to bitvecs
-    fn _compute[K: Keyable](mut self, var keys: List[K], var gamma: Float64):
+    def _compute[K: Keyable](mut self, var keys: List[K], var gamma: Float64):
         """Compute the minimal perfect hash function.
 
         Args:
@@ -208,7 +208,7 @@ struct BBHash[compute_reverse_map: Bool = False]:
             lvl += 1
         self._compute_level_ranks()
 
-    fn _compute_with_reversemap[
+    def _compute_with_reversemap[
         K: Keyable
     ](mut self, var keys: List[K], var gamma: Float64):
         """Compute the minimal perfect hash function.
@@ -284,7 +284,7 @@ struct BBHash[compute_reverse_map: Bool = False]:
                     self.reverse_map[index] = key
                     index += 1
 
-    fn _compute_level_ranks(mut self):
+    def _compute_level_ranks(mut self):
         """Computes the total rank of each level.
 
         The total rank is the rank for all levels up to and including the current level.
@@ -296,7 +296,7 @@ struct BBHash[compute_reverse_map: Bool = False]:
             self.ranks[i] = rank
             rank += UInt64(self.bits[i].count_set_bits())
 
-    fn find[K: Hashable](read self, key: K) -> UInt64:
+    def find[K: Hashable](read self, key: K) -> UInt64:
         """Find returns a unique index representing the key in the minimal hash set.
 
         The return value is meaningful ONLY for keys in the original key set
@@ -327,7 +327,7 @@ struct BBHash[compute_reverse_map: Bool = False]:
                 return self.ranks[lvl] + UInt64(self.bits[lvl].rank(UInt(i)))
         return 0
 
-    fn key(read self, idx: UInt64) -> Optional[UInt64]:
+    def key(read self, idx: UInt64) -> Optional[UInt64]:
         """Get the hash of the key associated with the given index.
 
         Args:

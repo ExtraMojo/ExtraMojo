@@ -41,16 +41,16 @@ struct OptKind(Copyable, ImplicitlyCopyable, Movable, Writable):
     comptime FloatLike = Self(2)
     comptime BoolLike = Self(3)
 
-    fn __init__(out self, value: UInt8):
+    def __init__(out self, value: UInt8):
         self.value = value
 
-    fn __eq__(self, read other: Self) -> Bool:
+    def __eq__(self, read other: Self) -> Bool:
         return self.value == other.value
 
-    fn __ne__(self, read other: Self) -> Bool:
+    def __ne__(self, read other: Self) -> Bool:
         return not self == other
 
-    fn __str__(read self) -> String:
+    def __str__(read self) -> String:
         if self == Self.BoolLike:
             return "Bool"
         elif self == Self.IntLike:
@@ -75,28 +75,28 @@ struct OptValue(Copyable, Movable):
     var _float: Optional[Float64]
     var _bool: Optional[Bool]
 
-    fn __init__(out self, str_value: String = ""):
+    def __init__(out self, str_value: String = ""):
         self.kind = OptKind.StringLike
         self._string = str_value
         self._int = None
         self._float = None
         self._bool = None
 
-    fn __init__(out self, int_value: Int = 0):
+    def __init__(out self, int_value: Int = 0):
         self.kind = OptKind.IntLike
         self._string = None
         self._int = int_value
         self._float = None
         self._bool = None
 
-    fn __init__(out self, float_value: Float64 = 0.0):
+    def __init__(out self, float_value: Float64 = 0.0):
         self.kind = OptKind.FloatLike
         self._string = None
         self._int = None
         self._float = float_value
         self._bool = None
 
-    fn __init__(out self, bool_value: Bool = False):
+    def __init__(out self, bool_value: Bool = False):
         self.kind = OptKind.BoolLike
         self._string = None
         self._int = None
@@ -106,32 +106,32 @@ struct OptValue(Copyable, Movable):
     # TODO: there's currently no good way to make a more generic compile time
     # `get[ReturnType: AnyType](read self) -> ReturnType` that can use the `ReturnType`
     # with `@parameter` to select what to return since types aren't comparable.
-    fn get_string(read self) -> Optional[String]:
+    def get_string(read self) -> Optional[String]:
         return self._string
 
-    fn get_int(read self) -> Optional[Int]:
+    def get_int(read self) -> Optional[Int]:
         return self._int
 
-    fn get_float(read self) -> Optional[Float64]:
+    def get_float(read self) -> Optional[Float64]:
         return self._float
 
-    fn get_bool(read self) -> Optional[Bool]:
+    def get_bool(read self) -> Optional[Bool]:
         return self._bool
 
     @staticmethod
-    fn parse_string(read value: String) -> Self:
+    def parse_string(read value: String) -> Self:
         return Self(value)
 
     @staticmethod
-    fn parse_int(read value: String) raises -> Self:
+    def parse_int(read value: String) raises -> Self:
         return Self(atol(value))
 
     @staticmethod
-    fn parse_float(read value: String) raises -> Self:
+    def parse_float(read value: String) raises -> Self:
         return Self(atof(value))
 
     @staticmethod
-    fn parse_bool(read value: String) raises -> Self:
+    def parse_bool(read value: String) raises -> Self:
         if value.lower() == "true":
             return Self(True)
         elif value.lower() == "false":
@@ -146,7 +146,7 @@ struct OptValue(Copyable, Movable):
         )
 
     @staticmethod
-    fn parse_kind(kind: OptKind, read value: String) raises -> Self:
+    def parse_kind(kind: OptKind, read value: String) raises -> Self:
         """Parse the string based on the value of `OptKind`."""
         if kind == OptKind.BoolLike:
             return OptValue.parse_bool(value)
@@ -174,7 +174,7 @@ struct OptConfig(Copyable, Movable):
     var description: String
     """Long for description, for best results, don't add a newline."""
 
-    fn __init__(
+    def __init__(
         out self,
         var long_name: String,
         value_kind: OptKind,
@@ -208,18 +208,18 @@ struct ParsedOpts(Copyable, Movable):
     var args: List[String]
     var help_msg: String
 
-    fn __init__(out self, var help_msg: String = ""):
+    def __init__(out self, var help_msg: String = ""):
         self.options = Dict[String, OptValue]()
         self.args = List[String]()
         self.help_msg = help_msg
 
-    fn get_help_message(
+    def get_help_message(
         ref self,
     ) -> Pointer[String, origin_of(self.help_msg)]:
         """Get a nicely formatted help string."""
         return Pointer(to=self.help_msg)
 
-    fn get_string(read self, read key: String) raises -> String:
+    def get_string(read self, read key: String) raises -> String:
         """Try to get the option specified with the given key as a String.
 
         This will raise if the key is not found, or if the type of the option doesn't match asked-for type.
@@ -239,7 +239,7 @@ struct ParsedOpts(Copyable, Movable):
             )
         return str_value.value()
 
-    fn get_int(read self, read key: String) raises -> Int:
+    def get_int(read self, read key: String) raises -> Int:
         """Try to get the option specified with the given key as an Int.
 
         This will raise if the key is not found, or if the type of the option doesn't match asked-for type.
@@ -259,7 +259,7 @@ struct ParsedOpts(Copyable, Movable):
             )
         return int_value.value()
 
-    fn get_float(read self, read key: String) raises -> Float64:
+    def get_float(read self, read key: String) raises -> Float64:
         """Try to get the option specified with the given key as a Float64.
 
         This will raise if the key is not found, or if the type of the option doesn't match asked-for type.
@@ -279,7 +279,7 @@ struct ParsedOpts(Copyable, Movable):
             )
         return float_value.value()
 
-    fn get_bool(read self, read key: String) raises -> Bool:
+    def get_bool(read self, read key: String) raises -> Bool:
         """Try to get the option specified with the given key as a Bool.
 
         This will raise if the key is not found, or if the type of the option doesn't match asked-for type.
@@ -314,7 +314,7 @@ struct OptParser(Copyable, Movable):
     var args_help_msg: String
     """Help message for arguments."""
 
-    fn __init__(
+    def __init__(
         out self,
         *,
         name: String,
@@ -337,7 +337,7 @@ struct OptParser(Copyable, Movable):
             )
         )
 
-    fn expect_at_least_n_args(mut self, n: Int, args_help_msg: String = ""):
+    def expect_at_least_n_args(mut self, n: Int, args_help_msg: String = ""):
         """The minimum number of args to expect.
 
         len(args) >= min_num_args_expected
@@ -347,15 +347,15 @@ struct OptParser(Copyable, Movable):
         self.min_num_args_expected = n
         self.args_help_msg = args_help_msg
 
-    fn add_opt(mut self, var arg: OptConfig):
+    def add_opt(mut self, var arg: OptConfig):
         """Add an [`OptConfig`]."""
         self.options[arg.long_name] = arg^
 
-    fn help_msg(read self) -> String:
+    def help_msg(read self) -> String:
         """Get the help message string based on the currently added options."""
 
         @parameter
-        fn write_arg_msg(mut writer: String, read opt: OptConfig):
+        def write_arg_msg(mut writer: String, read opt: OptConfig):
             writer.write(
                 "\t--",
                 opt.long_name,
@@ -379,7 +379,7 @@ struct OptParser(Copyable, Movable):
             help_msg.write(
                 "\t", "<ARGS (>=", self.min_num_args_expected.value(), ")>...\n"
             )
-            if len(self.args_help_msg) > 0:
+            if self.args_help_msg.byte_length() > 0:
                 help_msg.write("\t\t", self.args_help_msg, "\n")
 
         help_msg.write("FLAGS:\n")
@@ -397,18 +397,18 @@ struct OptParser(Copyable, Movable):
         return help_msg
 
     @staticmethod
-    fn _strip_leading_dashes(
+    def _strip_leading_dashes(
         arg: StringSlice,
     ) raises -> String:
         # TODO: use a string slice or something better here
         var i = 0
-        while i < len(arg):
+        while i < arg.byte_length():
             if arg.as_bytes()[i] != UInt8(ord("-")):
                 break
             i += 1
         return String(arg[byte=i:])
 
-    fn parse_sys_args(mut self) raises -> ParsedOpts:
+    def parse_sys_args(mut self) raises -> ParsedOpts:
         """Parse the arguments from `sys.argv()`."""
         var args = sys.argv()
 
@@ -423,7 +423,7 @@ struct OptParser(Copyable, Movable):
             i += 1
         return self.parse_args(fixed)
 
-    fn parse_args(read self, args: List[String]) raises -> ParsedOpts:
+    def parse_args(read self, args: List[String]) raises -> ParsedOpts:
         """Parse the arguments passed in via `args`."""
         var result = ParsedOpts(help_msg=self.help_msg())
 
@@ -527,16 +527,16 @@ struct Subcommand(Copyable, Hashable, Movable):
 
     var parser: OptParser
 
-    fn __init__(out self, var parser: OptParser):
+    def __init__(out self, var parser: OptParser):
         self.parser = parser^
 
-    fn __hash__[H: Hasher](read self, mut hasher: H):
+    def __hash__[H: Hasher](read self, mut hasher: H):
         self.parser.program_name.__hash__[H](hasher)
 
-    fn __eq__(read self, read other: Self) -> Bool:
+    def __eq__(read self, read other: Self) -> Bool:
         return self.parser.program_name == other.parser.program_name
 
-    fn __ne__(read self, read other: Self) -> Bool:
+    def __ne__(read self, read other: Self) -> Bool:
         return not (self == other)
 
 
@@ -585,7 +585,7 @@ struct SubcommandParser(Copyable, Movable):
     var description: String
     var name: String
 
-    fn __init__(
+    def __init__(
         out self,
         *,
         var name: String,
@@ -595,7 +595,7 @@ struct SubcommandParser(Copyable, Movable):
         self.description = description^
         self.commands = Dict[String, Subcommand]()
 
-    fn get_help_message(read self) raises -> String:
+    def get_help_message(read self) raises -> String:
         """Create the help message for the subcommands."""
         var help = String()
         help.write(String("{}\n").format(self.name))
@@ -610,11 +610,11 @@ struct SubcommandParser(Copyable, Movable):
 
         return help
 
-    fn add_command(mut self, command: Subcommand):
+    def add_command(mut self, command: Subcommand):
         """Add a subcommand."""
         self.commands[command.parser.program_name] = command.copy()
 
-    fn parse_args(
+    def parse_args(
         read self, args: List[String]
     ) raises -> Optional[Tuple[String, ParsedOpts]]:
         """Parse the input args, expecting a subcommand."""
@@ -634,7 +634,7 @@ struct SubcommandParser(Copyable, Movable):
             cmd.value().parser.parse_args(List(args[1:])),
         )
 
-    fn parse_sys_args(read self) raises -> Optional[Tuple[String, ParsedOpts]]:
+    def parse_sys_args(read self) raises -> Optional[Tuple[String, ParsedOpts]]:
         """Parse the sys.argv() list."""
         var args = sys.argv()
 

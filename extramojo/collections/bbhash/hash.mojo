@@ -10,19 +10,19 @@ comptime m: UInt64 = 0x880355F21E6D1965
 
 
 @always_inline
-fn _level_key_hash(level: UInt64, key: UInt64) -> UInt64:
+def _level_key_hash(level: UInt64, key: UInt64) -> UInt64:
     """`hash` returns the hash of the current level and key."""
     return _key_hash(_level_hash(level), key)
 
 
 @always_inline
-fn _level_hash(level: UInt64) -> UInt64:
+def _level_hash(level: UInt64) -> UInt64:
     """`level_hash` returns the hash of the given level."""
     return _mix(level) * m
 
 
 @always_inline
-fn _key_hash(level_hash: UInt64, key: UInt64) -> UInt64:
+def _key_hash(level_hash: UInt64, key: UInt64) -> UInt64:
     """`key_hash` returns the hash of a key given a level hash."""
     var h = level_hash
     h ^= _mix(key)
@@ -32,7 +32,7 @@ fn _key_hash(level_hash: UInt64, key: UInt64) -> UInt64:
 
 
 @always_inline
-fn _mix(h_in: UInt64) -> UInt64:
+def _mix(h_in: UInt64) -> UInt64:
     """`mix` is a compression function for fast hashing."""
     var h = h_in
     h ^= h >> 23
@@ -43,7 +43,7 @@ fn _mix(h_in: UInt64) -> UInt64:
 
 # todo: try u128
 @always_inline
-fn _hash64(seed: UInt64, buffer: Span[UInt8, _]) -> UInt64:
+def _hash64(seed: UInt64, buffer: Span[UInt8, _]) -> UInt64:
     var buf = buffer[:]
     var h = seed ^ (UInt64(len(buf)) * m)
 
@@ -70,7 +70,7 @@ comptime FNV_PRIME: UInt64 = 1099511628211
 
 
 @always_inline
-fn fnv1a(buf: Span[UInt8, _]) -> UInt64:
+def fnv1a(buf: Span[UInt8, _]) -> UInt64:
     """Classic FNV1a hash function."""
     var h = FNV_OFFSET
     for b in buf:

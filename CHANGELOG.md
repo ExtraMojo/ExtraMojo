@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## Unreleased
+
+- Migrate to Mojo 1.0.0b1.
+- Update Pixi and package build metadata for the stable Modular channel.
+- Update `BitVec` empty-storage handling for non-null `UnsafePointer`.
+
 ## v0.21.1
 
 - Fix out of bounds issue in BitVec copy code

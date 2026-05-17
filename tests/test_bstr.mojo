@@ -9,7 +9,7 @@ from std.testing import *
 from std.testing import TestSuite
 
 
-fn s(bytes: Span[UInt8, _]) -> String:
+def s(bytes: Span[UInt8, _]) -> String:
     """Convert bytes to a String."""
     var buffer = String()
     buffer.write_string(StringSlice(unsafe_from_utf8=bytes))
@@ -18,7 +18,7 @@ fn s(bytes: Span[UInt8, _]) -> String:
 
 # Sometimes useful for digging into the memchr function
 # from ir_utils.dump import dump_ir
-# fn main() raises:
+# def main() raises:
 # var static_str = "hi"
 # dump_ir[
 #     find_chr_next_occurrence[__origin_of(static_str)],
@@ -27,7 +27,7 @@ fn s(bytes: Span[UInt8, _]) -> String:
 # test_find_chr_next_occurance()
 
 
-fn test_memchr() raises:
+def test_memchr() raises:
     comptime check: InlineArray[Bool, 2] = [True, False]
 
     comptime for do_alignment in range(0, len(check)):
@@ -62,7 +62,7 @@ fn test_memchr() raises:
             )
 
 
-fn test_memchr_wide() raises:
+def test_memchr_wide() raises:
     var cases: List[Tuple[String, Int]] = [
         (
             String(
@@ -87,21 +87,21 @@ fn test_memchr_wide() raises:
         )
 
 
-fn test_lowercase_short() raises:
+def test_lowercase_short() raises:
     var example = List("ABCdefgHIjklmnOPQRSTUVWXYZ".as_bytes())
     var answer = "abcdefghijklmnopqrstuvwxyz"
     to_ascii_lowercase(example)
     assert_equal(s(example), s(answer.as_bytes()))
 
 
-fn test_uppercase_short() raises:
+def test_uppercase_short() raises:
     var example = List("ABCdefgHIjklmnOPQRSTUVWXYZ".as_bytes())
     var answer = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     to_ascii_uppercase(example)
     assert_equal(s(example), s(answer.as_bytes()))
 
 
-fn test_lowercase() raises:
+def test_lowercase() raises:
     var example = List(
         "ABCdefgHIjklmnOPQRSTUVWXYZ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;ABCdefgHIjklmnOPQRSTUVWXYZ"
         .as_bytes()
@@ -111,7 +111,7 @@ fn test_lowercase() raises:
     assert_equal(s(example), s(answer.as_bytes()))
 
 
-fn test_uppercase() raises:
+def test_uppercase() raises:
     var example = List(
         "ABCdefgHIjklmnOPQRSTUVWXYZ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;ABCdefgHIjklmnOPQRSTUVWXYZ"
         .as_bytes()
@@ -121,7 +121,7 @@ fn test_uppercase() raises:
     assert_equal(s(example), s(answer.as_bytes()))
 
 
-fn test_lowercase_long() raises:
+def test_lowercase_long() raises:
     var example = List(
         "ABCdefgHIjklmnOPQRSTUVWXYZ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;ABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;ABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;ABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;ABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;ABCdefgHIjklmnOPQRSTUVWXYZ"
         .as_bytes()
@@ -131,7 +131,7 @@ fn test_lowercase_long() raises:
     assert_equal(s(example), s(answer.as_bytes()))
 
 
-fn test_uppercase_long() raises:
+def test_uppercase_long() raises:
     var example = List(
         "ABCdefgHIjklmnOPQRSTUVWXYZ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;ABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;ABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;ABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;ABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;ABCdefgHIjklmnOPQRSTUVWXYZ"
         .as_bytes()
@@ -141,29 +141,49 @@ fn test_uppercase_long() raises:
     assert_equal(s(example), s(answer.as_bytes()))
 
 
-fn test_find_short() raises:
+def test_find_short() raises:
     var haystack = "ABCDEFGhijklmnop".as_bytes()
     var expected = 4
     var answer = find(haystack, "EFG".as_bytes()).value()
     assert_equal(answer, expected)
 
 
-fn test_find_medium() raises:
-    var haystack = "ABCDEFGhijklmnop0123456789TheKindIguana\nJumpedOver the angry weird fense as it ran away from the seething moon that was swooping down to scoop it up and bring it to outer space.".as_bytes()
+def test_find_medium() raises:
+    var haystack = (
+        "ABCDEFGhijklmnop0123456789TheKindIguana\nJumpedOver the angry weird"
+        " fense as it ran away from the seething moon that was swooping down to"
+        " scoop it up and bring it to outer space.".as_bytes()
+    )
     var expected = 171
     var answer = find(haystack, "space".as_bytes()).value()
     assert_equal(answer, expected)
 
 
-fn test_find_long() raises:
-    var haystack = "ABCDEFGhijklmnop0123456789TheKindIguana\nJumpedOver the angry weird fense as it ran away from the seething moon that was swooping down to scoop it up and bring it to outer space.\nThen a really weird thing happened and suddenly 64 moons were swooping down at the Iguana. It tried to turn and tell them it was scalar, but they didn't care all tried to scoop it at once, which resulted in a massive Iguana lock contention.".as_bytes()
+def test_find_long() raises:
+    var haystack = (
+        "ABCDEFGhijklmnop0123456789TheKindIguana\nJumpedOver the angry weird"
+        " fense as it ran away from the seething moon that was swooping down to"
+        " scoop it up and bring it to outer space.\nThen a really weird thing"
+        " happened and suddenly 64 moons were swooping down at the Iguana. It"
+        " tried to turn and tell them it was scalar, but they didn't care all"
+        " tried to scoop it at once, which resulted in a massive Iguana lock"
+        " contention.".as_bytes()
+    )
     var expected = 373
     var answer = find(haystack, "result".as_bytes()).value()
     assert_equal(answer, expected)
 
 
-fn test_find_long_variable_start() raises:
-    var haystack = "ABCDEFGhijklmnop0123456789TheKindIguana\nJumpedOver the angry weird fense as it ran away from the seething moon that was swooping down to scoop it up and bring it to outer space.\nThen a really weird thing happened and suddenly 64 moons were swooping down at the Iguana. It tried to turn and tell them it was scalar, but they didn't care all tried to scoop it at once, which resulted in a massive IguanaZ lock contention.".as_bytes()
+def test_find_long_variable_start() raises:
+    var haystack = (
+        "ABCDEFGhijklmnop0123456789TheKindIguana\nJumpedOver the angry weird"
+        " fense as it ran away from the seething moon that was swooping down to"
+        " scoop it up and bring it to outer space.\nThen a really weird thing"
+        " happened and suddenly 64 moons were swooping down at the Iguana. It"
+        " tried to turn and tell them it was scalar, but they didn't care all"
+        " tried to scoop it at once, which resulted in a massive IguanaZ lock"
+        " contention.".as_bytes()
+    )
     for i in range(0, len(haystack)):
         var answer = memchr(haystack, UInt8(ord("Z")), i)
         if i <= 401:
@@ -173,7 +193,7 @@ fn test_find_long_variable_start() raises:
         # assert_equal(answer, expected)
 
 
-fn test_spilt_iterator() raises:
+def test_spilt_iterator() raises:
     var input = "ABCD\tEFGH\tIJKL\nMNOP".as_bytes()
     var expected = [
         "ABCD".as_bytes(),
@@ -187,7 +207,7 @@ fn test_spilt_iterator() raises:
         assert_equal(s(output[i]), s(expected[i]), "Not equal")
 
 
-# fn test_spilt_iterator_peek() raises:
+# def test_spilt_iterator_peek() raises:
 #     var input = "ABCD\tEFGH\tIJKL\nMNOP".as_bytes()
 #     var expected = [
 #         "ABCD".as_bytes(),
@@ -203,7 +223,7 @@ fn test_spilt_iterator() raises:
 #     assert_equal(s(second), s(expected[1]))
 
 
-fn test_spilt_iterator_long() raises:
+def test_spilt_iterator_long() raises:
     var input = "ABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ\tABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ\tABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ\tABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ\tABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ\tABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ\tABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ\tABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ\tABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ\tABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ\tABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ\tABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ\tABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ\tABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ\tABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ\tABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ\tABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ\tABCD\tEFGH\tIJKL\nMNOP\tQRST\tUVWXYZ".as_bytes()
     var expected = [
         "ABCD".as_bytes(),

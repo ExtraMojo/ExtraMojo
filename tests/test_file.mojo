@@ -17,14 +17,14 @@ from extramojo.io.buffered import (
 )
 
 
-fn s(bytes: Span[UInt8, _]) -> String:
+def s(bytes: Span[UInt8, _]) -> String:
     """Convert bytes to a String."""
     var buffer = String()
     buffer.write_string(StringSlice(unsafe_from_utf8=bytes))
     return buffer
 
 
-fn strings_for_writing(size: Int) -> List[String]:
+def strings_for_writing(size: Int) -> List[String]:
     var result = List[String]()
     for i in range(size):
         result.append(
@@ -33,7 +33,7 @@ fn strings_for_writing(size: Int) -> List[String]:
     return result^
 
 
-fn test_read_until(file: Path, expected_lines: List[String]) raises:
+def test_read_until(file: Path, expected_lines: List[String]) raises:
     var buffer_capacities = [10, 100, 200, 500]
     for cap in buffer_capacities:
         var fh = open(file, "r")
@@ -53,7 +53,7 @@ fn test_read_until(file: Path, expected_lines: List[String]) raises:
         )
 
 
-fn test_read_until_return_trailing(
+def test_read_until_return_trailing(
     file: Path, expected_lines: List[String]
 ) raises:
     var fh = open(file, "r")
@@ -68,7 +68,7 @@ fn test_read_until_return_trailing(
     print("Successful read_until_return_trailing")
 
 
-fn test_read_bytes(file: Path) raises:
+def test_read_bytes(file: Path) raises:
     var fh = open(file, "r")
     var reader = BufferedReader(fh^, buffer_capacity=50)
     var buffer = List[UInt8](capacity=125)
@@ -94,7 +94,9 @@ fn test_read_bytes(file: Path) raises:
     print("Successful read_bytes")
 
 
-fn test_context_manager_simple(file: Path, expected_lines: List[String]) raises:
+def test_context_manager_simple(
+    file: Path, expected_lines: List[String]
+) raises:
     var buffer = List[UInt8]()
     var counter = 0
     with BufferedReader(open(file, "r"), buffer_capacity=200) as reader:
@@ -106,7 +108,7 @@ fn test_context_manager_simple(file: Path, expected_lines: List[String]) raises:
     print("Successful read_until")
 
 
-fn test_read_lines(file: Path, expected_lines: List[String]) raises:
+def test_read_lines(file: Path, expected_lines: List[String]) raises:
     var lines = read_lines(String(file))
     assert_equal(len(lines), len(expected_lines))
     for i in range(0, len(lines)):
@@ -114,12 +116,12 @@ fn test_read_lines(file: Path, expected_lines: List[String]) raises:
     print("Successful read_lines")
 
 
-fn test_for_each_line(file: Path, expected_lines: List[String]) raises:
+def test_for_each_line(file: Path, expected_lines: List[String]) raises:
     var counter = 0
     var found_bad = False
 
     @parameter
-    fn inner(buffer: Span[UInt8, _], start: Int, end: Int) capturing -> None:
+    def inner(buffer: Span[UInt8, _], start: Int, end: Int) capturing -> None:
         if s(buffer[start:end]) != expected_lines[counter]:
             found_bad = True
         counter += 1
@@ -134,14 +136,14 @@ struct SerDerStruct(Copyable, FromDelimited, Movable, ToDelimited):
     var index: Int
     var name: String
 
-    fn write_to_delimited(read self, mut writer: DelimWriter) raises:
+    def write_to_delimited(read self, mut writer: DelimWriter) raises:
         writer.write_record(self.index, self.name)
 
-    fn write_header(read self, mut writer: DelimWriter) raises:
+    def write_header(read self, mut writer: DelimWriter) raises:
         writer.write_record("index", "name")
 
     @staticmethod
-    fn from_delimited(
+    def from_delimited(
         mut data: SplitIterator,
         read header_values: Optional[List[String]] = None,
     ) raises -> Self:
@@ -151,7 +153,7 @@ struct SerDerStruct(Copyable, FromDelimited, Movable, ToDelimited):
         return Self(index, name)
 
 
-fn test_delim_reader_writer(file: Path) raises:
+def test_delim_reader_writer(file: Path) raises:
     var to_write = List[SerDerStruct]()
     for i in range(0, 1000):
         to_write.append(SerDerStruct(i, String("MyNameIs" + String(i))))
@@ -181,20 +183,20 @@ fn test_delim_reader_writer(file: Path) raises:
 struct ThinWrapper(Copyable, FromDelimited, ToDelimited):
     var stuff: Dict[String, Int]
 
-    fn write_to_delimited(read self, mut writer: DelimWriter) raises:
+    def write_to_delimited(read self, mut writer: DelimWriter) raises:
         var seen = 1
         for value in self.stuff.values():  # Relying on stable iteration order
             writer.write_field(value, is_last=seen == len(self.stuff))
             seen += 1
 
-    fn write_header(read self, mut writer: DelimWriter) raises:
+    def write_header(read self, mut writer: DelimWriter) raises:
         var seen = 1
         for header in self.stuff.keys():  # Relying on stable iteration order
             writer.write_field(header, is_last=seen == len(self.stuff))
             seen += 1
 
     @staticmethod
-    fn from_delimited(
+    def from_delimited(
         mut data: SplitIterator,
         read header_values: Optional[List[String]] = None,
     ) raises -> Self:
@@ -204,7 +206,7 @@ struct ThinWrapper(Copyable, FromDelimited, ToDelimited):
         return Self(result^)
 
 
-fn test_delim_reader_writer_dicts(file: Path) raises:
+def test_delim_reader_writer_dicts(file: Path) raises:
     var to_write = List[ThinWrapper]()
     var headers = [
         String("a"),
@@ -242,7 +244,7 @@ fn test_delim_reader_writer_dicts(file: Path) raises:
     print("Successful delim_writer")
 
 
-fn test_buffered_writer(file: Path, expected_lines: List[String]) raises:
+def test_buffered_writer(file: Path, expected_lines: List[String]) raises:
     var fh = BufferedWriter(open(String(file), "w"), buffer_capacity=128)
     for i in range(len(expected_lines)):
         fh.write_bytes(expected_lines[i].as_bytes())
@@ -253,14 +255,14 @@ fn test_buffered_writer(file: Path, expected_lines: List[String]) raises:
     test_read_until(String(file), expected_lines)
 
 
-fn create_file(path: String, lines: List[String]) raises:
+def create_file(path: String, lines: List[String]) raises:
     with open(path, "w") as fh:
         for i in range(len(lines)):
             fh.write(lines[i])
             fh.write(String("\n"))
 
 
-fn create_file_no_trailing_newline(path: String, lines: List[String]) raises:
+def create_file_no_trailing_newline(path: String, lines: List[String]) raises:
     with open(path, "w") as fh:
         for i in range(len(lines)):
             fh.write(lines[i])
@@ -268,7 +270,7 @@ fn create_file_no_trailing_newline(path: String, lines: List[String]) raises:
                 fh.write(String("\n"))
 
 
-fn main() raises:
+def main() raises:
     var tempfile = Python.import_module("tempfile")
     var tempdir = tempfile.TemporaryDirectory()
     var file = Path(String(tempdir.name)) / "lines.txt"

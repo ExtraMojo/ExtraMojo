@@ -13,7 +13,7 @@ comptime SIMD_U8_WIDTH: Int = simd_width_of[DType.uint8]()
 
 
 @always_inline("nodebug")
-fn memchr[
+def memchr[
     do_alignment: Bool = False
 ](haystack: Span[UInt8, _], chr: UInt8, start: Int = 0) -> Int:
     """
@@ -93,7 +93,7 @@ comptime LOOP_SIZE = SIMD_U8_WIDTH * 4
 
 
 @always_inline("nodebug")
-fn memchr_wide(haystack: Span[UInt8, _], chr: UInt8, start: Int = 0) -> Int:
+def memchr_wide(haystack: Span[UInt8, _], chr: UInt8, start: Int = 0) -> Int:
     """
     Function to find the next occurrence of character.
 
