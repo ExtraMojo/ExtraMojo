@@ -35,8 +35,8 @@ mojo = "=1.0.0b1"
 [tasks]
 build = "pixi run mojo package extramojo -o extramojo.mojopkg"
 r = { cmd = "pixi run mojo run -I . " }                                                                    # run
-t = { cmd = "sh -c 'find ./tests -name test_*.mojo | xargs -I % sh -c \"pixi run mojo build -debug-level=line-tables -I . -D ASSERT=all % -o /tmp/test_bin && /tmp/test_bin\"'" } # test
-t-asan = { cmd = "sh -c 'find ./tests -name test_*.mojo | xargs -I % sh -c \"pixi run mojo build --sanitize address -debug-level=line-tables -I . -D ASSERT=all % -o /tmp/test_bin && /tmp/test_bin\"'" } # test with ASAN
+t = { cmd = "sh -c 'target_flags=\"\"; if [ \"$(uname -m)\" = \"x86_64\" ]; then target_flags=\"--target-cpu x86-64\"; fi; find ./tests -name test_*.mojo | xargs -I % sh -c \"pixi run mojo build $target_flags -debug-level=line-tables -I . -D ASSERT=all % -o /tmp/test_bin && /tmp/test_bin\"'" } # test
+t-asan = { cmd = "sh -c 'target_flags=\"\"; if [ \"$(uname -m)\" = \"x86_64\" ]; then target_flags=\"--target-cpu x86-64\"; fi; find ./tests -name test_*.mojo | xargs -I % sh -c \"pixi run mojo build $target_flags --sanitize address -debug-level=line-tables -I . -D ASSERT=all % -o /tmp/test_bin && /tmp/test_bin\"'" } # test with ASAN
 format = "pixi run mojo format ./"
 #t = { cmd = "pixi run mojo test -I . -D ASSERT=all" }
 #test = { cmd = "pixi run mojo run -I . tests/test_file.mojo", depends-on = ["t",] }
