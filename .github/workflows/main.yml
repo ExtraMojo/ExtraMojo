@@ -18,21 +18,15 @@ jobs:
                   export PATH="/home/runner/.pixi/bin:$PATH"
                   pixi install --locked
 
-            - name: Install llvm-symbolizer
-              run: |
-                  sudo apt-get install -y llvm
-
             - name: Run build
               run: |
                   export PATH="/home/runner/.pixi/bin:$PATH"
                   pixi run build
 
             - name: Run tests
-              env:
-                  LLVM_SYMBOLIZER_PATH: /usr/bin/llvm-symbolizer
               run: |
                   export PATH="/home/runner/.pixi/bin:$PATH"
-                  pixi run t-asan
+                  pixi run t
 
             - name: Check formatting
               run: |
