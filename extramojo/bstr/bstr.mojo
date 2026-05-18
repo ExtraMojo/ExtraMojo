@@ -13,7 +13,7 @@ comptime SIMD_U8_WIDTH: Int = simd_width_of[DType.uint8]()
 
 
 @always_inline
-fn find_chr_all_occurrences(haystack: Span[UInt8, _], chr: UInt8) -> List[Int]:
+def find_chr_all_occurrences(haystack: Span[UInt8, _], chr: UInt8) -> List[Int]:
     """Find all the occurrences of `chr` in the input buffer.
 
     ```mojo
@@ -35,7 +35,9 @@ fn find_chr_all_occurrences(haystack: Span[UInt8, _], chr: UInt8) -> List[Int]:
                 holder.append(i)
         return holder^
 
-    fn inner[simd_width: Int](offset: Int) unified {mut}:
+    def inner[
+        simd_width: Int
+    ](offset: Int) {mut holder, read haystack, read chr}:
         var simd_vec = haystack.unsafe_ptr().load[width=simd_width](offset)
         var bool_vec = simd_vec.eq(chr)
         if bool_vec.reduce_or():
@@ -59,7 +61,7 @@ comptime ZERO = SIMD[DType.uint8, SIMD_U8_WIDTH](0)
 
 
 @always_inline
-fn is_ascii_uppercase(value: UInt8) -> Bool:
+def is_ascii_uppercase(value: UInt8) -> Bool:
     """Check if a byte is ASCII uppercase.
 
     ```mojo
@@ -77,7 +79,7 @@ fn is_ascii_uppercase(value: UInt8) -> Bool:
 
 
 @always_inline
-fn is_ascii_lowercase(value: UInt8) -> Bool:
+def is_ascii_lowercase(value: UInt8) -> Bool:
     """Check if a byte is ASCII lowercase.
 
     ```mojo
@@ -95,7 +97,7 @@ fn is_ascii_lowercase(value: UInt8) -> Bool:
 
 
 @always_inline
-fn to_ascii_lowercase(mut buffer: List[UInt8]):
+def to_ascii_lowercase(mut buffer: List[UInt8]):
     """Lowercase all ascii a-zA-Z characters.
 
     ```mojo
@@ -140,7 +142,7 @@ fn to_ascii_lowercase(mut buffer: List[UInt8]):
 
 
 @always_inline
-fn _to_ascii_lowercase_vec(mut v: SIMD[DType.uint8, SIMD_U8_WIDTH]):
+def _to_ascii_lowercase_vec(mut v: SIMD[DType.uint8, SIMD_U8_WIDTH]):
     """Convert a vec to ascii lowercase."""
     var ge_A = v.ge(CAPITAL_A)
     var le_Z = v.le(CAPITAL_Z)
@@ -149,7 +151,7 @@ fn _to_ascii_lowercase_vec(mut v: SIMD[DType.uint8, SIMD_U8_WIDTH]):
 
 
 @always_inline
-fn to_ascii_uppercase(mut buffer: List[UInt8]):
+def to_ascii_uppercase(mut buffer: List[UInt8]):
     """Uppercase all ascii a-zA-Z characters.
 
     ```mojo
@@ -194,7 +196,7 @@ fn to_ascii_uppercase(mut buffer: List[UInt8]):
 
 
 @always_inline
-fn _to_ascii_uppercase_vec(mut v: SIMD[DType.uint8, SIMD_U8_WIDTH]):
+def _to_ascii_uppercase_vec(mut v: SIMD[DType.uint8, SIMD_U8_WIDTH]):
     """Convert a vec to ASCII upercase."""
     var ge_a = v.ge(LOWER_A)
     var le_z = v.le(LOWER_Z)
@@ -202,7 +204,7 @@ fn _to_ascii_uppercase_vec(mut v: SIMD[DType.uint8, SIMD_U8_WIDTH]):
     v ^= ASCII_CASE_MASK * is_lower.cast[DType.uint8]()
 
 
-fn find(haystack: Span[UInt8, _], needle: Span[UInt8, _]) -> Optional[Int]:
+def find(haystack: Span[UInt8, _], needle: Span[UInt8, _]) -> Optional[Int]:
     """Look for the substring `needle` in the haystack.
 
     This is not a terribly smart find implementation. It will use `memchr` to find
@@ -259,7 +261,7 @@ struct StartEnd(
     var start: Int
     var end: Int
 
-    fn __init__(out self):
+    def __init__(out self):
         self.start = 0
         self.end = 0
 
@@ -310,16 +312,16 @@ struct SplitIterator[is_mutable: Bool, //, origin: Origin[mut=is_mutable]](
     var current: Int
     var len: Int
 
-    fn __init__(out self, to_split: Span[UInt8, Self.origin], split_on: UInt8):
+    def __init__(out self, to_split: Span[UInt8, Self.origin], split_on: UInt8):
         self.inner = to_split
         self.split_on = split_on
         self.current = 0
         self.len = 1
 
-    fn __iter__(var self) -> Self:
+    def __iter__(var self) -> Self:
         return self^
 
-    fn __next__(mut self) raises StopIteration -> Span[UInt8, Self.origin]:
+    def __next__(mut self) raises StopIteration -> Span[UInt8, Self.origin]:
         if self.current >= len(self.inner):
             self.len = 0
             raise StopIteration()
@@ -336,7 +338,7 @@ struct SplitIterator[is_mutable: Bool, //, origin: Origin[mut=is_mutable]](
 
         return self.inner[start_end.start : start_end.end]
 
-    fn next(mut self) raises StopIteration -> Span[UInt8, Self.origin]:
+    def next(mut self) raises StopIteration -> Span[UInt8, Self.origin]:
         return self.__next__()
 
 
@@ -353,16 +355,16 @@ struct SplitIteratorPos[is_mutable: Bool, //, origin: Origin[mut=is_mutable]](
     ]: Iterator = Self
     comptime Element = StartEnd
 
-    fn __init__(out self, to_split: Span[UInt8, Self.origin], split_on: UInt8):
+    def __init__(out self, to_split: Span[UInt8, Self.origin], split_on: UInt8):
         self.inner = to_split
         self.split_on = split_on
         self.current = 0
         self.len = 1
 
-    fn __iter__(ref self) -> Self.IteratorType[origin_of(self)]:
+    def __iter__(ref self) -> Self.IteratorType[origin_of(self)]:
         return self.copy()
 
-    fn __next__(mut self) raises StopIteration -> Self.Element:
+    def __next__(mut self) raises StopIteration -> Self.Element:
         if self.current >= len(self.inner):
             self.len = 0
             raise StopIteration()
@@ -379,5 +381,5 @@ struct SplitIteratorPos[is_mutable: Bool, //, origin: Origin[mut=is_mutable]](
 
         return start_end
 
-    fn next(mut self) raises StopIteration -> StartEnd:
+    def next(mut self) raises StopIteration -> StartEnd:
         return self.__next__()

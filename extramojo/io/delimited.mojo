@@ -32,21 +32,21 @@ struct SerDerStruct(ToDelimited, FromDelimited):
     var index: Int
     var name: String
 
-    fn write_to_delimited(read self, mut writer: DelimWriter) raises:
+    def write_to_delimited(read self, mut writer: DelimWriter) raises:
         writer.write_record(self.index, self.name)
 
-    fn write_header(read self, mut writer: DelimWriter) raises:
+    def write_header(read self, mut writer: DelimWriter) raises:
         writer.write_record("index", "name")
 
     @staticmethod
-    fn from_delimited(mut data: SplitIterator, read header_values: Optional[List[String]]=None) raises -> Self:
+    def from_delimited(mut data: SplitIterator, read header_values: Optional[List[String]]=None) raises -> Self:
         var index = Int(StringSlice(unsafe_from_utf8=data.__next__()))
         var name = String()  # String constructor expected nul terminated byte span
         name.write_bytes(data.__next__())
         return Self(index, name)
 
 
-fn test_delim_reader_writer(file: String) raises:
+def test_delim_reader_writer(file: String) raises:
     var to_write = List[SerDerStruct]()
     for i in range(0, 1000):
         to_write.append(SerDerStruct(i, String("MyNameIs" + String(i))))
@@ -74,7 +74,6 @@ fn test_delim_reader_writer(file: String) raises:
 # Example with dynamic fields.
 # #########################################
 
-@value
 struct Score[
     truth_lengths_origin: ImmutableOrigin,
     truth_names_origin: ImmutableOrigin,
@@ -85,7 +84,7 @@ struct Score[
     var truth_lengths: Pointer[List[Int], truth_lengths_origin]
     var truth_names: Pointer[List[String], truth_names_origin]
 
-    fn __init__(
+    def __init__(
         out self,
         var assembly_name: String,
         assembly_length: Int,
@@ -99,7 +98,7 @@ struct Score[
         self.truth_lengths = Pointer(to=truth_lengths)
         self.truth_names = Pointer(to=truth_names)
 
-    fn write_to_delimited(read self, mut writer: DelimWriter) raises:
+    def write_to_delimited(read self, mut writer: DelimWriter) raises:
         writer.write_field(self.assembly_name, is_last=False)
         writer.write_field(self.assembly_length, is_last=False)
         for i in range(0, len(self.scores)):
@@ -108,7 +107,7 @@ struct Score[
                 is_last=i == len(self.scores) - 1,
             )
 
-    fn write_header(read self, mut writer: DelimWriter) raises:
+    def write_header(read self, mut writer: DelimWriter) raises:
         writer.write_field("assembly_name", is_last=False)
         writer.write_field("assembly_length", is_last=False)
         for i in range(0, len(self.truth_names[])):
@@ -116,7 +115,7 @@ struct Score[
                 self.truth_names[][i], is_last=i == len(self.truth_names[]) - 1
             )
 
-fn run_check_scores(opts: ParsedOpts) raises:
+def run_check_scores(opts: ParsedOpts) raises:
     var truth_names = List(String("A"), String("B"), String("C"))
     var truth_lengths = List(125, 2000, 1234)
     var output_scores_tsv = "/tmp/out.tsv"
@@ -146,24 +145,24 @@ fn run_check_scores(opts: ParsedOpts) raises:
 # Example similar to dictreader/dictwriter.
 # #########################################
 
-@value
+@fieldwise_init
 struct ThinWrapper(ToDelimited, FromDelimited):
     var stuff: Dict[String, Int]
 
-    fn write_to_delimited(read self, mut writer: DelimWriter) raises:
+    def write_to_delimited(read self, mut writer: DelimWriter) raises:
         var seen = 1
         for value in self.stuff.values():  # Relying on stable iteration order
             writer.write_field(value, is_last=seen == len(self.stuff))
             seen += 1
 
-    fn write_header(read self, mut writer: DelimWriter) raises:
+    def write_header(read self, mut writer: DelimWriter) raises:
         var seen = 1
         for header in self.stuff.keys():  # Relying on stable iteration order
             writer.write_field(header, is_last=seen == len(self.stuff))
             seen += 1
 
     @staticmethod
-    fn from_delimited(
+    def from_delimited(
         mut data: SplitIterator,
         read header_values: Optional[List[String]] = None,
     ) raises -> Self:
@@ -175,7 +174,7 @@ struct ThinWrapper(ToDelimited, FromDelimited):
         return Self(result)
 
 
-fn test_delim_reader_writer_dicts(file: String) raises:
+def test_delim_reader_writer_dicts(file: String) raises:
     var to_write = List[ThinWrapper]()
     var headers = List(
         String("a"), String("b"), String("c"), String("d"), String("e")
@@ -220,7 +219,7 @@ trait FromDelimited(Copyable & Movable & ImplicitlyDestructible):
     """
 
     @staticmethod
-    fn from_delimited(
+    def from_delimited(
         mut data: SplitIterator,
         read header_values: Optional[List[String]] = None,
     ) raises -> Self:
@@ -244,7 +243,7 @@ struct DelimReader[RowType: FromDelimited](Movable):
     var has_header: Bool
     var header_values: Optional[List[String]]
 
-    fn __init__(
+    def __init__(
         out self,
         var reader: BufferedReader,
         *,
@@ -262,7 +261,7 @@ struct DelimReader[RowType: FromDelimited](Movable):
             self._skip_header()
         self._get_next()
 
-    fn __moveinit__(out self, deinit take: Self):
+    def __init__(out self, *, deinit take: Self):
         self.delim = take.delim
         self.reader = take.reader^
         self.next_elem = take.next_elem^
@@ -271,23 +270,23 @@ struct DelimReader[RowType: FromDelimited](Movable):
         self.has_header = take.has_header
         self.header_values = take.header_values^
 
-    fn __len__(read self) -> Int:
+    def __len__(read self) -> Int:
         return self.len
 
-    fn __has_next__(read self) -> Bool:
+    def __has_next__(read self) -> Bool:
         return self.__len__() > 0
 
-    fn __next__(mut self) raises -> Self.RowType:
+    def __next__(mut self) raises -> Self.RowType:
         if not self.next_elem:
             raise "Attempting to call past end of iterator"
         var ret = self.next_elem.take()
         self._get_next()
         return ret^
 
-    fn __iter__(var self) -> Self:
+    def __iter__(var self) -> Self:
         return self^
 
-    fn _skip_header(mut self) raises:
+    def _skip_header(mut self) raises:
         self.buffer.clear()
         var bytes_read = self.reader.read_until(self.buffer, UInt(ord("\n")))
 
@@ -301,7 +300,7 @@ struct DelimReader[RowType: FromDelimited](Movable):
             header_values.append(String(StringSlice(unsafe_from_utf8=header)))
         self.header_values = header_values^
 
-    fn _get_next(mut self) raises:
+    def _get_next(mut self) raises:
         self.buffer.clear()
         var bytes_read = self.reader.read_until(self.buffer, UInt(ord("\n")))
         if bytes_read == 0:
@@ -315,7 +314,7 @@ struct DelimReader[RowType: FromDelimited](Movable):
 
 
 trait ToDelimited:
-    fn write_to_delimited(read self, mut writer: DelimWriter) raises:
+    def write_to_delimited(read self, mut writer: DelimWriter) raises:
         """Write `self` to the passed in `writer`.
 
         This should probably be done with `DelimWriter.write_record` or a series of
@@ -323,7 +322,7 @@ trait ToDelimited:
         """
         ...
 
-    fn write_header(read self, mut writer: DelimWriter) raises:
+    def write_header(read self, mut writer: DelimWriter) raises:
         """Write `self`s headers to the passed in `writer`.
 
         This should probably be done with `DelimWriter.write_record` or a series of
@@ -344,7 +343,7 @@ struct DelimWriter[W: Movable & Writer](Movable):
     var needs_to_write_header: Bool
     """Whether or not we need to write the headers still."""
 
-    fn __init__(
+    def __init__(
         out self,
         var writer: BufferedWriter[Self.W],
         *,
@@ -363,27 +362,27 @@ struct DelimWriter[W: Movable & Writer](Movable):
         self.write_header = write_header
         self.needs_to_write_header = write_header
 
-    fn __moveinit__(out self, deinit take: Self):
+    def __init__(out self, *, deinit take: Self):
         self.delim = take.delim^
         self.writer = take.writer^
         self.write_header = take.write_header
         self.needs_to_write_header = take.needs_to_write_header
 
-    fn __enter__(var self) -> Self:
+    def __enter__(var self) -> Self:
         return self^
 
-    fn flush(mut self):
+    def flush(mut self):
         self.writer.flush()
 
-    fn close(mut self) raises:
+    def close(mut self) raises:
         self.flush()
         self.writer.close()
 
-    fn write_record[*Ts: Writable](mut self, *args: *Ts) raises:
+    def write_record[*Ts: Writable](mut self, *args: *Ts) raises:
         """Write the passed in arguments as a delimited record."""
 
         @parameter
-        fn write_elem[index: Int, T: Writable](arg: T):
+        def write_elem[index: Int, T: Writable](arg: T):
             arg.write_to(self.writer)
 
             comptime if index == args.__len__() - 1:
@@ -394,7 +393,7 @@ struct DelimWriter[W: Movable & Writer](Movable):
         comptime for i in range(0, args.__len__()):
             write_elem[i](args[i])
 
-    fn write_field[T: Writable](mut self, column: T, *, is_last: Bool) raises:
+    def write_field[T: Writable](mut self, column: T, *, is_last: Bool) raises:
         """Write a single field, delimited by the configured delimiter."""
         column.write_to(self.writer)
         if not is_last:
@@ -402,7 +401,7 @@ struct DelimWriter[W: Movable & Writer](Movable):
         else:
             self.writer.write("\n")
 
-    fn serialize[T: ToDelimited](mut self, read value: T) raises:
+    def serialize[T: ToDelimited](mut self, read value: T) raises:
         """Write a struct that implements `ToDelimted` to the underlying writer.
         """
         if self.needs_to_write_header:

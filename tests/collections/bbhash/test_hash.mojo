@@ -15,7 +15,7 @@ struct HashCases(Copyable, Movable):
     var want: UInt64
 
     @staticmethod
-    fn hash64_cases() -> List[Self]:
+    def hash64_cases() -> List[Self]:
         return [
             {"0", 7749275010220701263},
             {"0", 7749275010220701263},
@@ -41,7 +41,7 @@ struct HashCases(Copyable, Movable):
         ]
 
     @staticmethod
-    fn fnv1a_cases() -> List[Self]:
+    def fnv1a_cases() -> List[Self]:
         return [
             {"", 14695981039346656037},
             {"a", 12638187200555641996},

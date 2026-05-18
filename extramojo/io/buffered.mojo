@@ -9,7 +9,7 @@ BufferedReader:
 from testing import assert_equal
 from extramojo.io.buffered import BufferedReader
 
-fn test_read_until(file: String, expected_lines: List[String]) raises:
+def test_read_until(file: String, expected_lines: List[String]) raises:
     var buffer_capacities = List(10, 100, 200, 500)
     for cap in buffer_capacities:
         var fh = open(file, "r")
@@ -30,7 +30,7 @@ BufferedWriter:
 ```mojo
 from extramojo.io.buffered import BufferedWriter
 
-fn test_buffered_writer(file: String, expected_lines: List[String]) raises:
+def test_buffered_writer(file: String, expected_lines: List[String]) raises:
     var fh = BufferedWriter(open(String(file), "w"), buffer_capacity=128)
     for i in range(len(expected_lines)):
         fh.write_bytes(expected_lines[i].as_bytes())
@@ -62,7 +62,7 @@ comptime SIMD_U8_WIDTH: Int = simd_width_of[DType.uint8]()
 comptime BUF_SIZE: Int = 1024 * 128
 
 
-fn read_lines(
+def read_lines(
     path: String, buf_size: Int = BUF_SIZE
 ) raises -> List[List[UInt8]]:
     """
@@ -96,8 +96,8 @@ fn read_lines(
     return result^
 
 
-fn for_each_line[
-    func: fn(Span[UInt8, _], Int, Int) capturing[_] -> None
+def for_each_line[
+    func: def(Span[UInt8, _], Int, Int) capturing[_] -> None
 ](path: String, buf_size: Int = BUF_SIZE) raises:
     """
     Call the provided callback on each line.
@@ -135,7 +135,7 @@ fn for_each_line[
 
 
 @always_inline
-fn get_next_line[
+def get_next_line[
     is_mutable: Bool, //, origin: Origin[mut=is_mutable]
 ](buffer: Span[UInt8, origin], start: Int) -> Span[UInt8, origin]:
     """Function to get the next line using either SIMD instruction (default) or iteratively.
@@ -171,7 +171,7 @@ struct BufferedReader(Movable):
     ```mojo
     from extramojo.io.buffered import BufferedReader
 
-    fn read_bytes(read file: String) raises -> List[UInt8]:
+    def read_bytes(read file: String) raises -> List[UInt8]:
         var fh = open(file, "r")
         var reader = BufferedReader(fh^, buffer_capacity=50)
         var buffer = List[UInt8](capacity=125)
@@ -205,7 +205,7 @@ struct BufferedReader(Movable):
     var buffer_len: Int
     """Total filled capacity of the buffer."""
 
-    fn __init__(
+    def __init__(
         out self, var fh: FileHandle, buffer_capacity: Int = BUF_SIZE
     ) raises:
         """Create a `BufferedReader`.
@@ -222,17 +222,17 @@ struct BufferedReader(Movable):
         self.buffer_len = 0
         _ = self._fill_buffer()
 
-    fn __del__(deinit self):
+    def __del__(deinit self):
         try:
             self.fh.close()
         except:
             pass
         self.buffer.free()
 
-    fn __enter__(var self) -> Self:
+    def __enter__(var self) -> Self:
         return self^
 
-    fn __moveinit__(out self, deinit take: Self):
+    def __init__(out self, *, deinit take: Self):
         self.fh = take.fh^
         self.file_offset = take.file_offset
         self.buffer_offset = take.buffer_offset
@@ -240,7 +240,7 @@ struct BufferedReader(Movable):
         self.buffer_capacity = take.buffer_capacity
         self.buffer_len = take.buffer_len
 
-    fn read_bytes(mut self, mut buffer: List[UInt8]) raises -> Int:
+    def read_bytes(mut self, mut buffer: List[UInt8]) raises -> Int:
         """Read up to `len(buffer)` bytes.
 
         Args:
@@ -275,7 +275,7 @@ struct BufferedReader(Movable):
 
         return bytes_read
 
-    fn read_until(
+    def read_until(
         mut self,
         mut buffer: List[UInt8],
         char: UInt = NEW_LINE,
@@ -332,7 +332,7 @@ struct BufferedReader(Movable):
 
         return bytes_read
 
-    fn _fill_buffer(mut self) raises -> Int:
+    def _fill_buffer(mut self) raises -> Int:
         """Fill the buffer, dropping anything currently not read.
 
         Returns:
@@ -354,7 +354,7 @@ struct BufferedWriter[W: Movable & Writer](Movable, Writer):
 
     ```mojo
     from extramojo.io.buffered import BufferedWriter
-    fn write_to_file(read file: String, read expected_lines: List[String]) raises:
+    def write_to_file(read file: String, read expected_lines: List[String]) raises:
         var fh = BufferedWriter(open(String(file), "w"), buffer_capacity=128)
         for i in range(len(expected_lines)):
             fh.write_bytes(expected_lines[i].as_bytes())
@@ -373,7 +373,7 @@ struct BufferedWriter[W: Movable & Writer](Movable, Writer):
     var buffer_len: Int
     """The number of bytes currently stored in the inner buffer."""
 
-    fn __init__(
+    def __init__(
         out self, var writer: Self.W, buffer_capacity: Int = BUF_SIZE
     ) raises:
         """Create a `BufferedReader`.
@@ -387,26 +387,26 @@ struct BufferedWriter[W: Movable & Writer](Movable, Writer):
         self.buffer_capacity = buffer_capacity
         self.buffer_len = 0
 
-    fn __del__(deinit self):
+    def __del__(deinit self):
         self.flush()
 
-    fn __enter__(var self) -> Self:
+    def __enter__(var self) -> Self:
         return self^
 
-    fn __moveinit__(out self, deinit take: Self):
+    def __init__(out self, *, deinit take: Self):
         self.inner = take.inner^
         self.buffer = take.buffer^
         self.buffer_capacity = take.buffer_capacity
         self.buffer_len = take.buffer_len
 
-    fn close(mut self) raises:
+    def close(mut self) raises:
         self.flush()
         # self.fh.close()
 
-    fn write_string(mut self, string: StringSlice):
+    def write_string(mut self, string: StringSlice):
         self.write_bytes(string.as_bytes())
 
-    fn write_bytes(mut self, bytes: Span[UInt8, _]):
+    def write_bytes(mut self, bytes: Span[UInt8, _]):
         """Write bytes to this writer.
 
         Args:
@@ -431,7 +431,7 @@ struct BufferedWriter[W: Movable & Writer](Movable, Writer):
                 self.flush()
             b = b[end:]
 
-    fn write[*Ts: Writable](mut self, *args: *Ts):
+    def write[*Ts: Writable](mut self, *args: *Ts):
         """Implement write.
 
         Args:
@@ -439,13 +439,13 @@ struct BufferedWriter[W: Movable & Writer](Movable, Writer):
         """
 
         @parameter
-        fn write_arg[T: Writable](arg: T):
+        def write_arg[T: Writable](arg: T):
             arg.write_to(self)
 
         comptime for i in range(0, args.__len__()):
             write_arg(args[i])
 
-    fn flush(mut self):
+    def flush(mut self):
         """Write any remaining bytes in the current buffer, then clear the buffer.
         """
         # TODO: replace the inner writer with something of our own

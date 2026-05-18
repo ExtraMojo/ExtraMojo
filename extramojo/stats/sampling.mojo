@@ -79,12 +79,12 @@ struct ReservoirSampler[T: Copyable & ImplicitlyDestructible](
     var values_to_collect: Int
     var seen_values: Int
 
-    fn __init__(out self, values_to_collect: Int):
+    def __init__(out self, values_to_collect: Int):
         self.seen_values = 0
         self.reservoir = List[Self.T](capacity=values_to_collect)
         self.values_to_collect = values_to_collect
 
-    fn insert(mut self, read item: Self.T):
+    def insert(mut self, read item: Self.T):
         """Add an element.
 
         The element will be tested for addition to the reservoir.

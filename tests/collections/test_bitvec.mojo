@@ -86,7 +86,7 @@ def test_bitvec_init_length_fill_false() raises:
     assert_equal(len(bv), 65)
 
     # Ensure bits are cleared
-    for i in range(0, bv.word_len()):
+    for i in range(UInt(0), bv.word_len()):
         assert_equal(bv.data[i], 0)
     _ = bv
 
@@ -95,7 +95,7 @@ def test_bitvec_init_length_fill_true() raises:
     var bv = BitVec(length=65, fill=True)
     assert_equal(len(bv), 65)
 
-    for i in range(0, bv.word_len() - 1):
+    for i in range(UInt(0), bv.word_len() - 1):
         assert_equal(bv.data[i], ~0)
     assert_equal(bv.data[bv.word_len() - 1], 1)
 
@@ -116,7 +116,7 @@ def test_bitvec_resize_grow_fill_false() raises:
     assert_equal(first_word & first_word_mask, first_word_mask)
 
     # Check new words are cleared
-    for i in range(1, bv.word_len()):
+    for i in range(UInt(1), bv.word_len()):
         assert_equal(bv.data[i], 0)
     _ = bv
 
@@ -134,7 +134,7 @@ def test_bitvec_resize_grow_fill_true() raises:
     assert_true((bv.data[0] & upper_mask) == upper_mask)
 
     # Check new words are set to 0xFFFFFFFF
-    for i in range(1, bv.word_len() - 1):
+    for i in range(UInt(1), bv.word_len() - 1):
         assert_equal(bv.data[i], ~0)
     assert_true(bv.data[bv.word_len() - 1] != ~0)
     _ = bv
@@ -764,7 +764,10 @@ def test_bitvec_full_overlap_union() raises:
 
 
 def test_bitvec_adhoc() raises:
-    comptime example = "As the quick brown fox jumped over the fence a moon was rising in the distance. Then the moon exploded. The End.".as_bytes()
+    comptime example = (
+        "As the quick brown fox jumped over the fence a moon was rising in the"
+        " distance. Then the moon exploded. The End.".as_bytes()
+    )
     var periods = BitVec(length=UInt(len(example)), fill=False)
     var spaces = BitVec(length=UInt(len(example)), fill=False)
     var ts = BitVec(length=UInt(len(example)), fill=False)
