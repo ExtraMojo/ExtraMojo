@@ -91,7 +91,7 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
     comptime WORD_BYTEWIDTH = bit_width_of[Self.WORD.dtype]() // 8
     comptime WORD = Scalar[Self.WORD_DTYPE]
     comptime WORD_PTR = UnsafePointer[
-        mut=True, type=Self.WORD, origin=ExternalOrigin[mut=True]
+        mut=True, type=Self.WORD, origin=UntrackedOrigin[mut=True]
     ]
 
     var data: Self.WORD_PTR
@@ -178,10 +178,10 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
         return copy^
 
     @always_inline
-    def __init__(out self, *, deinit take: Self):
-        self.data = take.data
-        self._len = take._len
-        self._capacity = take._capacity
+    def __init__(out self, *, deinit move: Self):
+        self.data = move.data
+        self._len = move._len
+        self._capacity = move._capacity
 
     @always_inline
     def __del__(deinit self):

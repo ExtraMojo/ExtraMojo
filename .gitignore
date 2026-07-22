@@ -5,3 +5,4 @@
 # magic environments
 .magic
 *.mojopkg
+*.mojoc

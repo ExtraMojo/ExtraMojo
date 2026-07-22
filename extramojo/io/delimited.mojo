@@ -7,8 +7,7 @@ Compile-time known fields:
 TODO: this should be two different examples, but the doc parser can't seem to handle that for this example.
 
 ```mojo
-from collections.string import StringSlice
-from testing import assert_equal
+from std.testing import assert_equal
 
 from extramojo.bstr.bstr import SplitIterator
 from extramojo.cli.parser import ParsedOpts
@@ -261,14 +260,14 @@ struct DelimReader[RowType: FromDelimited](Movable):
             self._skip_header()
         self._get_next()
 
-    def __init__(out self, *, deinit take: Self):
-        self.delim = take.delim
-        self.reader = take.reader^
-        self.next_elem = take.next_elem^
-        self.buffer = take.buffer^
-        self.len = take.len
-        self.has_header = take.has_header
-        self.header_values = take.header_values^
+    def __init__(out self, *, deinit move: Self):
+        self.delim = move.delim
+        self.reader = move.reader^
+        self.next_elem = move.next_elem^
+        self.buffer = move.buffer^
+        self.len = move.len
+        self.has_header = move.has_header
+        self.header_values = move.header_values^
 
     def __len__(read self) -> Int:
         return self.len
@@ -331,7 +330,7 @@ trait ToDelimited:
         ...
 
 
-struct DelimWriter[W: Movable & Writer](Movable):
+struct DelimWriter[W: Movable & Writer & ImplicitlyDestructible](Movable):
     """Write delimited data."""
 
     var delim: String
@@ -362,11 +361,11 @@ struct DelimWriter[W: Movable & Writer](Movable):
         self.write_header = write_header
         self.needs_to_write_header = write_header
 
-    def __init__(out self, *, deinit take: Self):
-        self.delim = take.delim^
-        self.writer = take.writer^
-        self.write_header = take.write_header
-        self.needs_to_write_header = take.needs_to_write_header
+    def __init__(out self, *, deinit move: Self):
+        self.delim = move.delim^
+        self.writer = move.writer^
+        self.write_header = move.write_header
+        self.needs_to_write_header = move.needs_to_write_header
 
     def __enter__(var self) -> Self:
         return self^

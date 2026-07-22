@@ -20,7 +20,7 @@ def memchr[
     Function to find the next occurrence of character.
 
     ```mojo
-    from testing import assert_equal
+    from std.testing import assert_equal
     from extramojo.bstr.memchr import memchr
 
     assert_equal(memchr("enlivened,unleavened,Arnulfo's,Unilever's,unloved|Anouilh,analogue,analogy".as_bytes(), ord("|")), 49)
@@ -100,7 +100,7 @@ def memchr_wide(haystack: Span[UInt8, _], chr: UInt8, start: Int = 0) -> Int:
     This function does more unrolling and will be faster if the search if over longer distances. If in doubt use `memchr`.
 
     ```mojo
-    from testing import assert_equal
+    from std.testing import assert_equal
     from extramojo.bstr.memchr import memchr_wide
 
     assert_equal(memchr_wide("enlivened,unleavened,Arnulfo's,Unilever's,unloved|Anouilh,analogue,analogy".as_bytes(), ord("|")), 49)

@@ -20,28 +20,26 @@ backend = { name = "pixi-build-mojo", version = "0.*", channels = [
 ] }
 
 [package.host-dependencies]
-mojo-compiler = "=1.0.0b1"
+mojo-compiler = "=1.0.0b2"
 
 [package.build-dependencies]
-mojo-compiler = "=1.0.0b1"
+mojo-compiler = "=1.0.0b2"
 
 [package.run-dependencies]
-mojo-compiler = "=1.0.0b1"
+mojo-compiler = "=1.0.0b2"
 
 # These are basically just dev deps, the real deps are specified in the recipe.yaml
 [dependencies]
-mojo = "=1.0.0b1"
+mojo = "=1.0.0b2"
 
 [tasks]
-build = "pixi run mojo package extramojo -o extramojo.mojopkg"
+build = "pixi run mojo precompile extramojo -o extramojo.mojoc"
 r = { cmd = "pixi run mojo run -I . " }                                                                    # run
 t = { cmd = "sh -c 'find ./tests -name test_*.mojo | xargs -I % pixi run mojo run -debug-level=line-tables -I . -D ASSERT=all %'" } # test
-# Mojo 1.0.0b1 may enable AVX-512 on some GitHub x86_64 runners that do not expose AVX-512 CPU flags,
+# Mojo may enable AVX-512 on some GitHub x86_64 runners that do not expose AVX-512 CPU flags,
 # causing ASAN test binaries to trap with illegal instructions in stdlib code.
 t-asan = { cmd = "sh -c 'target_features=\"\"; if [ \"$(uname -m)\" = \"x86_64\" ]; then target_features=\"--target-features -avx512bf16,-avx512bitalg,-avx512bw,-avx512cd,-avx512dq,-avx512f,-avx512ifma,-avx512vbmi,-avx512vbmi2,-avx512vl,-avx512vnni,-avx512vpopcntdq\"; fi; find ./tests -name test_*.mojo | xargs -I % sh -c \"pixi run mojo build $target_features --sanitize address -debug-level=line-tables -I . -D ASSERT=all % -o /tmp/test_bin && /tmp/test_bin\"'" } # test with ASAN
 format = "pixi run mojo format ./"
-#t = { cmd = "pixi run mojo test -I . -D ASSERT=all" }
-#test = { cmd = "pixi run mojo run -I . tests/test_file.mojo", depends-on = ["t",] }
 
 # rattler-build tasks
 rbuild = "pixi build"

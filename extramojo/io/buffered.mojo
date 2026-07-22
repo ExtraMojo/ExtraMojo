@@ -6,7 +6,7 @@ Buffered reading and writing.
 BufferedReader:
 
 ```mojo
-from testing import assert_equal
+from std.testing import assert_equal
 from extramojo.io.buffered import BufferedReader
 
 def test_read_until(file: String, expected_lines: List[String]) raises:
@@ -193,7 +193,7 @@ struct BufferedReader(Movable):
     var fh: FileHandle
     """The internal filehandle to read from."""
     var buffer: UnsafePointer[
-        mut=True, type=UInt8, origin=ExternalOrigin[mut=True]
+        mut=True, type=UInt8, origin=UntrackedOrigin[mut=True]
     ]
     """The internal buffer."""
     var file_offset: Int
@@ -232,13 +232,13 @@ struct BufferedReader(Movable):
     def __enter__(var self) -> Self:
         return self^
 
-    def __init__(out self, *, deinit take: Self):
-        self.fh = take.fh^
-        self.file_offset = take.file_offset
-        self.buffer_offset = take.buffer_offset
-        self.buffer = take.buffer
-        self.buffer_capacity = take.buffer_capacity
-        self.buffer_len = take.buffer_len
+    def __init__(out self, *, deinit move: Self):
+        self.fh = move.fh^
+        self.file_offset = move.file_offset
+        self.buffer_offset = move.buffer_offset
+        self.buffer = move.buffer
+        self.buffer_capacity = move.buffer_capacity
+        self.buffer_len = move.buffer_len
 
     def read_bytes(mut self, mut buffer: List[UInt8]) raises -> Int:
         """Read up to `len(buffer)` bytes.
@@ -347,7 +347,9 @@ struct BufferedReader(Movable):
         return self.buffer_len
 
 
-struct BufferedWriter[W: Movable & Writer](Movable, Writer):
+struct BufferedWriter[W: Movable & Writer & ImplicitlyDestructible](
+    Movable, Writer
+):
     """A BufferedWriter.
 
     ## Example
@@ -393,11 +395,11 @@ struct BufferedWriter[W: Movable & Writer](Movable, Writer):
     def __enter__(var self) -> Self:
         return self^
 
-    def __init__(out self, *, deinit take: Self):
-        self.inner = take.inner^
-        self.buffer = take.buffer^
-        self.buffer_capacity = take.buffer_capacity
-        self.buffer_len = take.buffer_len
+    def __init__(out self, *, deinit move: Self):
+        self.inner = move.inner^
+        self.buffer = move.buffer^
+        self.buffer_capacity = move.buffer_capacity
+        self.buffer_len = move.buffer_len
 
     def close(mut self) raises:
         self.flush()

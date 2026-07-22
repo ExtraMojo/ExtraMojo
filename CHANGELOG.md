@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Migrate to Mojo 1.0.0b2 and MAX 26.4.
+- Update move initializers, pointer origins, generic bounds, constraints, and documentation imports for 1.0.0b2.
+- Replace `mojo package`/`.mojopkg` with `mojo precompile`/`.mojoc` and run test entry points with `mojo run`.
+
 ## v0.22.0
 
 - Migrate to Mojo 1.0.0b1.
