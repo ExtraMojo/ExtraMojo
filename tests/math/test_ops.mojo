@@ -3,7 +3,9 @@ from std.testing import assert_equal, TestSuite
 from extramojo.math.ops import saturating_add, saturating_sub
 
 
-def _sat_add[dtype: DType where dtype.is_integral(), width: Int]() raises:
+def _sat_add[
+    dtype: DType, width: SIMDLength
+]() raises where dtype.is_integral():
     comptime MIN = Scalar[dtype].MIN
     comptime MAX = Scalar[dtype].MAX
 
@@ -35,7 +37,9 @@ def test_saturating_add() raises:
                 _sat_add[dtype, width]()
 
 
-def _sat_sub[dtype: DType where dtype.is_integral(), width: Int]() raises:
+def _sat_sub[
+    dtype: DType, width: SIMDLength
+]() raises where dtype.is_integral():
     comptime MIN = Scalar[dtype].MIN
     comptime MAX = Scalar[dtype].MAX
 

@@ -63,7 +63,7 @@ jobs:
           cd hugo
           go install .
         
-      - name: Run Modo # Includes 'mojo doc' and 'mojo test'
+      - name: Run Modo # Includes Mojo documentation checks
         run: |
           export PATH="/home/runner/.pixi/bin:$PATH"
           pixi install --locked

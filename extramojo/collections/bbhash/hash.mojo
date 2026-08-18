@@ -3,8 +3,6 @@
 These are all for `BBHash`, with the exception of fnv1a.
 """
 from std.math import trunc
-from std.memory import bitcast
-
 
 comptime m: UInt64 = 0x880355F21E6D1965
 
@@ -50,7 +48,9 @@ def _hash64(seed: UInt64, buffer: Span[UInt8, _]) -> UInt64:
     var n = len(buf) // 8
     if n > 0:
         # TODO verify the bitcast is a no-op, or use rebind
-        var data = Span(ptr=buffer.unsafe_ptr().bitcast[UInt64](), length=n)
+        var data = Span(
+            unsafe_ptr=buffer.unsafe_ptr().unsafe_bitcast[UInt64](), length=n
+        )
         for v in data:
             h ^= _mix(v)
             h *= m

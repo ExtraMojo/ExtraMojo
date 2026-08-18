@@ -59,11 +59,7 @@ pre-test: []
 
 # Bash scripts to run after test.
 # Also runs after build if 'tests' is given.
-post-test:
-  - |
-    echo Running 'mojo test'...
-    pixi run mojo test -I . docs/test
-    echo Done.
+post-test: []
 
 # Bash scripts to run after build.
 post-build: []

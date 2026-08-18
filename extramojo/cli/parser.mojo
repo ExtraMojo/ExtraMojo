@@ -44,22 +44,22 @@ struct OptKind(Copyable, ImplicitlyCopyable, Movable, Writable):
     def __init__(out self, value: UInt8):
         self.value = value
 
-    def __eq__(self, read other: Self) -> Bool:
+    def __eq__(self, imm other: Self) -> Bool:
         return self.value == other.value
 
-    def __ne__(self, read other: Self) -> Bool:
+    def __ne__(self, imm other: Self) -> Bool:
         return not self == other
 
-    def __str__(read self) -> String:
+    def write_to(self, mut writer: Some[Writer]):
         if self == Self.BoolLike:
-            return "Bool"
+            writer.write("Bool")
         elif self == Self.IntLike:
-            return "Int"
+            writer.write("Int")
         elif self == Self.FloatLike:
-            return "Float"
+            writer.write("Float")
         else:
             # elif self == Self.StringLike:
-            return "String"
+            writer.write("String")
 
 
 struct OptValue(Copyable, Movable):
@@ -104,34 +104,34 @@ struct OptValue(Copyable, Movable):
         self._bool = bool_value
 
     # TODO: there's currently no good way to make a more generic compile time
-    # `get[ReturnType: AnyType](read self) -> ReturnType` that can use the `ReturnType`
-    # with `@parameter` to select what to return since types aren't comparable.
-    def get_string(read self) -> Optional[String]:
+    # `get[ReturnType: AnyType](imm self) -> ReturnType` that can use the `ReturnType`
+    # with a comptime closure to select what to return since types aren't comparable.
+    def get_string(imm self) -> Optional[String]:
         return self._string
 
-    def get_int(read self) -> Optional[Int]:
+    def get_int(imm self) -> Optional[Int]:
         return self._int
 
-    def get_float(read self) -> Optional[Float64]:
+    def get_float(imm self) -> Optional[Float64]:
         return self._float
 
-    def get_bool(read self) -> Optional[Bool]:
+    def get_bool(imm self) -> Optional[Bool]:
         return self._bool
 
     @staticmethod
-    def parse_string(read value: String) -> Self:
+    def parse_string(imm value: String) -> Self:
         return Self(value)
 
     @staticmethod
-    def parse_int(read value: String) raises -> Self:
+    def parse_int(imm value: String) raises -> Self:
         return Self(atol(value))
 
     @staticmethod
-    def parse_float(read value: String) raises -> Self:
+    def parse_float(imm value: String) raises -> Self:
         return Self(atof(value))
 
     @staticmethod
-    def parse_bool(read value: String) raises -> Self:
+    def parse_bool(imm value: String) raises -> Self:
         if value.lower() == "true":
             return Self(True)
         elif value.lower() == "false":
@@ -146,7 +146,7 @@ struct OptValue(Copyable, Movable):
         )
 
     @staticmethod
-    def parse_kind(kind: OptKind, read value: String) raises -> Self:
+    def parse_kind(kind: OptKind, imm value: String) raises -> Self:
         """Parse the string based on the value of `OptKind`."""
         if kind == OptKind.BoolLike:
             return OptValue.parse_bool(value)
@@ -219,19 +219,19 @@ struct ParsedOpts(Copyable, Movable):
         """Get a nicely formatted help string."""
         return Pointer(to=self.help_msg)
 
-    def get_string(read self, read key: String) raises -> String:
+    def get_string(imm self, imm key: String) raises -> String:
         """Try to get the option specified with the given key as a String.
 
         This will raise if the key is not found, or if the type of the option doesn't match asked-for type.
         """
         var opt = self.options.get(key)
         if not key:
-            raise Error(String.write(key, " not found in options"))
+            raise Error(String(key, " not found in options"))
 
         var str_value = opt.value().get_string()
         if not str_value:
             raise Error(
-                String.write(
+                String(
                     "No string value for ",
                     key,
                     ". Check the specified option type.",
@@ -239,19 +239,19 @@ struct ParsedOpts(Copyable, Movable):
             )
         return str_value.value()
 
-    def get_int(read self, read key: String) raises -> Int:
+    def get_int(imm self, imm key: String) raises -> Int:
         """Try to get the option specified with the given key as an Int.
 
         This will raise if the key is not found, or if the type of the option doesn't match asked-for type.
         """
         var opt = self.options.get(key)
         if not key:
-            raise Error(String.write(key, " not found in options"))
+            raise Error(String(key, " not found in options"))
 
         var int_value = opt.value().get_int()
         if not int_value:
             raise Error(
-                String.write(
+                String(
                     "No Int value for ",
                     key,
                     ". Check the specified option type.",
@@ -259,19 +259,19 @@ struct ParsedOpts(Copyable, Movable):
             )
         return int_value.value()
 
-    def get_float(read self, read key: String) raises -> Float64:
+    def get_float(imm self, imm key: String) raises -> Float64:
         """Try to get the option specified with the given key as a Float64.
 
         This will raise if the key is not found, or if the type of the option doesn't match asked-for type.
         """
         var opt = self.options.get(key)
         if not key:
-            raise Error(String.write(key, " not found in options"))
+            raise Error(String(key, " not found in options"))
 
         var float_value = opt.value().get_float()
         if not float_value:
             raise Error(
-                String.write(
+                String(
                     "No Float64 value for ",
                     key,
                     ". Check the specified option type.",
@@ -279,19 +279,19 @@ struct ParsedOpts(Copyable, Movable):
             )
         return float_value.value()
 
-    def get_bool(read self, read key: String) raises -> Bool:
+    def get_bool(imm self, imm key: String) raises -> Bool:
         """Try to get the option specified with the given key as a Bool.
 
         This will raise if the key is not found, or if the type of the option doesn't match asked-for type.
         """
         var opt = self.options.get(key)
         if not key:
-            raise Error(String.write(key, " not found in options"))
+            raise Error(String(key, " not found in options"))
 
         var bool_value = opt.value().get_bool()
         if not bool_value:
             raise Error(
-                String.write(
+                String(
                     "No Bool value for ",
                     key,
                     ". Check the specified option type.",
@@ -351,11 +351,10 @@ struct OptParser(Copyable, Movable):
         """Add an [`OptConfig`]."""
         self.options[arg.long_name] = arg^
 
-    def help_msg(read self) -> String:
+    def help_msg(imm self) -> String:
         """Get the help message string based on the currently added options."""
 
-        @parameter
-        def write_arg_msg(mut writer: String, read opt: OptConfig):
+        def write_arg_msg(mut writer: String, imm opt: OptConfig):
             writer.write(
                 "\t--",
                 opt.long_name,
@@ -398,7 +397,7 @@ struct OptParser(Copyable, Movable):
 
     @staticmethod
     def _strip_leading_dashes(
-        arg: StringSlice,
+        arg: StringSpan,
     ) raises -> String:
         # TODO: use a string slice or something better here
         var i = 0
@@ -423,7 +422,7 @@ struct OptParser(Copyable, Movable):
             i += 1
         return self.parse_args(fixed)
 
-    def parse_args(read self, args: List[String]) raises -> ParsedOpts:
+    def parse_args(imm self, args: List[String]) raises -> ParsedOpts:
         """Parse the arguments passed in via `args`."""
         var result = ParsedOpts(help_msg=self.help_msg())
 
@@ -440,7 +439,7 @@ struct OptParser(Copyable, Movable):
                         j += 1
                         if j >= len(args):
                             raise Error(
-                                String.write("Missing value for option: ", opt)
+                                String("Missing value for option: ", opt)
                             )
                         var value = args[j]
                         # Get the value from the next string
@@ -472,7 +471,7 @@ struct OptParser(Copyable, Movable):
                         i += 1
                         if i >= len(args):
                             raise Error(
-                                String.write("Missing value for option: ", opt)
+                                String("Missing value for option: ", opt)
                             )
                         var value = args[i]
                         # Get the value from the next string
@@ -490,7 +489,7 @@ struct OptParser(Copyable, Movable):
                             .value()
                         )
                 else:
-                    raise Error(String.write("No such option: ", opt))
+                    raise Error(String("No such option: ", opt))
             else:
                 result.args.append(arg)
             i += 1
@@ -500,7 +499,7 @@ struct OptParser(Copyable, Movable):
             if not result.options.get(arg.key):
                 var default = arg.value.default_value
                 if not default:
-                    raise Error(String.write("No value provided for ", arg.key))
+                    raise Error(String("No value provided for ", arg.key))
                 result.options[arg.key] = OptValue.parse_kind(
                     arg.value.value_kind, default.value()
                 )
@@ -530,13 +529,13 @@ struct Subcommand(Copyable, Hashable, Movable):
     def __init__(out self, var parser: OptParser):
         self.parser = parser^
 
-    def __hash__[H: Hasher](read self, mut hasher: H):
+    def __hash__[H: Hasher](imm self, mut hasher: H):
         self.parser.program_name.__hash__[H](hasher)
 
-    def __eq__(read self, read other: Self) -> Bool:
+    def __eq__(imm self, imm other: Self) -> Bool:
         return self.parser.program_name == other.parser.program_name
 
-    def __ne__(read self, read other: Self) -> Bool:
+    def __ne__(imm self, imm other: Self) -> Bool:
         return not (self == other)
 
 
@@ -595,7 +594,7 @@ struct SubcommandParser(Copyable, Movable):
         self.description = description^
         self.commands = Dict[String, Subcommand]()
 
-    def get_help_message(read self) raises -> String:
+    def get_help_message(imm self) raises -> String:
         """Create the help message for the subcommands."""
         var help = String()
         help.write(String("{}\n").format(self.name))
@@ -615,7 +614,7 @@ struct SubcommandParser(Copyable, Movable):
         self.commands[command.parser.program_name] = command.copy()
 
     def parse_args(
-        read self, args: List[String]
+        imm self, args: List[String]
     ) raises -> Optional[Tuple[String, ParsedOpts]]:
         """Parse the input args, expecting a subcommand."""
         if len(args) == 0:
@@ -634,7 +633,7 @@ struct SubcommandParser(Copyable, Movable):
             cmd.value().parser.parse_args(List(args[1:])),
         )
 
-    def parse_sys_args(read self) raises -> Optional[Tuple[String, ParsedOpts]]:
+    def parse_sys_args(imm self) raises -> Optional[Tuple[String, ParsedOpts]]:
         """Parse the sys.argv() list."""
         var args = sys.argv()
 

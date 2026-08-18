@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## v0.23.0
+
+- Migrate to Mojo 1.0.0.
+- Adopt the unified pointer and explicit unsafe memory APIs.
+- Replace removed `mojo test` and deprecated `mojo package` workflows.
+
 ## v0.22.0
 
 - Migrate to Mojo 1.0.0b1.

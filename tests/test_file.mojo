@@ -20,7 +20,7 @@ from extramojo.io.buffered import (
 def s(bytes: Span[UInt8, _]) -> String:
     """Convert bytes to a String."""
     var buffer = String()
-    buffer.write_string(StringSlice(unsafe_from_utf8=bytes))
+    buffer.write_string(StringSpan(unsafe_from_utf8=bytes))
     return buffer
 
 
@@ -83,7 +83,7 @@ def test_read_bytes(file: Path) raises:
         if bytes_read == 0:
             break
         found_file.extend(buffer[0:bytes_read])
-    # Last usage of reader, meaning it should call __del__ here.
+    # Last usage of reader, meaning it should call __deinit__ here.
 
     var expected = open(file, "r").read().as_bytes()
     assert_equal(len(expected), len(found_file))
@@ -136,20 +136,20 @@ struct SerDerStruct(Copyable, FromDelimited, Movable, ToDelimited):
     var index: Int
     var name: String
 
-    def write_to_delimited(read self, mut writer: DelimWriter) raises:
+    def write_to_delimited(imm self, mut writer: DelimWriter) raises:
         writer.write_record(self.index, self.name)
 
-    def write_header(read self, mut writer: DelimWriter) raises:
+    def write_header(imm self, mut writer: DelimWriter) raises:
         writer.write_record("index", "name")
 
     @staticmethod
     def from_delimited(
         mut data: SplitIterator,
-        read header_values: Optional[List[String]] = None,
+        imm header_values: Optional[List[String]] = None,
     ) raises -> Self:
-        var index = Int(StringSlice(unsafe_from_utf8=data.__next__()))
+        var index = Int(StringSpan(unsafe_from_utf8=data.__next__()))
         var name = String()
-        name.write_string(StringSlice(unsafe_from_utf8=data.__next__()))
+        name.write_string(StringSpan(unsafe_from_utf8=data.__next__()))
         return Self(index, name)
 
 
@@ -183,13 +183,13 @@ def test_delim_reader_writer(file: Path) raises:
 struct ThinWrapper(Copyable, FromDelimited, ToDelimited):
     var stuff: Dict[String, Int]
 
-    def write_to_delimited(read self, mut writer: DelimWriter) raises:
+    def write_to_delimited(imm self, mut writer: DelimWriter) raises:
         var seen = 1
         for value in self.stuff.values():  # Relying on stable iteration order
             writer.write_field(value, is_last=seen == len(self.stuff))
             seen += 1
 
-    def write_header(read self, mut writer: DelimWriter) raises:
+    def write_header(imm self, mut writer: DelimWriter) raises:
         var seen = 1
         for header in self.stuff.keys():  # Relying on stable iteration order
             writer.write_field(header, is_last=seen == len(self.stuff))
@@ -198,11 +198,11 @@ struct ThinWrapper(Copyable, FromDelimited, ToDelimited):
     @staticmethod
     def from_delimited(
         mut data: SplitIterator,
-        read header_values: Optional[List[String]] = None,
+        imm header_values: Optional[List[String]] = None,
     ) raises -> Self:
         var result = Dict[String, Int]()
         for header in header_values.value():
-            result[header] = Int(StringSlice(unsafe_from_utf8=data.__next__()))
+            result[header] = Int(StringSpan(unsafe_from_utf8=data.__next__()))
         return Self(result^)
 
 

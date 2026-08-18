@@ -12,7 +12,7 @@ from std.testing import TestSuite
 def s(bytes: Span[UInt8, _]) -> String:
     """Convert bytes to a String."""
     var buffer = String()
-    buffer.write_string(StringSlice(unsafe_from_utf8=bytes))
+    buffer.write_string(StringSpan(unsafe_from_utf8=bytes))
     return buffer
 
 
@@ -28,7 +28,7 @@ def s(bytes: Span[UInt8, _]) -> String:
 
 
 def test_memchr() raises:
-    comptime check: InlineArray[Bool, 2] = [True, False]
+    comptime check: Array[Bool, 2] = [True, False]
 
     comptime for do_alignment in range(0, len(check)):
         var cases: List[Tuple[String, Int]] = [
@@ -200,7 +200,7 @@ def test_spilt_iterator() raises:
         "EFGH".as_bytes(),
         "IJKL\nMNOP".as_bytes(),
     ]
-    var output = List[Span[UInt8, StaticConstantOrigin]]()
+    var output = List[Span[UInt8, ImmStaticOrigin]]()
     for value in SplitIterator(input, UInt8(ord("\t"))):
         output.append(value)
     for i in range(len(expected)):
@@ -317,7 +317,7 @@ def test_spilt_iterator_long() raises:
         "QRST".as_bytes(),
         "UVWXYZ".as_bytes(),
     ]
-    var output = List[Span[UInt8, StaticConstantOrigin]]()
+    var output = List[Span[UInt8, ImmStaticOrigin]]()
     for value in SplitIterator(input, UInt8(ord("\t"))):
         output.append(value)
     for i in range(len(expected)):

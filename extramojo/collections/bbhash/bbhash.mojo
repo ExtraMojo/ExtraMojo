@@ -77,20 +77,20 @@ struct _BCVec(Writable):
         var w = _word_index[BitVec.WORD_DTYPE](UInt(x))
         var mask = _bit_mask[BitVec.WORD_DTYPE](UInt(x))
 
-        if self.v.data[w] & mask != 0:
+        if self.v.data[unsafe_offset=w] & mask != 0:
             # Found one or more collisions at index; update collision vector
-            self.c.data[w] |= mask
+            self.c.data[unsafe_offset=w] |= mask
             return
         # No collisions at index; set bit
-        self.v.data[w] |= mask
+        self.v.data[unsafe_offset=w] |= mask
 
     def unset_collision(mut self, h: UInt64) -> Bool:
         var x = h % UInt64(len(self.v))
         var w = _word_index[BitVec.WORD_DTYPE](UInt(x))
         var mask = _bit_mask[BitVec.WORD_DTYPE](UInt(x))
-        if self.c.data[w] & mask != 0:
+        if self.c.data[unsafe_offset=w] & mask != 0:
             # found collision at index i; unset bit
-            self.v.data[w] &= ~mask
+            self.v.data[unsafe_offset=w] &= ~mask
             return True
         # No collisions at index i
         return False
@@ -105,12 +105,12 @@ struct _BCVec(Writable):
         self.v.resize(full_len, fill=False)
         self.v.zero_all()
 
-    def write_to[W: Writer](read self, mut writer: W):
+    def write_to[W: Writer](imm self, mut writer: W):
         writer.write("bitvec:    ", self.v)
         writer.write("collisions:", self.c)
 
 
-comptime Keyable = Copyable & Movable & Hashable & ImplicitlyDestructible
+comptime Keyable = Copyable & Hashable & Deinitable
 
 
 struct BBHash[compute_reverse_map: Bool = False]:
@@ -168,7 +168,7 @@ struct BBHash[compute_reverse_map: Bool = False]:
         )  # heuristic: only 1/2 of the keys will collide
 
         # bit vectors for current level: A and C in the paper
-        level_vec = _BCVec(length=UInt(Int(gamma * Float64(size))))
+        var level_vec = _BCVec(length=UInt(Int(gamma * Float64(size))))
 
         # loop exits when there are no more keys to re-hash
         var lvl = 0
@@ -229,7 +229,7 @@ struct BBHash[compute_reverse_map: Bool = False]:
         )  # heuristic: only 1/2 of the keys will collide
 
         # bit vectors for current level: A and C in the paper
-        level_vec = _BCVec(length=UInt(Int(gamma * Float64(size))))
+        var level_vec = _BCVec(length=UInt(Int(gamma * Float64(size))))
         self.reverse_map = List[UInt64](length=len(keys) + 1, fill=0)
         var level_keys_map = List[List[UInt64]]()
 
@@ -296,7 +296,7 @@ struct BBHash[compute_reverse_map: Bool = False]:
             self.ranks[i] = rank
             rank += UInt64(self.bits[i].count_set_bits())
 
-    def find[K: Hashable](read self, key: K) -> UInt64:
+    def find[K: Hashable](imm self, key: K) -> UInt64:
         """Find returns a unique index representing the key in the minimal hash set.
 
         The return value is meaningful ONLY for keys in the original key set
@@ -327,7 +327,7 @@ struct BBHash[compute_reverse_map: Bool = False]:
                 return self.ranks[lvl] + UInt64(self.bits[lvl].rank(UInt(i)))
         return 0
 
-    def key(read self, idx: UInt64) -> Optional[UInt64]:
+    def key(imm self, idx: UInt64) -> Optional[UInt64]:
         """Get the hash of the key associated with the given index.
 
         Args:

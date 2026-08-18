@@ -8,9 +8,7 @@ Reservoir sampling on a stream.
 from std.random import random_si64
 
 
-struct ReservoirSampler[T: Copyable & ImplicitlyDestructible](
-    Copyable, ImplicitlyDestructible
-):
+struct ReservoirSampler[T: Copyable & Deinitable](Copyable, Deinitable):
     """Sample N items from a stream of unknown length.
 
     Sample all the elements, this should retain the order since we always automatically take the first N elements.
@@ -84,7 +82,7 @@ struct ReservoirSampler[T: Copyable & ImplicitlyDestructible](
         self.reservoir = List[Self.T](capacity=values_to_collect)
         self.values_to_collect = values_to_collect
 
-    def insert(mut self, read item: Self.T):
+    def insert(mut self, imm item: Self.T):
         """Add an element.
 
         The element will be tested for addition to the reservoir.
