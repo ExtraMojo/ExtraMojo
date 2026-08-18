@@ -1,0 +1,600 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>ExtraMojo – delimited</title><link>https://extramojo.github.io/ExtraMojo/extramojo/io/delimited/</link><description>Recent content in delimited on ExtraMojo</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="https://extramojo.github.io/ExtraMojo/extramojo/io/delimited/index.xml" rel="self" type="application/rss+xml"/><item><title>DelimReader</title><link>https://extramojo.github.io/ExtraMojo/extramojo/io/delimited/DelimReader/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://extramojo.github.io/ExtraMojo/extramojo/io/delimited/DelimReader/</guid><description>
+&lt;p>Mojo struct &lt;a href="https://github.com/ExtraMojo/ExtraMojo/blob/main/extramojo/io/delimited.mojo" target="_blank" rel="noopener">🡭&lt;/a>&lt;/p>
+&lt;h1>&lt;code>DelimReader&lt;/code>&lt;/h1>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@memory_only&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">struct&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nc">DelimReader&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">RowType&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">FromDelimited&lt;/span>&lt;span class="p">]&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>Read delimited data that is delimited by a single bytes.&lt;/p>
+&lt;p>The &lt;code>RowType&lt;/code> must implement &lt;code>FromBytes&lt;/code> which is passed an iterator over the split up line.&lt;/p>
+&lt;h2>Parameters&lt;span class="hx-absolute -hx-mt-20" id="parameters">&lt;/span>
+&lt;a href="#parameters" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;strong>RowType&lt;/strong> (&lt;code>FromDelimited&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;h2>Fields&lt;span class="hx-absolute -hx-mt-20" id="fields">&lt;/span>
+&lt;a href="#fields" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;strong>delim&lt;/strong> (&lt;code>UInt8&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>reader&lt;/strong> (&lt;code>BufferedReader&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>next_elem&lt;/strong> (&lt;code>Optional[RowType]&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>buffer&lt;/strong> (&lt;code>List[UInt8]&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>len&lt;/strong> (&lt;code>Int&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>has_header&lt;/strong> (&lt;code>Bool&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>header_values&lt;/strong> (&lt;code>Optional[List[String]]&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;h2>Implemented traits&lt;span class="hx-absolute -hx-mt-20" id="implemented-traits">&lt;/span>
+&lt;a href="#implemented-traits" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>&lt;code>AnyType&lt;/code>, &lt;code>Deinitable&lt;/code>, &lt;code>Movable&lt;/code>&lt;/p>
+&lt;h2>Methods&lt;span class="hx-absolute -hx-mt-20" id="methods">&lt;/span>
+&lt;a href="#methods" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;script lang="JS">
+function expandAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = true;
+}
+}
+function collapseAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = false;
+}
+}
+&lt;/script>
+&lt;a class="" onclick="expandAll()" style="cursor:pointer; text-decoration: none;" title="Expand all">➕&lt;/a>&amp;nbsp;
+&lt;a class="" onclick="collapseAll()" style="cursor:pointer; text-decoration: none;" title="Collapse all">➖&lt;/a>
+&lt;h3>&lt;code>__init__&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="__init__">&lt;/span>
+&lt;a href="#__init__" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__init__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">out&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">reader&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">BufferedReader&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">delim&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">UInt8&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">has_header&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Bool&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>reader&lt;/strong> (&lt;code>BufferedReader&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>delim&lt;/strong> (&lt;code>UInt8&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>has_header&lt;/strong> (&lt;code>Bool&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Self&lt;/code>&lt;/p>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details>
+&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__init__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">out&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">deinit&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">move&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Self&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>move&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Self&lt;/code>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>__len__&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="__len__">&lt;/span>
+&lt;a href="#__len__" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__len__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">Int&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Int&lt;/code>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>__has_next__&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="__has_next__">&lt;/span>
+&lt;a href="#__has_next__" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">__has_next__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Bool&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Bool&lt;/code>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>__next__&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="__next__">&lt;/span>
+&lt;a href="#__next__" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__next__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">mut&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">RowType&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>RowType&lt;/code>&lt;/p>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>__iter__&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="__iter__">&lt;/span>
+&lt;a href="#__iter__" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__iter__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">self&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Self&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Self&lt;/code>&lt;/p>
+&lt;/details></description></item><item><title>DelimWriter</title><link>https://extramojo.github.io/ExtraMojo/extramojo/io/delimited/DelimWriter/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://extramojo.github.io/ExtraMojo/extramojo/io/delimited/DelimWriter/</guid><description>
+&lt;p>Mojo struct &lt;a href="https://github.com/ExtraMojo/ExtraMojo/blob/main/extramojo/io/delimited.mojo" target="_blank" rel="noopener">🡭&lt;/a>&lt;/p>
+&lt;h1>&lt;code>DelimWriter&lt;/code>&lt;/h1>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@memory_only&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">struct&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nc">DelimWriter&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">W&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Writer&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">&amp;amp;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Deinitable&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">&amp;amp;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">Movable&lt;/span>&lt;span class="p">]&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>Write delimited data.&lt;/p>
+&lt;h2>Parameters&lt;span class="hx-absolute -hx-mt-20" id="parameters">&lt;/span>
+&lt;a href="#parameters" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;strong>W&lt;/strong> (&lt;code>Writer &amp;amp; Deinitable &amp;amp; Movable&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;h2>Fields&lt;span class="hx-absolute -hx-mt-20" id="fields">&lt;/span>
+&lt;a href="#fields" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;strong>delim&lt;/strong> (&lt;code>String&lt;/code>): The delimiter to use.&lt;/li>
+&lt;li>&lt;strong>writer&lt;/strong> (&lt;code>BufferedWriter[W]&lt;/code>): The &lt;code>BufferedWriter&lt;/code> to write to.&lt;/li>
+&lt;li>&lt;strong>write_header&lt;/strong> (&lt;code>Bool&lt;/code>): Whether or not to write headers.&lt;/li>
+&lt;li>&lt;strong>needs_to_write_header&lt;/strong> (&lt;code>Bool&lt;/code>): Whether or not we need to write the headers still.&lt;/li>
+&lt;/ul>
+&lt;h2>Implemented traits&lt;span class="hx-absolute -hx-mt-20" id="implemented-traits">&lt;/span>
+&lt;a href="#implemented-traits" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>&lt;code>AnyType&lt;/code>, &lt;code>Deinitable&lt;/code>, &lt;code>Movable&lt;/code>&lt;/p>
+&lt;h2>Methods&lt;span class="hx-absolute -hx-mt-20" id="methods">&lt;/span>
+&lt;a href="#methods" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;script lang="JS">
+function expandAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = true;
+}
+}
+function collapseAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = false;
+}
+}
+&lt;/script>
+&lt;a class="" onclick="expandAll()" style="cursor:pointer; text-decoration: none;" title="Expand all">➕&lt;/a>&amp;nbsp;
+&lt;a class="" onclick="collapseAll()" style="cursor:pointer; text-decoration: none;" title="Collapse all">➖&lt;/a>
+&lt;h3>&lt;code>__init__&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="__init__">&lt;/span>
+&lt;a href="#__init__" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__init__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">out&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">writer&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">BufferedWriter&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">W&lt;/span>&lt;span class="p">],&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">delim&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">write_header&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Bool&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Create a &lt;code>DelimWriter&lt;/code>.
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>writer&lt;/strong> (&lt;code>BufferedWriter[W]&lt;/code>): The &lt;code>BufferedWriter&lt;/code> to write to.&lt;/li>
+&lt;li>&lt;strong>delim&lt;/strong> (&lt;code>String&lt;/code>): The delimiter to use.&lt;/li>
+&lt;li>&lt;strong>write_header&lt;/strong> (&lt;code>Bool&lt;/code>): Whether or not to write headers.&lt;/li>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Self&lt;/code>&lt;/p>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details>
+&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__init__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">out&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">deinit&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">move&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Self&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>move&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Self&lt;/code>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>__enter__&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="__enter__">&lt;/span>
+&lt;a href="#__enter__" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__enter__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">self&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Self&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Self&lt;/code>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>flush&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="flush">&lt;/span>
+&lt;a href="#flush" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">flush&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">mut&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;/details>
+&lt;h3>&lt;code>close&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="close">&lt;/span>
+&lt;a href="#close" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">close&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">mut&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>write_record&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="write_record">&lt;/span>
+&lt;a href="#write_record" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">write_record&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="n">Ts&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Writable&lt;/span>&lt;span class="p">](&lt;/span>&lt;span class="n">mut&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="n">args&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="n">Ts.values&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Write the passed in arguments as a delimited record.
+&lt;/summary>
+&lt;strong>Parameters:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>*&lt;strong>Ts&lt;/strong> (&lt;code>Writable&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;li>*&lt;strong>args&lt;/strong> (&lt;code>*Ts.values&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>write_field&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="write_field">&lt;/span>
+&lt;a href="#write_field" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">write_field&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">T&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Writable&lt;/span>&lt;span class="p">](&lt;/span>&lt;span class="n">mut&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">column&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">T&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">is_last&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Bool&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Write a single field, delimited by the configured delimiter.
+&lt;/summary>
+&lt;strong>Parameters:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>T&lt;/strong> (&lt;code>Writable&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>column&lt;/strong> (&lt;code>T&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>is_last&lt;/strong> (&lt;code>Bool&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>serialize&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="serialize">&lt;/span>
+&lt;a href="#serialize" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">serialize&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">T&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ToDelimited&lt;/span>&lt;span class="p">](&lt;/span>&lt;span class="n">mut&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">value&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">T&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Write a struct that implements &lt;code>ToDelimted&lt;/code> to the underlying writer.
+&lt;/summary>
+&lt;strong>Parameters:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>T&lt;/strong> (&lt;code>ToDelimited&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>value&lt;/strong> (&lt;code>T&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details></description></item><item><title>FromDelimited</title><link>https://extramojo.github.io/ExtraMojo/extramojo/io/delimited/FromDelimited/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://extramojo.github.io/ExtraMojo/extramojo/io/delimited/FromDelimited/</guid><description>
+&lt;p>Mojo trait &lt;a href="https://github.com/ExtraMojo/ExtraMojo/blob/main/extramojo/io/delimited.mojo" target="_blank" rel="noopener">🡭&lt;/a>&lt;/p>
+&lt;h1>&lt;code>FromDelimited&lt;/code>&lt;/h1>&lt;p>Create an instance of &lt;code>Self&lt;/code> from the iterator over &lt;code>Span[UInt8]&lt;/code> bytes.&lt;/p>
+&lt;h2>Implemented traits&lt;span class="hx-absolute -hx-mt-20" id="implemented-traits">&lt;/span>
+&lt;a href="#implemented-traits" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>&lt;code>AnyType&lt;/code>, &lt;code>Copyable&lt;/code>, &lt;code>Deinitable&lt;/code>, &lt;code>Movable&lt;/code>&lt;/p>
+&lt;h2>Methods&lt;span class="hx-absolute -hx-mt-20" id="methods">&lt;/span>
+&lt;a href="#methods" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;script lang="JS">
+function expandAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = true;
+}
+}
+function collapseAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = false;
+}
+}
+&lt;/script>
+&lt;a class="" onclick="expandAll()" style="cursor:pointer; text-decoration: none;" title="Expand all">➕&lt;/a>&amp;nbsp;
+&lt;a class="" onclick="collapseAll()" style="cursor:pointer; text-decoration: none;" title="Collapse all">➖&lt;/a>
+&lt;h3>&lt;code>__init__&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="__init__">&lt;/span>
+&lt;a href="#__init__" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__init__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">out&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">copy&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Self&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Create a new instance of the value by copying an existing one.
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>copy&lt;/strong> (&lt;code>_Self&lt;/code>): The value to copy.&lt;/li>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>_Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>_Self&lt;/code>&lt;/p>
+&lt;/details>
+&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__init__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">out&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">deinit&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">move&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Self&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Create a new instance of the value by moving the value of another.
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>move&lt;/strong> (&lt;code>_Self&lt;/code>): The value to move.&lt;/li>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>_Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>_Self&lt;/code>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>from_delimited&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="from_delimited">&lt;/span>
+&lt;a href="#from_delimited" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@staticmethod&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">from_delimited&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">mut&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">data&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">SplitIterator&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">header_values&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Optional&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">List&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">]]&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">None&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Self&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>data&lt;/strong> (&lt;code>SplitIterator&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>header_values&lt;/strong> (&lt;code>Optional[List[String]]&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>_Self&lt;/code>&lt;/p>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>copy&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="copy">&lt;/span>
+&lt;a href="#copy" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">copy&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Self&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Explicitly construct a copy of self, a convenience method for &lt;code>Self(copy=self)&lt;/code> when the type is inconvenient to write out.
+&lt;/summary>
+Overriding this method is not allowed.&lt;/p>
+&lt;p>&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>_Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>_Self&lt;/code>: A copy of this value.&lt;/p>
+&lt;/details></description></item><item><title>ToDelimited</title><link>https://extramojo.github.io/ExtraMojo/extramojo/io/delimited/ToDelimited/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://extramojo.github.io/ExtraMojo/extramojo/io/delimited/ToDelimited/</guid><description>
+&lt;p>Mojo trait &lt;a href="https://github.com/ExtraMojo/ExtraMojo/blob/main/extramojo/io/delimited.mojo" target="_blank" rel="noopener">🡭&lt;/a>&lt;/p>
+&lt;h1>&lt;code>ToDelimited&lt;/code>&lt;/h1>&lt;h2>Implemented traits&lt;span class="hx-absolute -hx-mt-20" id="implemented-traits">&lt;/span>
+&lt;a href="#implemented-traits" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>&lt;code>AnyType&lt;/code>&lt;/p>
+&lt;h2>Methods&lt;span class="hx-absolute -hx-mt-20" id="methods">&lt;/span>
+&lt;a href="#methods" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;script lang="JS">
+function expandAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = true;
+}
+}
+function collapseAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = false;
+}
+}
+&lt;/script>
+&lt;a class="" onclick="expandAll()" style="cursor:pointer; text-decoration: none;" title="Expand all">➕&lt;/a>&amp;nbsp;
+&lt;a class="" onclick="collapseAll()" style="cursor:pointer; text-decoration: none;" title="Collapse all">➖&lt;/a>
+&lt;h3>&lt;code>write_to_delimited&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="write_to_delimited">&lt;/span>
+&lt;a href="#write_to_delimited" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">write_to_delimited&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">mut&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">writer&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">DelimWriter&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Write &lt;code>self&lt;/code> to the passed in &lt;code>writer&lt;/code>.
+&lt;/summary>
+This should probably be done with &lt;code>DelimWriter.write_record&lt;/code> or a series of
+&lt;code>DelimWriter.write_field&lt;/code> calls.&lt;/p>
+&lt;p>&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>_Self&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>writer&lt;/strong> (&lt;code>DelimWriter&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>write_header&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="write_header">&lt;/span>
+&lt;a href="#write_header" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">write_header&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">mut&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">writer&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">DelimWriter&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Write &lt;code>self&lt;/code>s headers to the passed in &lt;code>writer&lt;/code>.
+&lt;/summary>
+This should probably be done with &lt;code>DelimWriter.write_record&lt;/code> or a series of
+&lt;code>DelimWriter.write_field&lt;/code> calls.&lt;/p>
+&lt;p>&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>_Self&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>writer&lt;/strong> (&lt;code>DelimWriter&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details></description></item></channel></rss>

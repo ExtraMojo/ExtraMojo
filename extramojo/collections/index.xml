@@ -1,0 +1,33 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>ExtraMojo – collections</title><link>https://extramojo.github.io/ExtraMojo/extramojo/collections/</link><description>Recent content in collections on ExtraMojo</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="https://extramojo.github.io/ExtraMojo/extramojo/collections/index.xml" rel="self" type="application/rss+xml"/><item><title>bitvec</title><link>https://extramojo.github.io/ExtraMojo/extramojo/collections/bitvec/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://extramojo.github.io/ExtraMojo/extramojo/collections/bitvec/</guid><description>
+&lt;p>Mojo module &lt;a href="https://github.com/ExtraMojo/ExtraMojo/blob/main/extramojo/collections/bitvec.mojo" target="_blank" rel="noopener">🡭&lt;/a>&lt;/p>
+&lt;h1>&lt;code>bitvec&lt;/code>&lt;/h1>&lt;p>Provides a growable bitfield.&lt;/p>
+&lt;p>Optimized for space (1 bit per element) and speed (O(1) operations).
+Offers set/clear/test/toggle and fast population count. The underlying
+storage grows automatically but does not shrink unless &lt;code>shrink_to_fit&lt;/code>
+is called (not implemented yet).&lt;/p>
+&lt;p>Example:&lt;/p>
+&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">bv&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">BitVec&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">length&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mi">128&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">fill&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">False&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1"># 128-bit set, all clear&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">bv.set&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">42&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1"># Mark value 42 as present.&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">if&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">bv&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">42&lt;/span>&lt;span class="p">]:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1"># Check membership, could use bv.test(42)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;hit&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1"># Prints &amp;#34;hit&amp;#34;.&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">bv.clear&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">42&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1"># Remove 42.&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">bv.count_set_bits&lt;/span>&lt;span class="p">())&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1"># Prints 0.&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;h2>Structs&lt;span class="hx-absolute -hx-mt-20" id="structs">&lt;/span>
+&lt;a href="#structs" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;a href="https://extramojo.github.io/ExtraMojo/extramojo/collections/bitvec/BitVec/" >&lt;code>BitVec&lt;/code>&lt;/a>: A growable bitfield.&lt;/li>
+&lt;/ul></description></item><item><title>bbhash</title><link>https://extramojo.github.io/ExtraMojo/extramojo/collections/bbhash/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://extramojo.github.io/ExtraMojo/extramojo/collections/bbhash/</guid><description>
+&lt;p>Mojo package &lt;a href="https://github.com/ExtraMojo/ExtraMojo/blob/main/extramojo/collections/bbhash/__init__.mojo" target="_blank" rel="noopener">🡭&lt;/a>&lt;/p>
+&lt;h1>&lt;code>bbhash&lt;/code>&lt;/h1>&lt;h2>Modules&lt;span class="hx-absolute -hx-mt-20" id="modules">&lt;/span>
+&lt;a href="#modules" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;a href="https://extramojo.github.io/ExtraMojo/extramojo/collections/bbhash/bbhash/" >&lt;code>bbhash&lt;/code>&lt;/a>: Provides a BBHash implementation.&lt;/li>
+&lt;li>&lt;a href="https://extramojo.github.io/ExtraMojo/extramojo/collections/bbhash/hash/" >&lt;code>hash&lt;/code>&lt;/a>: Hash functions.&lt;/li>
+&lt;/ul></description></item></channel></rss>

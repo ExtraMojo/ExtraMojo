@@ -1,0 +1,590 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>ExtraMojo – buffered</title><link>https://extramojo.github.io/ExtraMojo/extramojo/io/buffered/</link><description>Recent content in buffered on ExtraMojo</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="https://extramojo.github.io/ExtraMojo/extramojo/io/buffered/index.xml" rel="self" type="application/rss+xml"/><item><title>BufferedReader</title><link>https://extramojo.github.io/ExtraMojo/extramojo/io/buffered/BufferedReader/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://extramojo.github.io/ExtraMojo/extramojo/io/buffered/BufferedReader/</guid><description>
+&lt;p>Mojo struct &lt;a href="https://github.com/ExtraMojo/ExtraMojo/blob/main/extramojo/io/buffered.mojo" target="_blank" rel="noopener">🡭&lt;/a>&lt;/p>
+&lt;h1>&lt;code>BufferedReader&lt;/code>&lt;/h1>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@memory_only&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">struct&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nc">BufferedReader&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>BufferedReader for readying lines and bytes from a file in a buffered way.&lt;/p>
+&lt;h2>Example&lt;span class="hx-absolute -hx-mt-20" id="example">&lt;/span>
+&lt;a href="#example" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="kn">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">extramojo.io.buffered&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">BufferedReader&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">read_bytes&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">imm&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">file&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">raises&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">List&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">UInt8&lt;/span>&lt;span class="p">]:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">fh&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">open&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">file&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;r&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">reader&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">BufferedReader&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">fh&lt;/span>&lt;span class="o">^&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">buffer_capacity&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mi">50&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">buffer&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">List&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">UInt8&lt;/span>&lt;span class="p">](&lt;/span>&lt;span class="n">capacity&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mi">125&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">for&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">_&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="ow">in&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">range&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">125&lt;/span>&lt;span class="p">):&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">buffer.append&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">found_file&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">List&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">UInt8&lt;/span>&lt;span class="p">]()&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c1"># Read bytes from the buf reader, copy to found&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">bytes_read&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">while&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">True&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">bytes_read&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">reader.read_bytes&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">buffer&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">if&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">bytes_read&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">==&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">break&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">found_file.extend&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">buffer&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="n">bytes_read&lt;/span>&lt;span class="p">])&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">found_file&lt;/span>&lt;span class="o">^&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;h2>Fields&lt;span class="hx-absolute -hx-mt-20" id="fields">&lt;/span>
+&lt;a href="#fields" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;strong>fh&lt;/strong> (&lt;code>FileHandle&lt;/code>): The internal filehandle to read from.&lt;/li>
+&lt;li>&lt;strong>buffer&lt;/strong> (&lt;code>Pointer[UInt8, MutUntrackedOrigin]&lt;/code>): The internal buffer.&lt;/li>
+&lt;li>&lt;strong>file_offset&lt;/strong> (&lt;code>Int&lt;/code>): Current offset into the file.&lt;/li>
+&lt;li>&lt;strong>buffer_offset&lt;/strong> (&lt;code>Int&lt;/code>): Current offset into the buffer.&lt;/li>
+&lt;li>&lt;strong>buffer_capacity&lt;/strong> (&lt;code>Int&lt;/code>): Total capacity of the buffer.&lt;/li>
+&lt;li>&lt;strong>buffer_len&lt;/strong> (&lt;code>Int&lt;/code>): Total filled capacity of the buffer.&lt;/li>
+&lt;/ul>
+&lt;h2>Implemented traits&lt;span class="hx-absolute -hx-mt-20" id="implemented-traits">&lt;/span>
+&lt;a href="#implemented-traits" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>&lt;code>AnyType&lt;/code>, &lt;code>Deinitable&lt;/code>, &lt;code>Movable&lt;/code>&lt;/p>
+&lt;h2>Methods&lt;span class="hx-absolute -hx-mt-20" id="methods">&lt;/span>
+&lt;a href="#methods" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;script lang="JS">
+function expandAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = true;
+}
+}
+function collapseAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = false;
+}
+}
+&lt;/script>
+&lt;a class="" onclick="expandAll()" style="cursor:pointer; text-decoration: none;" title="Expand all">➕&lt;/a>&amp;nbsp;
+&lt;a class="" onclick="collapseAll()" style="cursor:pointer; text-decoration: none;" title="Collapse all">➖&lt;/a>
+&lt;h3>&lt;code>__init__&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="__init__">&lt;/span>
+&lt;a href="#__init__" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__init__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">out&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">fh&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">FileHandle&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">buffer_capacity&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">Int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">Int&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">131072&lt;/span>&lt;span class="p">))&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Create a &lt;code>BufferedReader&lt;/code>.
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>fh&lt;/strong> (&lt;code>FileHandle&lt;/code>): The filehandle to read from.&lt;/li>
+&lt;li>&lt;strong>buffer_capacity&lt;/strong> (&lt;code>Int&lt;/code>): The size of the buffer to use.&lt;/li>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Self&lt;/code>&lt;/p>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details>
+&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__init__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">out&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">deinit&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">move&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Self&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>move&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Self&lt;/code>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>__deinit__&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="__deinit__">&lt;/span>
+&lt;a href="#__deinit__" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">__deinit__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">deinit&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;/details>
+&lt;h3>&lt;code>__enter__&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="__enter__">&lt;/span>
+&lt;a href="#__enter__" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__enter__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">self&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Self&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Self&lt;/code>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>read_bytes&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="read_bytes">&lt;/span>
+&lt;a href="#read_bytes" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">read_bytes&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">mut&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">mut&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">buffer&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">List&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">UInt8&lt;/span>&lt;span class="p">])&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">Int&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Read up to &lt;code>len(buffer)&lt;/code> bytes.
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>buffer&lt;/strong> (&lt;code>List[UInt8]&lt;/code>): The buffer to read into. The &lt;code>len&lt;/code> of the &lt;code>buffer&lt;/code> determines how many bytes will be read.&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Int&lt;/code>: This returns the number of bytes read.
+If the number of bytes read is less then &lt;code>len(buffer)&lt;/code> then EOF has been reached.&lt;/p>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>read_until&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="read_until">&lt;/span>
+&lt;a href="#read_until" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">read_until&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">mut&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">mut&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">buffer&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">List&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">UInt8&lt;/span>&lt;span class="p">],&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">char&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">UInt&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">UInt&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">10&lt;/span>&lt;span class="p">))&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">Int&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Fill the given &lt;code>line_buffer&lt;/code> until the given &lt;code>char&lt;/code> is hit, or EOF.
+&lt;/summary>
+&lt;strong>Note&lt;/strong>: the callee is responsible for clearing (or not) the buffer between calls to &lt;code>read_until&lt;/code>.&lt;/p>
+&lt;p>&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>buffer&lt;/strong> (&lt;code>List[UInt8]&lt;/code>): The buffer to filled with any bytes found before &lt;code>char&lt;/code> is hit.&lt;/li>
+&lt;li>&lt;strong>char&lt;/strong> (&lt;code>UInt&lt;/code>): The character to use as the terminator.&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Int&lt;/code>: The number of bytes read.&lt;/p>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details></description></item><item><title>BufferedWriter</title><link>https://extramojo.github.io/ExtraMojo/extramojo/io/buffered/BufferedWriter/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://extramojo.github.io/ExtraMojo/extramojo/io/buffered/BufferedWriter/</guid><description>
+&lt;p>Mojo struct &lt;a href="https://github.com/ExtraMojo/ExtraMojo/blob/main/extramojo/io/buffered.mojo" target="_blank" rel="noopener">🡭&lt;/a>&lt;/p>
+&lt;h1>&lt;code>BufferedWriter&lt;/code>&lt;/h1>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@memory_only&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">struct&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nc">BufferedWriter&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">W&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Writer&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">&amp;amp;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Deinitable&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">&amp;amp;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">Movable&lt;/span>&lt;span class="p">]&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>A BufferedWriter.&lt;/p>
+&lt;pre>&lt;code>## Example
+```mojo
+from extramojo.io.buffered import BufferedWriter
+def write_to_file(imm file: String, imm expected_lines: List[String]) raises:
+var fh = BufferedWriter(open(String(file), &amp;quot;w&amp;quot;), buffer_capacity=128)
+for i in range(len(expected_lines)):
+fh.write_bytes(expected_lines[i].as_bytes())
+fh.write_bytes(&amp;quot;
+&lt;/code>&lt;/pre>
+&lt;p>&amp;ldquo;.as_bytes())
+fh.flush()
+fh.close()
+```&lt;/p>
+&lt;h2>Parameters&lt;span class="hx-absolute -hx-mt-20" id="parameters">&lt;/span>
+&lt;a href="#parameters" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;strong>W&lt;/strong> (&lt;code>Writer &amp;amp; Deinitable &amp;amp; Movable&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;h2>Fields&lt;span class="hx-absolute -hx-mt-20" id="fields">&lt;/span>
+&lt;a href="#fields" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;strong>inner&lt;/strong> (&lt;code>W&lt;/code>): The inner file handle to write to.&lt;/li>
+&lt;li>&lt;strong>buffer&lt;/strong> (&lt;code>List[UInt8]&lt;/code>): The inner buffer.&lt;/li>
+&lt;li>&lt;strong>buffer_capacity&lt;/strong> (&lt;code>Int&lt;/code>): The capacity of the inner buffer.&lt;/li>
+&lt;li>&lt;strong>buffer_len&lt;/strong> (&lt;code>Int&lt;/code>): The number of bytes currently stored in the inner buffer.&lt;/li>
+&lt;/ul>
+&lt;h2>Implemented traits&lt;span class="hx-absolute -hx-mt-20" id="implemented-traits">&lt;/span>
+&lt;a href="#implemented-traits" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>&lt;code>AnyType&lt;/code>, &lt;code>Deinitable&lt;/code>, &lt;code>Movable&lt;/code>, &lt;code>Writer&lt;/code>&lt;/p>
+&lt;h2>Methods&lt;span class="hx-absolute -hx-mt-20" id="methods">&lt;/span>
+&lt;a href="#methods" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;script lang="JS">
+function expandAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = true;
+}
+}
+function collapseAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = false;
+}
+}
+&lt;/script>
+&lt;a class="" onclick="expandAll()" style="cursor:pointer; text-decoration: none;" title="Expand all">➕&lt;/a>&amp;nbsp;
+&lt;a class="" onclick="collapseAll()" style="cursor:pointer; text-decoration: none;" title="Collapse all">➖&lt;/a>
+&lt;h3>&lt;code>__init__&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="__init__">&lt;/span>
+&lt;a href="#__init__" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__init__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">out&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">writer&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">W&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">buffer_capacity&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">Int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">Int&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">131072&lt;/span>&lt;span class="p">))&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Create a &lt;code>BufferedReader&lt;/code>.
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>writer&lt;/strong> (&lt;code>W&lt;/code>): The writer to write to.&lt;/li>
+&lt;li>&lt;strong>buffer_capacity&lt;/strong> (&lt;code>Int&lt;/code>): The capacity of the inner buffer to use.&lt;/li>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Self&lt;/code>&lt;/p>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details>
+&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__init__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">out&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">deinit&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">move&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Self&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>move&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Self&lt;/code>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>__deinit__&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="__deinit__">&lt;/span>
+&lt;a href="#__deinit__" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">__deinit__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">deinit&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;/details>
+&lt;h3>&lt;code>__enter__&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="__enter__">&lt;/span>
+&lt;a href="#__enter__" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__enter__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">self&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Self&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Self&lt;/code>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>close&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="close">&lt;/span>
+&lt;a href="#close" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">close&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">mut&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>write_string&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="write_string">&lt;/span>
+&lt;a href="#write_string" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">write_string&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">mut&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">string&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">StringSpan&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>string&lt;/strong> (&lt;code>StringSpan&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;/details>
+&lt;h3>&lt;code>write_bytes&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="write_bytes">&lt;/span>
+&lt;a href="#write_bytes" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">write_bytes&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">mut&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">bytes&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Span&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">UInt8&lt;/span>&lt;span class="p">])&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Write bytes to this writer.
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>bytes&lt;/strong> (&lt;code>Span[UInt8]&lt;/code>): The bytes that will be written to the underlying buffer.&lt;/li>
+&lt;/ul>
+&lt;/details>
+&lt;h3>&lt;code>write&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="write">&lt;/span>
+&lt;a href="#write" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">write&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="n">Ts&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Writable&lt;/span>&lt;span class="p">](&lt;/span>&lt;span class="n">mut&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="n">args&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="n">Ts.values&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Implement write.
+&lt;/summary>
+&lt;strong>Parameters:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>*&lt;strong>Ts&lt;/strong> (&lt;code>Writable&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;li>*&lt;strong>args&lt;/strong> (&lt;code>*Ts.values&lt;/code>): Any &lt;code>Writable&lt;/code> values that will be written to the writer.&lt;/li>
+&lt;/ul>
+&lt;/details>
+&lt;h3>&lt;code>flush&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="flush">&lt;/span>
+&lt;a href="#flush" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">flush&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">mut&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Write any remaining bytes in the current buffer, then clear the buffer.
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;/details></description></item><item><title>for_each_line</title><link>https://extramojo.github.io/ExtraMojo/extramojo/io/buffered/for_each_line/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://extramojo.github.io/ExtraMojo/extramojo/io/buffered/for_each_line/</guid><description>
+&lt;p>Mojo function &lt;a href="https://github.com/ExtraMojo/ExtraMojo/blob/main/extramojo/io/buffered.mojo" target="_blank" rel="noopener">🡭&lt;/a>&lt;/p>
+&lt;h1>&lt;code>for_each_line&lt;/code>&lt;/h1>&lt;script lang="JS">
+function expandAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = true;
+}
+}
+function collapseAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = false;
+}
+}
+&lt;/script>
+&lt;a class="" onclick="expandAll()" style="cursor:pointer; text-decoration: none;" title="Expand all">➕&lt;/a>&amp;nbsp;
+&lt;a class="" onclick="collapseAll()" style="cursor:pointer; text-decoration: none;" title="Collapse all">➖&lt;/a>
+&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">for_each_line&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">func&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">def&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Span&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">UInt8&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">origin_of&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">origin&lt;/span>&lt;span class="p">)],&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">Int&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">Int&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">capturing&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">thin&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">None&lt;/span>&lt;span class="p">](&lt;/span>&lt;span class="n">path&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">buf_size&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">Int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">Int&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">131072&lt;/span>&lt;span class="p">))&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Call the provided callback on each line.
+&lt;/summary>
+The callback will be given a buffer, and the [start, end) of where the line is in that buffer.&lt;/p>
+&lt;p>&lt;strong>Parameters:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>func&lt;/strong> (&lt;code>def(Span[UInt8, origin_of(origin)], Int, Int) capturing thin -&amp;gt; None&lt;/code>): The callback to run for each line.&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>path&lt;/strong> (&lt;code>String&lt;/code>): The file path to open and read.&lt;/li>
+&lt;li>&lt;strong>buf_size&lt;/strong> (&lt;code>Int&lt;/code>): The size of the buffer to use.&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details></description></item><item><title>get_next_line</title><link>https://extramojo.github.io/ExtraMojo/extramojo/io/buffered/get_next_line/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://extramojo.github.io/ExtraMojo/extramojo/io/buffered/get_next_line/</guid><description>
+&lt;p>Mojo function &lt;a href="https://github.com/ExtraMojo/ExtraMojo/blob/main/extramojo/io/buffered.mojo" target="_blank" rel="noopener">🡭&lt;/a>&lt;/p>
+&lt;h1>&lt;code>get_next_line&lt;/code>&lt;/h1>&lt;script lang="JS">
+function expandAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = true;
+}
+}
+function collapseAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = false;
+}
+}
+&lt;/script>
+&lt;a class="" onclick="expandAll()" style="cursor:pointer; text-decoration: none;" title="Expand all">➕&lt;/a>&amp;nbsp;
+&lt;a class="" onclick="collapseAll()" style="cursor:pointer; text-decoration: none;" title="Collapse all">➖&lt;/a>
+&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">get_next_line&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">is_mutable&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Bool&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">//&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">origin&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Origin&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">mut&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">is_mutable&lt;/span>&lt;span class="p">]](&lt;/span>&lt;span class="n">buffer&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Span&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">UInt8&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">origin&lt;/span>&lt;span class="p">],&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">start&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">Int&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Span&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">UInt8&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">origin&lt;/span>&lt;span class="p">]&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Function to get the next line using either SIMD instruction (default) or iteratively.
+&lt;/summary>
+&lt;strong>Parameters:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>is_mutable&lt;/strong> (&lt;code>Bool&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>origin&lt;/strong> (&lt;code>Origin[mut=is_mutable]&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>buffer&lt;/strong> (&lt;code>Span[UInt8, origin]&lt;/code>): The buffer to search for the next newline character.&lt;/li>
+&lt;li>&lt;strong>start&lt;/strong> (&lt;code>Int&lt;/code>): The start position to use inside the buffer.&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Span[UInt8, origin]&lt;/code>: A span of bytes from [start, newline).&lt;/p>
+&lt;/details></description></item><item><title>read_lines</title><link>https://extramojo.github.io/ExtraMojo/extramojo/io/buffered/read_lines/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://extramojo.github.io/ExtraMojo/extramojo/io/buffered/read_lines/</guid><description>
+&lt;p>Mojo function &lt;a href="https://github.com/ExtraMojo/ExtraMojo/blob/main/extramojo/io/buffered.mojo" target="_blank" rel="noopener">🡭&lt;/a>&lt;/p>
+&lt;h1>&lt;code>read_lines&lt;/code>&lt;/h1>&lt;script lang="JS">
+function expandAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = true;
+}
+}
+function collapseAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = false;
+}
+}
+&lt;/script>
+&lt;a class="" onclick="expandAll()" style="cursor:pointer; text-decoration: none;" title="Expand all">➕&lt;/a>&amp;nbsp;
+&lt;a class="" onclick="collapseAll()" style="cursor:pointer; text-decoration: none;" title="Collapse all">➖&lt;/a>
+&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">read_lines&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">path&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">buf_size&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">Int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">Int&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">131072&lt;/span>&lt;span class="p">))&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">List&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">List&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">UInt8&lt;/span>&lt;span class="p">]]&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Read all the lines in the file and return them as a List of Lists of bytes.
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>path&lt;/strong> (&lt;code>String&lt;/code>): The file path to open and read.&lt;/li>
+&lt;li>&lt;strong>buf_size&lt;/strong> (&lt;code>Int&lt;/code>): The size of the buffer to use.&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>List[List[UInt8]]&lt;/code>: A list of lines, where each line is a &lt;code>List[UInt8]&lt;/code>.&lt;/p>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details></description></item></channel></rss>

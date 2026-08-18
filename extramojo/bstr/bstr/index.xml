@@ -1,0 +1,692 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>ExtraMojo – bstr</title><link>https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/</link><description>Recent content in bstr on ExtraMojo</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/index.xml" rel="self" type="application/rss+xml"/><item><title>SplitIterator</title><link>https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/SplitIterator/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/SplitIterator/</guid><description>
+&lt;p>Mojo struct &lt;a href="https://github.com/ExtraMojo/ExtraMojo/blob/main/extramojo/bstr/bstr.mojo" target="_blank" rel="noopener">🡭&lt;/a>&lt;/p>
+&lt;h1>&lt;code>SplitIterator&lt;/code>&lt;/h1>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@memory_only&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">struct&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nc">SplitIterator&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">is_mutable&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Bool&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">//&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">origin&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Origin&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">mut&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">is_mutable&lt;/span>&lt;span class="p">]]&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;pre>&lt;code>Get an iterator the yields the splits from the input `to_split` string.
+TODO: these test run fine in the test module, but not in doctests.
+```
+from std.testing import assert_equal
+from extramojo.bstr.bstr import SplitIterator
+var input = &amp;quot;ABCD EFGH IJKL
+&lt;/code>&lt;/pre>
+&lt;p>MNOP&amp;quot;.as_bytes()
+var expected = List(
+&amp;ldquo;ABCD&amp;rdquo;.as_bytes(), &amp;ldquo;EFGH&amp;rdquo;.as_bytes(), &amp;ldquo;IJKL
+MNOP&amp;rdquo;.as_bytes()
+)
+var output = List&lt;a href="" >Span[UInt8, ImmStaticOrigin]&lt;/a>
+for value in SplitIterator(input, ord(&amp;quot; &amp;ldquo;)):
+output.append(value)
+for i in range(len(expected)):
+assert_equal(StringSpan(unsafe_from_utf8=output[i]), StringSpan(unsafe_from_utf8=expected[i]))
+```&lt;/p>
+&lt;pre>&lt;code>```
+from std.collections.string import StringSpan
+from std.testing import assert_equal
+from extramojo.bstr.bstr import SplitIterator
+var input = &amp;quot;ABCD EFGH IJKL
+&lt;/code>&lt;/pre>
+&lt;p>MNOP&amp;rdquo;.as_bytes()
+var expected = List(
+&amp;ldquo;ABCD&amp;rdquo;.as_bytes(), &amp;ldquo;EFGH&amp;rdquo;.as_bytes(), &amp;ldquo;IJKL
+MNOP&amp;rdquo;.as_bytes()
+)
+var iter = SplitIterator(input, ord(&amp;quot; &amp;ldquo;))
+var first = iter.&lt;strong>next&lt;/strong>()
+var peek = iter.peek()
+var second = iter.&lt;strong>next&lt;/strong>()
+assert_equal(StringSpan(unsafe_from_utf8=peek.value()), StringSpan(unsafe_from_utf8=second))
+assert_equal(StringSpan(unsafe_from_utf8=first), StringSpan(unsafe_from_utf8=expected[0]))
+assert_equal(StringSpan(unsafe_from_utf8=second), StringSpan(unsafe_from_utf8=expected[1]))
+```&lt;/p>
+&lt;h2>Parameters&lt;span class="hx-absolute -hx-mt-20" id="parameters">&lt;/span>
+&lt;a href="#parameters" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;strong>is_mutable&lt;/strong> (&lt;code>Bool&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>origin&lt;/strong> (&lt;code>Origin[mut=is_mutable]&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;h2>Fields&lt;span class="hx-absolute -hx-mt-20" id="fields">&lt;/span>
+&lt;a href="#fields" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;strong>inner&lt;/strong> (&lt;code>Span[UInt8, origin]&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>split_on&lt;/strong> (&lt;code>UInt8&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>current&lt;/strong> (&lt;code>Int&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>len&lt;/strong> (&lt;code>Int&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;h2>Implemented traits&lt;span class="hx-absolute -hx-mt-20" id="implemented-traits">&lt;/span>
+&lt;a href="#implemented-traits" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>&lt;code>AnyType&lt;/code>, &lt;code>Copyable&lt;/code>, &lt;code>Deinitable&lt;/code>, &lt;code>Movable&lt;/code>&lt;/p>
+&lt;h2>Methods&lt;span class="hx-absolute -hx-mt-20" id="methods">&lt;/span>
+&lt;a href="#methods" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;script lang="JS">
+function expandAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = true;
+}
+}
+function collapseAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = false;
+}
+}
+&lt;/script>
+&lt;a class="" onclick="expandAll()" style="cursor:pointer; text-decoration: none;" title="Expand all">➕&lt;/a>&amp;nbsp;
+&lt;a class="" onclick="collapseAll()" style="cursor:pointer; text-decoration: none;" title="Collapse all">➖&lt;/a>
+&lt;h3>&lt;code>__init__&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="__init__">&lt;/span>
+&lt;a href="#__init__" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__init__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">out&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">to_split&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Span&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">UInt8&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">origin&lt;/span>&lt;span class="p">],&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">split_on&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">UInt8&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>to_split&lt;/strong> (&lt;code>Span[UInt8, origin]&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>split_on&lt;/strong> (&lt;code>UInt8&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Self&lt;/code>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>__iter__&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="__iter__">&lt;/span>
+&lt;a href="#__iter__" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__iter__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">self&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Self&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Self&lt;/code>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>__next__&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="__next__">&lt;/span>
+&lt;a href="#__next__" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__next__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">mut&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Span&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">UInt8&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">origin&lt;/span>&lt;span class="p">]&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Span[UInt8, origin]&lt;/code>&lt;/p>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>next&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="next">&lt;/span>
+&lt;a href="#next" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">next&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">mut&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Span&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">UInt8&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">origin&lt;/span>&lt;span class="p">]&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Span[UInt8, origin]&lt;/code>&lt;/p>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details></description></item><item><title>SplitIteratorPos</title><link>https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/SplitIteratorPos/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/SplitIteratorPos/</guid><description>
+&lt;p>Mojo struct &lt;a href="https://github.com/ExtraMojo/ExtraMojo/blob/main/extramojo/bstr/bstr.mojo" target="_blank" rel="noopener">🡭&lt;/a>&lt;/p>
+&lt;h1>&lt;code>SplitIteratorPos&lt;/code>&lt;/h1>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@memory_only&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">struct&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nc">SplitIteratorPos&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">is_mutable&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Bool&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">//&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">origin&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Origin&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">mut&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">is_mutable&lt;/span>&lt;span class="p">]]&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;h2>Aliases&lt;span class="hx-absolute -hx-mt-20" id="aliases">&lt;/span>
+&lt;a href="#aliases" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;code>IteratorType[iterable_mut: Bool, //, iterable_origin: Origin[mut=iterable_mut]]: Iterator = SplitIteratorPos[origin]&lt;/code>&lt;/li>
+&lt;li>&lt;code>Element = StartEnd&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h2>Parameters&lt;span class="hx-absolute -hx-mt-20" id="parameters">&lt;/span>
+&lt;a href="#parameters" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;strong>is_mutable&lt;/strong> (&lt;code>Bool&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>origin&lt;/strong> (&lt;code>Origin[mut=is_mutable]&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;h2>Fields&lt;span class="hx-absolute -hx-mt-20" id="fields">&lt;/span>
+&lt;a href="#fields" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;strong>inner&lt;/strong> (&lt;code>Span[UInt8, origin]&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>split_on&lt;/strong> (&lt;code>UInt8&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>current&lt;/strong> (&lt;code>Int&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>len&lt;/strong> (&lt;code>Int&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;h2>Implemented traits&lt;span class="hx-absolute -hx-mt-20" id="implemented-traits">&lt;/span>
+&lt;a href="#implemented-traits" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>&lt;code>AnyType&lt;/code>, &lt;code>Copyable&lt;/code>, &lt;code>Deinitable&lt;/code>, &lt;code>Iterable&lt;/code>, &lt;code>Iterator&lt;/code>, &lt;code>Movable&lt;/code>&lt;/p>
+&lt;h2>Methods&lt;span class="hx-absolute -hx-mt-20" id="methods">&lt;/span>
+&lt;a href="#methods" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;script lang="JS">
+function expandAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = true;
+}
+}
+function collapseAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = false;
+}
+}
+&lt;/script>
+&lt;a class="" onclick="expandAll()" style="cursor:pointer; text-decoration: none;" title="Expand all">➕&lt;/a>&amp;nbsp;
+&lt;a class="" onclick="collapseAll()" style="cursor:pointer; text-decoration: none;" title="Collapse all">➖&lt;/a>
+&lt;h3>&lt;code>__init__&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="__init__">&lt;/span>
+&lt;a href="#__init__" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__init__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">out&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">to_split&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Span&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">UInt8&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">origin&lt;/span>&lt;span class="p">],&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">split_on&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">UInt8&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>to_split&lt;/strong> (&lt;code>Span[UInt8, origin]&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>split_on&lt;/strong> (&lt;code>UInt8&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Self&lt;/code>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>__iter__&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="__iter__">&lt;/span>
+&lt;a href="#__iter__" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__iter__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ref&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Self&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Self&lt;/code>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>__next__&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="__next__">&lt;/span>
+&lt;a href="#__next__" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__next__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">mut&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Self.Element&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Self.Element&lt;/code>&lt;/p>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>next&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="next">&lt;/span>
+&lt;a href="#next" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">next&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">mut&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">StartEnd&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>StartEnd&lt;/code>&lt;/p>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details></description></item><item><title>StartEnd</title><link>https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/StartEnd/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/StartEnd/</guid><description>
+&lt;p>Mojo struct &lt;a href="https://github.com/ExtraMojo/ExtraMojo/blob/main/extramojo/bstr/bstr.mojo" target="_blank" rel="noopener">🡭&lt;/a>&lt;/p>
+&lt;h1>&lt;code>StartEnd&lt;/code>&lt;/h1>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@register_passable&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">struct&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nc">StartEnd&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>Helper struct for tracking start/end coords in &lt;code>SplitIterator&lt;/code>.&lt;/p>
+&lt;h2>Fields&lt;span class="hx-absolute -hx-mt-20" id="fields">&lt;/span>
+&lt;a href="#fields" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;strong>start&lt;/strong> (&lt;code>Int&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>end&lt;/strong> (&lt;code>Int&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;h2>Implemented traits&lt;span class="hx-absolute -hx-mt-20" id="implemented-traits">&lt;/span>
+&lt;a href="#implemented-traits" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>&lt;code>AnyType&lt;/code>, &lt;code>Copyable&lt;/code>, &lt;code>Defaultable&lt;/code>, &lt;code>Deinitable&lt;/code>, &lt;code>ImplicitlyCopyable&lt;/code>, &lt;code>Movable&lt;/code>, &lt;code>RegisterPassable&lt;/code>&lt;/p>
+&lt;h2>Methods&lt;span class="hx-absolute -hx-mt-20" id="methods">&lt;/span>
+&lt;a href="#methods" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;script lang="JS">
+function expandAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = true;
+}
+}
+function collapseAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = false;
+}
+}
+&lt;/script>
+&lt;a class="" onclick="expandAll()" style="cursor:pointer; text-decoration: none;" title="Expand all">➕&lt;/a>&amp;nbsp;
+&lt;a class="" onclick="collapseAll()" style="cursor:pointer; text-decoration: none;" title="Collapse all">➖&lt;/a>
+&lt;h3>&lt;code>__init__&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="__init__">&lt;/span>
+&lt;a href="#__init__" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__init__&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Self&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Self&lt;/code>&lt;/p>
+&lt;/details></description></item><item><title>find</title><link>https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/find/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/find/</guid><description>
+&lt;p>Mojo function &lt;a href="https://github.com/ExtraMojo/ExtraMojo/blob/main/extramojo/bstr/bstr.mojo" target="_blank" rel="noopener">🡭&lt;/a>&lt;/p>
+&lt;h1>&lt;code>find&lt;/code>&lt;/h1>&lt;script lang="JS">
+function expandAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = true;
+}
+}
+function collapseAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = false;
+}
+}
+&lt;/script>
+&lt;a class="" onclick="expandAll()" style="cursor:pointer; text-decoration: none;" title="Expand all">➕&lt;/a>&amp;nbsp;
+&lt;a class="" onclick="collapseAll()" style="cursor:pointer; text-decoration: none;" title="Collapse all">➖&lt;/a>
+&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">find&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">haystack&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Span&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">UInt8&lt;/span>&lt;span class="p">],&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">needle&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Span&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">UInt8&lt;/span>&lt;span class="p">])&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Optional&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">Int&lt;/span>&lt;span class="p">]&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Look for the substring &lt;code>needle&lt;/code> in the haystack.
+&lt;/summary>
+This is not a terribly smart find implementation. It will use &lt;code>memchr&lt;/code> to find
+occurrences of the first byte in the &lt;code>needle&lt;/code>, it then checks the subsequent bytes to see
+if they match the rest of the needle.&lt;/p>
+&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="kn">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">std.testing&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">assert_equal&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kn">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">extramojo.bstr.bstr&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">find&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">haystack&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;ABCDEFGhijklmnop&amp;#34;&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">as_bytes&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">expected&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">4&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">answer&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">find&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">haystack&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;EFG&amp;#34;&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">as_bytes&lt;/span>&lt;span class="p">())&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">value&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">assert_equal&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">answer&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">expected&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>haystack&lt;/strong> (&lt;code>Span[UInt8]&lt;/code>): The bytes to be searched for the &lt;code>needle&lt;/code>.&lt;/li>
+&lt;li>&lt;strong>needle&lt;/strong> (&lt;code>Span[UInt8]&lt;/code>): The bytes to search for in the &lt;code>haystack&lt;/code>.&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Optional[Int]&lt;/code>: Index of the start of the first occurrence of needle.&lt;/p>
+&lt;/details></description></item><item><title>find_chr_all_occurrences</title><link>https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/find_chr_all_occurrences/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/find_chr_all_occurrences/</guid><description>
+&lt;p>Mojo function &lt;a href="https://github.com/ExtraMojo/ExtraMojo/blob/main/extramojo/bstr/bstr.mojo" target="_blank" rel="noopener">🡭&lt;/a>&lt;/p>
+&lt;h1>&lt;code>find_chr_all_occurrences&lt;/code>&lt;/h1>&lt;script lang="JS">
+function expandAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = true;
+}
+}
+function collapseAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = false;
+}
+}
+&lt;/script>
+&lt;a class="" onclick="expandAll()" style="cursor:pointer; text-decoration: none;" title="Expand all">➕&lt;/a>&amp;nbsp;
+&lt;a class="" onclick="collapseAll()" style="cursor:pointer; text-decoration: none;" title="Collapse all">➖&lt;/a>
+&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">find_chr_all_occurrences&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">haystack&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Span&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">UInt8&lt;/span>&lt;span class="p">],&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">chr&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">UInt8&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">List&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">Int&lt;/span>&lt;span class="p">]&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Find all the occurrences of &lt;code>chr&lt;/code> in the input buffer.
+&lt;/summary>&lt;/p>
+&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="kn">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">std.testing&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">assert_equal&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kn">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">extramojo.bstr.bstr&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">find_chr_all_occurrences&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">haystack&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;ATCGACCATCGAGATCATGTTTCAT&amp;#34;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">expected&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">List&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">Int&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">5&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">6&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">9&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">15&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">22&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">assert_equal&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">find_chr_all_occurrences&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">haystack.as_bytes&lt;/span>&lt;span class="p">(),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;C&amp;#34;&lt;/span>&lt;span class="p">)),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">expected&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>haystack&lt;/strong> (&lt;code>Span[UInt8]&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>chr&lt;/strong> (&lt;code>UInt8&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>List[Int]&lt;/code>&lt;/p>
+&lt;/details></description></item><item><title>is_ascii_lowercase</title><link>https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/is_ascii_lowercase/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/is_ascii_lowercase/</guid><description>
+&lt;p>Mojo function &lt;a href="https://github.com/ExtraMojo/ExtraMojo/blob/main/extramojo/bstr/bstr.mojo" target="_blank" rel="noopener">🡭&lt;/a>&lt;/p>
+&lt;h1>&lt;code>is_ascii_lowercase&lt;/code>&lt;/h1>&lt;script lang="JS">
+function expandAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = true;
+}
+}
+function collapseAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = false;
+}
+}
+&lt;/script>
+&lt;a class="" onclick="expandAll()" style="cursor:pointer; text-decoration: none;" title="Expand all">➕&lt;/a>&amp;nbsp;
+&lt;a class="" onclick="collapseAll()" style="cursor:pointer; text-decoration: none;" title="Collapse all">➖&lt;/a>
+&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">is_ascii_lowercase&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">value&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">UInt8&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Bool&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Check if a byte is ASCII lowercase.
+&lt;/summary>&lt;/p>
+&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="kn">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">std.testing&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">assert_true&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">assert_false&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kn">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">extramojo.bstr.bstr&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">is_ascii_lowercase&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">for&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ascii_letter&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="ow">in&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">range&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;A&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Z&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">):&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">assert_false&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">is_ascii_lowercase&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ascii_letter&lt;/span>&lt;span class="p">))&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">for&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ascii_letter&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="ow">in&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">range&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;a&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;z&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">):&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">assert_true&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">is_ascii_lowercase&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ascii_letter&lt;/span>&lt;span class="p">))&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">assert_false&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">is_ascii_lowercase&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">))&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>value&lt;/strong> (&lt;code>UInt8&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Bool&lt;/code>&lt;/p>
+&lt;/details></description></item><item><title>is_ascii_uppercase</title><link>https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/is_ascii_uppercase/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/is_ascii_uppercase/</guid><description>
+&lt;p>Mojo function &lt;a href="https://github.com/ExtraMojo/ExtraMojo/blob/main/extramojo/bstr/bstr.mojo" target="_blank" rel="noopener">🡭&lt;/a>&lt;/p>
+&lt;h1>&lt;code>is_ascii_uppercase&lt;/code>&lt;/h1>&lt;script lang="JS">
+function expandAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = true;
+}
+}
+function collapseAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = false;
+}
+}
+&lt;/script>
+&lt;a class="" onclick="expandAll()" style="cursor:pointer; text-decoration: none;" title="Expand all">➕&lt;/a>&amp;nbsp;
+&lt;a class="" onclick="collapseAll()" style="cursor:pointer; text-decoration: none;" title="Collapse all">➖&lt;/a>
+&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">is_ascii_uppercase&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">value&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">UInt8&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Bool&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Check if a byte is ASCII uppercase.
+&lt;/summary>&lt;/p>
+&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="kn">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">std.testing&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">assert_true&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">assert_false&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kn">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">extramojo.bstr.bstr&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">is_ascii_uppercase&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">for&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ascii_letter&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="ow">in&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">range&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;A&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Z&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">):&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">assert_true&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">is_ascii_uppercase&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ascii_letter&lt;/span>&lt;span class="p">))&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">for&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ascii_letter&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="ow">in&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">range&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;a&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;z&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">):&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">assert_false&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">is_ascii_uppercase&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ascii_letter&lt;/span>&lt;span class="p">))&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">assert_false&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">is_ascii_uppercase&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">))&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>value&lt;/strong> (&lt;code>UInt8&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Bool&lt;/code>&lt;/p>
+&lt;/details></description></item><item><title>to_ascii_lowercase</title><link>https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/to_ascii_lowercase/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/to_ascii_lowercase/</guid><description>
+&lt;p>Mojo function &lt;a href="https://github.com/ExtraMojo/ExtraMojo/blob/main/extramojo/bstr/bstr.mojo" target="_blank" rel="noopener">🡭&lt;/a>&lt;/p>
+&lt;h1>&lt;code>to_ascii_lowercase&lt;/code>&lt;/h1>&lt;script lang="JS">
+function expandAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = true;
+}
+}
+function collapseAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = false;
+}
+}
+&lt;/script>
+&lt;a class="" onclick="expandAll()" style="cursor:pointer; text-decoration: none;" title="Expand all">➕&lt;/a>&amp;nbsp;
+&lt;a class="" onclick="collapseAll()" style="cursor:pointer; text-decoration: none;" title="Collapse all">➖&lt;/a>
+&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">to_ascii_lowercase&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">mut&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">buffer&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">List&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">UInt8&lt;/span>&lt;span class="p">])&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Lowercase all ascii a-zA-Z characters.
+&lt;/summary>&lt;/p>
+&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="kn">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">std.testing&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">assert_equal&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kn">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">extramojo.bstr.bstr&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">to_ascii_lowercase&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">test&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">List&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;ABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZ&amp;#34;&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">as_bytes&lt;/span>&lt;span class="p">())&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">expected&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">List&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz&amp;#34;&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">as_bytes&lt;/span>&lt;span class="p">())&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">to_ascii_lowercase&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">test&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">assert_equal&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">test&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">expected&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>buffer&lt;/strong> (&lt;code>List[UInt8]&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;/details></description></item><item><title>to_ascii_uppercase</title><link>https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/to_ascii_uppercase/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/to_ascii_uppercase/</guid><description>
+&lt;p>Mojo function &lt;a href="https://github.com/ExtraMojo/ExtraMojo/blob/main/extramojo/bstr/bstr.mojo" target="_blank" rel="noopener">🡭&lt;/a>&lt;/p>
+&lt;h1>&lt;code>to_ascii_uppercase&lt;/code>&lt;/h1>&lt;script lang="JS">
+function expandAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = true;
+}
+}
+function collapseAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = false;
+}
+}
+&lt;/script>
+&lt;a class="" onclick="expandAll()" style="cursor:pointer; text-decoration: none;" title="Expand all">➕&lt;/a>&amp;nbsp;
+&lt;a class="" onclick="collapseAll()" style="cursor:pointer; text-decoration: none;" title="Collapse all">➖&lt;/a>
+&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">to_ascii_uppercase&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">mut&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">buffer&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">List&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">UInt8&lt;/span>&lt;span class="p">])&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Uppercase all ascii a-zA-Z characters.
+&lt;/summary>&lt;/p>
+&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="kn">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">std.testing&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">assert_equal&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kn">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">extramojo.bstr.bstr&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">to_ascii_uppercase&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">test&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">List&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;ABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZ&amp;#34;&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">as_bytes&lt;/span>&lt;span class="p">())&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">expected&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">List&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ&amp;#34;&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">as_bytes&lt;/span>&lt;span class="p">())&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">to_ascii_uppercase&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">test&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">assert_equal&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">test&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">expected&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>buffer&lt;/strong> (&lt;code>List[UInt8]&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;/details></description></item></channel></rss>

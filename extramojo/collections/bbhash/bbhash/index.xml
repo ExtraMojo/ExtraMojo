@@ -1,0 +1,136 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>ExtraMojo – bbhash</title><link>https://extramojo.github.io/ExtraMojo/extramojo/collections/bbhash/bbhash/</link><description>Recent content in bbhash on ExtraMojo</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="https://extramojo.github.io/ExtraMojo/extramojo/collections/bbhash/bbhash/index.xml" rel="self" type="application/rss+xml"/><item><title>BBHash</title><link>https://extramojo.github.io/ExtraMojo/extramojo/collections/bbhash/bbhash/BBHash/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://extramojo.github.io/ExtraMojo/extramojo/collections/bbhash/bbhash/BBHash/</guid><description>
+&lt;p>Mojo struct &lt;a href="https://github.com/ExtraMojo/ExtraMojo/blob/main/extramojo/collections/bbhash/bbhash.mojo" target="_blank" rel="noopener">🡭&lt;/a>&lt;/p>
+&lt;h1>&lt;code>BBHash&lt;/code>&lt;/h1>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@memory_only&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">struct&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nc">BBHash&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">compute_reverse_map&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Bool&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">False&lt;/span>&lt;span class="p">]&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>BBHash represents a minimal perfect hash for a set of keys.&lt;/p>
+&lt;h2>Parameters&lt;span class="hx-absolute -hx-mt-20" id="parameters">&lt;/span>
+&lt;a href="#parameters" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;strong>compute_reverse_map&lt;/strong> (&lt;code>Bool&lt;/code>): If True, compute the reverse_map which allows looking up the original
+key based off an index.&lt;/li>
+&lt;/ul>
+&lt;h2>Fields&lt;span class="hx-absolute -hx-mt-20" id="fields">&lt;/span>
+&lt;a href="#fields" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;strong>bits&lt;/strong> (&lt;code>List[BitVec]&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>ranks&lt;/strong> (&lt;code>List[UInt64]&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>reverse_map&lt;/strong> (&lt;code>List[UInt64]&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;h2>Implemented traits&lt;span class="hx-absolute -hx-mt-20" id="implemented-traits">&lt;/span>
+&lt;a href="#implemented-traits" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>&lt;code>AnyType&lt;/code>, &lt;code>Deinitable&lt;/code>, &lt;code>Movable&lt;/code>&lt;/p>
+&lt;h2>Methods&lt;span class="hx-absolute -hx-mt-20" id="methods">&lt;/span>
+&lt;a href="#methods" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;script lang="JS">
+function expandAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = true;
+}
+}
+function collapseAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = false;
+}
+}
+&lt;/script>
+&lt;a class="" onclick="expandAll()" style="cursor:pointer; text-decoration: none;" title="Expand all">➕&lt;/a>&amp;nbsp;
+&lt;a class="" onclick="collapseAll()" style="cursor:pointer; text-decoration: none;" title="Collapse all">➖&lt;/a>
+&lt;h3>&lt;code>__init__&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="__init__">&lt;/span>
+&lt;a href="#__init__" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__init__&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">K&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Keyable&lt;/span>&lt;span class="p">](&lt;/span>&lt;span class="n">out&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">keys&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">List&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">K&lt;/span>&lt;span class="p">],&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">gamma&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">Float64&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Create a &lt;code>BBHash&lt;/code>.
+&lt;/summary>
+&lt;strong>Parameters:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>K&lt;/strong> (&lt;code>Keyable&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>keys&lt;/strong> (&lt;code>List[K]&lt;/code>): The keys to create a minimal perfect hash for.&lt;/li>
+&lt;li>&lt;strong>gamma&lt;/strong> (&lt;code>Float64&lt;/code>): Tunable param for optimizing between storage size and creation/lookup speed.
+1.0 will give the best size, larger will result in faster lookups and creation.
+See publication for details.&lt;/li>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Self&lt;/code>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>find&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="find">&lt;/span>
+&lt;a href="#find" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">find&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">K&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Hashable&lt;/span>&lt;span class="p">](&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">key&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">K&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">UInt64&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Find returns a unique index representing the key in the minimal hash set.
+&lt;/summary>
+The return value is meaningful ONLY for keys in the original key set
+(provided at the time of construction of the minimal hash set).&lt;/p>
+&lt;p>If the key is in the original key set, the return value is guaranteed to be
+in the range [1, len(keys)].&lt;/p>
+&lt;p>If the key is not in the original key set, two things can happen:&lt;/p>
+&lt;ol>
+&lt;li>The return value is 0, representing that the key was not in the original key set.&lt;/li>
+&lt;li>The return value is in the expected range [1, len(keys)], but is a false positive.&lt;/li>
+&lt;/ol>
+&lt;p>In other words, &lt;code>find&lt;/code> can return false positives and if &amp;ldquo;within set&amp;rdquo; is your question
+you should then validate the key via the &lt;code>key&lt;/code> function to ensure that the found key
+matches the input key.&lt;/p>
+&lt;p>&lt;strong>Parameters:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>K&lt;/strong> (&lt;code>Hashable&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>key&lt;/strong> (&lt;code>K&lt;/code>): The hashable key to check membership for.&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>UInt64&lt;/code>: The unique index of the key, or 0 if it isn&amp;rsquo;t in the set.&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>key&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="key">&lt;/span>
+&lt;a href="#key" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">key&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">idx&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">UInt64&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Optional&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">UInt64&lt;/span>&lt;span class="p">]&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Get the hash of the key associated with the given index.
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>idx&lt;/strong> (&lt;code>UInt64&lt;/code>): The index given by &lt;code>find&lt;/code> for a key.&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Optional[UInt64]&lt;/code>: The hash of the key associated with the index, or None if the idx is invalid.&lt;/p>
+&lt;/details></description></item></channel></rss>

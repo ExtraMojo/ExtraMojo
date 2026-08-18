@@ -1,0 +1,1233 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>ExtraMojo – parser</title><link>https://extramojo.github.io/ExtraMojo/extramojo/cli/parser/</link><description>Recent content in parser on ExtraMojo</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="https://extramojo.github.io/ExtraMojo/extramojo/cli/parser/index.xml" rel="self" type="application/rss+xml"/><item><title>OptConfig</title><link>https://extramojo.github.io/ExtraMojo/extramojo/cli/parser/OptConfig/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://extramojo.github.io/ExtraMojo/extramojo/cli/parser/OptConfig/</guid><description>
+&lt;p>Mojo struct &lt;a href="https://github.com/ExtraMojo/ExtraMojo/blob/main/extramojo/cli/parser.mojo" target="_blank" rel="noopener">🡭&lt;/a>&lt;/p>
+&lt;h1>&lt;code>OptConfig&lt;/code>&lt;/h1>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@memory_only&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">struct&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nc">OptConfig&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>Create an option to be added to the &lt;code>OptParser&lt;/code>.&lt;/p>
+&lt;h2>Fields&lt;span class="hx-absolute -hx-mt-20" id="fields">&lt;/span>
+&lt;a href="#fields" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;strong>long_name&lt;/strong> (&lt;code>String&lt;/code>): Required long name of, this will be used as the cli value as &lt;code>--long_name&lt;/code>.&lt;/li>
+&lt;li>&lt;strong>default_value&lt;/strong> (&lt;code>Optional[String]&lt;/code>): If there is one, the Stringified deafult value. This will be parsed via &lt;code>OptKind&lt;/code>.&lt;/li>
+&lt;li>&lt;strong>value_kind&lt;/strong> (&lt;code>OptKind&lt;/code>): The type of the value for this option.&lt;/li>
+&lt;li>&lt;strong>is_flag&lt;/strong> (&lt;code>Bool&lt;/code>): If it&amp;rsquo;s a flag, then it&amp;rsquo;s value_kind needs to be Bool.&lt;/li>
+&lt;li>&lt;strong>description&lt;/strong> (&lt;code>String&lt;/code>): Long for description, for best results, don&amp;rsquo;t add a newline.&lt;/li>
+&lt;/ul>
+&lt;h2>Implemented traits&lt;span class="hx-absolute -hx-mt-20" id="implemented-traits">&lt;/span>
+&lt;a href="#implemented-traits" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>&lt;code>AnyType&lt;/code>, &lt;code>Copyable&lt;/code>, &lt;code>Deinitable&lt;/code>, &lt;code>Movable&lt;/code>&lt;/p>
+&lt;h2>Methods&lt;span class="hx-absolute -hx-mt-20" id="methods">&lt;/span>
+&lt;a href="#methods" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;script lang="JS">
+function expandAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = true;
+}
+}
+function collapseAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = false;
+}
+}
+&lt;/script>
+&lt;a class="" onclick="expandAll()" style="cursor:pointer; text-decoration: none;" title="Expand all">➕&lt;/a>&amp;nbsp;
+&lt;a class="" onclick="collapseAll()" style="cursor:pointer; text-decoration: none;" title="Collapse all">➖&lt;/a>
+&lt;h3>&lt;code>__init__&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="__init__">&lt;/span>
+&lt;a href="#__init__" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__init__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">out&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">long_name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">value_kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">OptKind&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">is_flag&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Bool&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">False&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">description&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">default_value&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Optional&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">None&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>long_name&lt;/strong> (&lt;code>String&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>value_kind&lt;/strong> (&lt;code>OptKind&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>is_flag&lt;/strong> (&lt;code>Bool&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>description&lt;/strong> (&lt;code>String&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>default_value&lt;/strong> (&lt;code>Optional[String]&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Self&lt;/code>&lt;/p>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details></description></item><item><title>OptKind</title><link>https://extramojo.github.io/ExtraMojo/extramojo/cli/parser/OptKind/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://extramojo.github.io/ExtraMojo/extramojo/cli/parser/OptKind/</guid><description>
+&lt;p>Mojo struct &lt;a href="https://github.com/ExtraMojo/ExtraMojo/blob/main/extramojo/cli/parser.mojo" target="_blank" rel="noopener">🡭&lt;/a>&lt;/p>
+&lt;h1>&lt;code>OptKind&lt;/code>&lt;/h1>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@memory_only&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">struct&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nc">OptKind&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>The viable types for an option to have.&lt;/p>
+&lt;h2>Aliases&lt;span class="hx-absolute -hx-mt-20" id="aliases">&lt;/span>
+&lt;a href="#aliases" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;code>StringLike = OptKind(UInt8(0))&lt;/code>&lt;/li>
+&lt;li>&lt;code>IntLike = OptKind(UInt8(1))&lt;/code>&lt;/li>
+&lt;li>&lt;code>FloatLike = OptKind(UInt8(2))&lt;/code>&lt;/li>
+&lt;li>&lt;code>BoolLike = OptKind(UInt8(3))&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h2>Fields&lt;span class="hx-absolute -hx-mt-20" id="fields">&lt;/span>
+&lt;a href="#fields" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;strong>value&lt;/strong> (&lt;code>UInt8&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;h2>Implemented traits&lt;span class="hx-absolute -hx-mt-20" id="implemented-traits">&lt;/span>
+&lt;a href="#implemented-traits" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>&lt;code>AnyType&lt;/code>, &lt;code>Copyable&lt;/code>, &lt;code>Deinitable&lt;/code>, &lt;code>ImplicitlyCopyable&lt;/code>, &lt;code>Movable&lt;/code>, &lt;code>Writable&lt;/code>&lt;/p>
+&lt;h2>Methods&lt;span class="hx-absolute -hx-mt-20" id="methods">&lt;/span>
+&lt;a href="#methods" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;script lang="JS">
+function expandAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = true;
+}
+}
+function collapseAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = false;
+}
+}
+&lt;/script>
+&lt;a class="" onclick="expandAll()" style="cursor:pointer; text-decoration: none;" title="Expand all">➕&lt;/a>&amp;nbsp;
+&lt;a class="" onclick="collapseAll()" style="cursor:pointer; text-decoration: none;" title="Collapse all">➖&lt;/a>
+&lt;h3>&lt;code>__init__&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="__init__">&lt;/span>
+&lt;a href="#__init__" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__init__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">out&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">value&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">UInt8&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>value&lt;/strong> (&lt;code>UInt8&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Self&lt;/code>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>__eq__&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="__eq__">&lt;/span>
+&lt;a href="#__eq__" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__eq__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">other&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Self&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Bool&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>other&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Bool&lt;/code>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>__ne__&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="__ne__">&lt;/span>
+&lt;a href="#__ne__" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__ne__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">other&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Self&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Bool&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>other&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Bool&lt;/code>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>write_to&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="write_to">&lt;/span>
+&lt;a href="#write_to" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">write_to&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">mut&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">writer&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">T&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>writer&lt;/strong> (&lt;code>T&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;/details></description></item><item><title>OptParser</title><link>https://extramojo.github.io/ExtraMojo/extramojo/cli/parser/OptParser/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://extramojo.github.io/ExtraMojo/extramojo/cli/parser/OptParser/</guid><description>
+&lt;p>Mojo struct &lt;a href="https://github.com/ExtraMojo/ExtraMojo/blob/main/extramojo/cli/parser.mojo" target="_blank" rel="noopener">🡭&lt;/a>&lt;/p>
+&lt;h1>&lt;code>OptParser&lt;/code>&lt;/h1>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@memory_only&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">struct&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nc">OptParser&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>[&lt;code>OptParser&lt;/code>] will try to parse your long-form CLI options.&lt;/p>
+&lt;h2>Fields&lt;span class="hx-absolute -hx-mt-20" id="fields">&lt;/span>
+&lt;a href="#fields" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;strong>options&lt;/strong> (&lt;code>Dict[String, OptConfig]&lt;/code>): The options this will attempt to parse.&lt;/li>
+&lt;li>&lt;strong>program_description&lt;/strong> (&lt;code>String&lt;/code>): The description of the program, to be used in the help message.&lt;/li>
+&lt;li>&lt;strong>program_name&lt;/strong> (&lt;code>String&lt;/code>): Your programs name, to be used in the help message.&lt;/li>
+&lt;li>&lt;strong>min_num_args_expected&lt;/strong> (&lt;code>Optional[Int]&lt;/code>): Whether or not to expect any program args, and if so, at least (&amp;gt;=) how many.&lt;/li>
+&lt;li>&lt;strong>args_help_msg&lt;/strong> (&lt;code>String&lt;/code>): Help message for arguments.&lt;/li>
+&lt;/ul>
+&lt;h2>Implemented traits&lt;span class="hx-absolute -hx-mt-20" id="implemented-traits">&lt;/span>
+&lt;a href="#implemented-traits" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>&lt;code>AnyType&lt;/code>, &lt;code>Copyable&lt;/code>, &lt;code>Deinitable&lt;/code>, &lt;code>Movable&lt;/code>&lt;/p>
+&lt;h2>Methods&lt;span class="hx-absolute -hx-mt-20" id="methods">&lt;/span>
+&lt;a href="#methods" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;script lang="JS">
+function expandAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = true;
+}
+}
+function collapseAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = false;
+}
+}
+&lt;/script>
+&lt;a class="" onclick="expandAll()" style="cursor:pointer; text-decoration: none;" title="Expand all">➕&lt;/a>&amp;nbsp;
+&lt;a class="" onclick="collapseAll()" style="cursor:pointer; text-decoration: none;" title="Collapse all">➖&lt;/a>
+&lt;h3>&lt;code>__init__&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="__init__">&lt;/span>
+&lt;a href="#__init__" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__init__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">out&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">description&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>name&lt;/strong> (&lt;code>String&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>description&lt;/strong> (&lt;code>String&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Self&lt;/code>&lt;/p>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>expect_at_least_n_args&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="expect_at_least_n_args">&lt;/span>
+&lt;a href="#expect_at_least_n_args" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">expect_at_least_n_args&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">mut&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">n&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">Int&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">args_help_msg&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>The minimum number of args to expect.
+&lt;/summary>
+len(args) &amp;gt;= min_num_args_expected&lt;/p>
+&lt;p>If not set, args are not checked.&lt;/p>
+&lt;p>&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>n&lt;/strong> (&lt;code>Int&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>args_help_msg&lt;/strong> (&lt;code>String&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;/details>
+&lt;h3>&lt;code>add_opt&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="add_opt">&lt;/span>
+&lt;a href="#add_opt" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">add_opt&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">mut&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">arg&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">OptConfig&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Add an [&lt;code>OptConfig&lt;/code>].
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>arg&lt;/strong> (&lt;code>OptConfig&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;/details>
+&lt;h3>&lt;code>help_msg&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="help_msg">&lt;/span>
+&lt;a href="#help_msg" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">help_msg&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">String&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Get the help message string based on the currently added options.
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>String&lt;/code>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>parse_sys_args&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="parse_sys_args">&lt;/span>
+&lt;a href="#parse_sys_args" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">parse_sys_args&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">mut&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ParsedOpts&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Parse the arguments from &lt;code>sys.argv()&lt;/code>.
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>ParsedOpts&lt;/code>&lt;/p>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>parse_args&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="parse_args">&lt;/span>
+&lt;a href="#parse_args" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">parse_args&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">args&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">List&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">])&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ParsedOpts&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Parse the arguments passed in via &lt;code>args&lt;/code>.
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>args&lt;/strong> (&lt;code>List[String]&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>ParsedOpts&lt;/code>&lt;/p>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details></description></item><item><title>OptValue</title><link>https://extramojo.github.io/ExtraMojo/extramojo/cli/parser/OptValue/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://extramojo.github.io/ExtraMojo/extramojo/cli/parser/OptValue/</guid><description>
+&lt;p>Mojo struct &lt;a href="https://github.com/ExtraMojo/ExtraMojo/blob/main/extramojo/cli/parser.mojo" target="_blank" rel="noopener">🡭&lt;/a>&lt;/p>
+&lt;h1>&lt;code>OptValue&lt;/code>&lt;/h1>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@memory_only&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">struct&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nc">OptValue&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>When an option is parsed, it&amp;rsquo;s stored as an OptValue.&lt;/p>
+&lt;p>To get concrete values out of the &lt;code>ParsedOpts&lt;/code> prefer to use the
+&lt;code>ParsedOpts.get_&amp;lt;type&amp;gt;()&lt;/code> methods.&lt;/p>
+&lt;h2>Fields&lt;span class="hx-absolute -hx-mt-20" id="fields">&lt;/span>
+&lt;a href="#fields" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;strong>kind&lt;/strong> (&lt;code>OptKind&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;h2>Implemented traits&lt;span class="hx-absolute -hx-mt-20" id="implemented-traits">&lt;/span>
+&lt;a href="#implemented-traits" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>&lt;code>AnyType&lt;/code>, &lt;code>Copyable&lt;/code>, &lt;code>Deinitable&lt;/code>, &lt;code>Movable&lt;/code>&lt;/p>
+&lt;h2>Methods&lt;span class="hx-absolute -hx-mt-20" id="methods">&lt;/span>
+&lt;a href="#methods" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;script lang="JS">
+function expandAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = true;
+}
+}
+function collapseAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = false;
+}
+}
+&lt;/script>
+&lt;a class="" onclick="expandAll()" style="cursor:pointer; text-decoration: none;" title="Expand all">➕&lt;/a>&amp;nbsp;
+&lt;a class="" onclick="collapseAll()" style="cursor:pointer; text-decoration: none;" title="Collapse all">➖&lt;/a>
+&lt;h3>&lt;code>__init__&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="__init__">&lt;/span>
+&lt;a href="#__init__" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__init__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">out&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">str_value&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>str_value&lt;/strong> (&lt;code>String&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Self&lt;/code>&lt;/p>
+&lt;/details>
+&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__init__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">out&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">int_value&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">Int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">Int&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">))&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>int_value&lt;/strong> (&lt;code>Int&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Self&lt;/code>&lt;/p>
+&lt;/details>
+&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__init__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">out&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">float_value&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">Float64&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>float_value&lt;/strong> (&lt;code>Float64&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Self&lt;/code>&lt;/p>
+&lt;/details>
+&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__init__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">out&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">bool_value&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Bool&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">False&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>bool_value&lt;/strong> (&lt;code>Bool&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Self&lt;/code>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>get_string&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="get_string">&lt;/span>
+&lt;a href="#get_string" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">get_string&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Optional&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">]&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Optional[String]&lt;/code>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>get_int&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="get_int">&lt;/span>
+&lt;a href="#get_int" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">get_int&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Optional&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">Int&lt;/span>&lt;span class="p">]&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Optional[Int]&lt;/code>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>get_float&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="get_float">&lt;/span>
+&lt;a href="#get_float" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">get_float&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Optional&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">Float64&lt;/span>&lt;span class="p">]&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Optional[Float64]&lt;/code>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>get_bool&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="get_bool">&lt;/span>
+&lt;a href="#get_bool" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">get_bool&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Optional&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">Bool&lt;/span>&lt;span class="p">]&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Optional[Bool]&lt;/code>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>parse_string&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="parse_string">&lt;/span>
+&lt;a href="#parse_string" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@staticmethod&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">parse_string&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">value&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Self&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>value&lt;/strong> (&lt;code>String&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Self&lt;/code>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>parse_int&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="parse_int">&lt;/span>
+&lt;a href="#parse_int" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@staticmethod&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">parse_int&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">value&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Self&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>value&lt;/strong> (&lt;code>String&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Self&lt;/code>&lt;/p>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>parse_float&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="parse_float">&lt;/span>
+&lt;a href="#parse_float" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@staticmethod&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">parse_float&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">value&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Self&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>value&lt;/strong> (&lt;code>String&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Self&lt;/code>&lt;/p>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>parse_bool&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="parse_bool">&lt;/span>
+&lt;a href="#parse_bool" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@staticmethod&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">parse_bool&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">value&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Self&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>value&lt;/strong> (&lt;code>String&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Self&lt;/code>&lt;/p>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>parse_kind&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="parse_kind">&lt;/span>
+&lt;a href="#parse_kind" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@staticmethod&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">parse_kind&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">OptKind&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">value&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Self&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Parse the string based on the value of &lt;code>OptKind&lt;/code>.
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>kind&lt;/strong> (&lt;code>OptKind&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>value&lt;/strong> (&lt;code>String&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Self&lt;/code>&lt;/p>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details></description></item><item><title>ParsedOpts</title><link>https://extramojo.github.io/ExtraMojo/extramojo/cli/parser/ParsedOpts/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://extramojo.github.io/ExtraMojo/extramojo/cli/parser/ParsedOpts/</guid><description>
+&lt;p>Mojo struct &lt;a href="https://github.com/ExtraMojo/ExtraMojo/blob/main/extramojo/cli/parser.mojo" target="_blank" rel="noopener">🡭&lt;/a>&lt;/p>
+&lt;h1>&lt;code>ParsedOpts&lt;/code>&lt;/h1>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@memory_only&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">struct&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nc">ParsedOpts&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>The parsed CLI options. Access your values with &lt;code>ParsedOpts.get_string()&lt;/code>, &lt;code>ParsedOpts.get_int()&lt;/code>, etc.&lt;/p>
+&lt;p>Access CLI arguments from &lt;code>ParsedOpts.args&lt;/code>.
+Get the help message with &lt;code>ParsedOpts.get_help_message&lt;/code>.&lt;/p>
+&lt;p>Note that there is an automatic &lt;code>help&lt;/code> flag added to your options, it can be overridden by another option with that same name.
+The input args are first scanned for &amp;ldquo;&amp;ndash;help&amp;rdquo; and if that is found the parser will exit early, returning the parsed value of the
+&amp;ldquo;&amp;ndash;help&amp;rdquo; flag (or option if you have overridden it). It is up to the user to check for the &amp;ldquo;help&amp;rdquo; option being set and print the
+help message.&lt;/p>
+&lt;h2>Fields&lt;span class="hx-absolute -hx-mt-20" id="fields">&lt;/span>
+&lt;a href="#fields" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;strong>options&lt;/strong> (&lt;code>Dict[String, OptValue]&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>args&lt;/strong> (&lt;code>List[String]&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>help_msg&lt;/strong> (&lt;code>String&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;h2>Implemented traits&lt;span class="hx-absolute -hx-mt-20" id="implemented-traits">&lt;/span>
+&lt;a href="#implemented-traits" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>&lt;code>AnyType&lt;/code>, &lt;code>Copyable&lt;/code>, &lt;code>Deinitable&lt;/code>, &lt;code>Movable&lt;/code>&lt;/p>
+&lt;h2>Methods&lt;span class="hx-absolute -hx-mt-20" id="methods">&lt;/span>
+&lt;a href="#methods" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;script lang="JS">
+function expandAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = true;
+}
+}
+function collapseAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = false;
+}
+}
+&lt;/script>
+&lt;a class="" onclick="expandAll()" style="cursor:pointer; text-decoration: none;" title="Expand all">➕&lt;/a>&amp;nbsp;
+&lt;a class="" onclick="collapseAll()" style="cursor:pointer; text-decoration: none;" title="Collapse all">➖&lt;/a>
+&lt;h3>&lt;code>__init__&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="__init__">&lt;/span>
+&lt;a href="#__init__" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__init__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">out&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">help_msg&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>help_msg&lt;/strong> (&lt;code>String&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Self&lt;/code>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>get_help_message&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="get_help_message">&lt;/span>
+&lt;a href="#get_help_message" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">get_help_message&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ref&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Pointer&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">origin_of&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">help_msg&lt;/span>&lt;span class="p">)]&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Get a nicely formatted help string.
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Pointer[String, origin_of(self.help_msg)]&lt;/code>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>get_string&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="get_string">&lt;/span>
+&lt;a href="#get_string" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">get_string&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">key&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">String&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Try to get the option specified with the given key as a String.
+&lt;/summary>
+This will raise if the key is not found, or if the type of the option doesn&amp;rsquo;t match asked-for type.&lt;/p>
+&lt;p>&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>key&lt;/strong> (&lt;code>String&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>String&lt;/code>&lt;/p>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>get_int&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="get_int">&lt;/span>
+&lt;a href="#get_int" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">get_int&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">key&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">Int&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Try to get the option specified with the given key as an Int.
+&lt;/summary>
+This will raise if the key is not found, or if the type of the option doesn&amp;rsquo;t match asked-for type.&lt;/p>
+&lt;p>&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>key&lt;/strong> (&lt;code>String&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Int&lt;/code>&lt;/p>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>get_float&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="get_float">&lt;/span>
+&lt;a href="#get_float" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">get_float&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">key&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">Float64&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Try to get the option specified with the given key as a Float64.
+&lt;/summary>
+This will raise if the key is not found, or if the type of the option doesn&amp;rsquo;t match asked-for type.&lt;/p>
+&lt;p>&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>key&lt;/strong> (&lt;code>String&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Float64&lt;/code>&lt;/p>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>get_bool&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="get_bool">&lt;/span>
+&lt;a href="#get_bool" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">get_bool&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">key&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Bool&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Try to get the option specified with the given key as a Bool.
+&lt;/summary>
+This will raise if the key is not found, or if the type of the option doesn&amp;rsquo;t match asked-for type.&lt;/p>
+&lt;p>&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>key&lt;/strong> (&lt;code>String&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Bool&lt;/code>&lt;/p>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details></description></item><item><title>Subcommand</title><link>https://extramojo.github.io/ExtraMojo/extramojo/cli/parser/Subcommand/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://extramojo.github.io/ExtraMojo/extramojo/cli/parser/Subcommand/</guid><description>
+&lt;p>Mojo struct &lt;a href="https://github.com/ExtraMojo/ExtraMojo/blob/main/extramojo/cli/parser.mojo" target="_blank" rel="noopener">🡭&lt;/a>&lt;/p>
+&lt;h1>&lt;code>Subcommand&lt;/code>&lt;/h1>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@memory_only&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">struct&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nc">Subcommand&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>A subcommand.&lt;/p>
+&lt;p>The name of the subcommand is the &lt;code>OptParser.name&lt;/code>.
+The name of the subcommand will be checked against the first value in the input args.
+The help message will display the program description for the &lt;code>OptParser&lt;/code> that is associated with this subcommand.&lt;/p>
+&lt;h2>Fields&lt;span class="hx-absolute -hx-mt-20" id="fields">&lt;/span>
+&lt;a href="#fields" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;strong>parser&lt;/strong> (&lt;code>OptParser&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;h2>Implemented traits&lt;span class="hx-absolute -hx-mt-20" id="implemented-traits">&lt;/span>
+&lt;a href="#implemented-traits" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>&lt;code>AnyType&lt;/code>, &lt;code>Copyable&lt;/code>, &lt;code>Deinitable&lt;/code>, &lt;code>Hashable&lt;/code>, &lt;code>Movable&lt;/code>&lt;/p>
+&lt;h2>Methods&lt;span class="hx-absolute -hx-mt-20" id="methods">&lt;/span>
+&lt;a href="#methods" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;script lang="JS">
+function expandAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = true;
+}
+}
+function collapseAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = false;
+}
+}
+&lt;/script>
+&lt;a class="" onclick="expandAll()" style="cursor:pointer; text-decoration: none;" title="Expand all">➕&lt;/a>&amp;nbsp;
+&lt;a class="" onclick="collapseAll()" style="cursor:pointer; text-decoration: none;" title="Collapse all">➖&lt;/a>
+&lt;h3>&lt;code>__init__&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="__init__">&lt;/span>
+&lt;a href="#__init__" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__init__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">out&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">parser&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">OptParser&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>parser&lt;/strong> (&lt;code>OptParser&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Self&lt;/code>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>__eq__&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="__eq__">&lt;/span>
+&lt;a href="#__eq__" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__eq__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">other&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Self&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Bool&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>other&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Bool&lt;/code>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>__ne__&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="__ne__">&lt;/span>
+&lt;a href="#__ne__" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__ne__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">other&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Self&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Bool&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>other&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Bool&lt;/code>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>__hash__&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="__hash__">&lt;/span>
+&lt;a href="#__hash__" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__hash__&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">H&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Hasher&lt;/span>&lt;span class="p">](&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">mut&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">hasher&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">H&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Parameters:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>H&lt;/strong> (&lt;code>Hasher&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>hasher&lt;/strong> (&lt;code>H&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;/details></description></item><item><title>SubcommandParser</title><link>https://extramojo.github.io/ExtraMojo/extramojo/cli/parser/SubcommandParser/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://extramojo.github.io/ExtraMojo/extramojo/cli/parser/SubcommandParser/</guid><description>
+&lt;p>Mojo struct &lt;a href="https://github.com/ExtraMojo/ExtraMojo/blob/main/extramojo/cli/parser.mojo" target="_blank" rel="noopener">🡭&lt;/a>&lt;/p>
+&lt;h1>&lt;code>SubcommandParser&lt;/code>&lt;/h1>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@memory_only&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">struct&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nc">SubcommandParser&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>Subcommands are created by passing in the command, and an &lt;code>OptParser&lt;/code>.&lt;/p>
+&lt;p>The parser is for the options for the subcommand.&lt;/p>
+&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="kn">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">std.testing&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">assert_equal&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">assert_true&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="kn">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nn">extramojo.cli.parser&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kn">import&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">OptParser&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">OptConfig&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">OptKind&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">SubcommandParser&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Subcommand&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">args&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">List&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;do-work&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;--file&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;/path/to/thing&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;--count&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;42&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;--fraction&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;-0.2&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;--verbose&amp;#34;&lt;/span>&lt;span class="p">))&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">program_name&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;example&amp;#34;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">parser&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">OptParser&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;do-work&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">description&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;An example program.&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">parser.add_opt&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">OptConfig&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;file&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">OptKind.StringLike&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">default_value&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">None&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">description&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;A file with something in it.&amp;#34;&lt;/span>&lt;span class="p">))&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">parser.add_opt&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">OptConfig&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;count&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">OptKind.IntLike&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">default_value&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;100&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">description&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;A number.&amp;#34;&lt;/span>&lt;span class="p">))&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">parser.add_opt&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">OptConfig&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;fraction&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">OptKind.FloatLike&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">default_value&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;0.5&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">description&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;Some interesting fraction to keep.&amp;#34;&lt;/span>&lt;span class="p">))&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1"># Note that with flags, the OptKind must be BoolLike and there must be a default_value specified.&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">parser.add_opt&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">OptConfig&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;verbose&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">OptKind.BoolLike&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">is_flag&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">True&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">default_value&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;False&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">description&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;Turn up the logging.&amp;#34;&lt;/span>&lt;span class="p">))&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">cmd&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Subcommand&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">parser&lt;/span>&lt;span class="o">^&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1"># uses the name from the passed in parser&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">cmd_parser&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">SubcommandParser&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;cool-program&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">description&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;Do some cool stuff.&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">cmd_parser.add_command&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">cmd&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1"># Note, a user would call parser.parse_sys_args()&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">cmd_and_opts&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">cmd_parser.parse_args&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">args&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">if&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="ow">not&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">cmd_and_opts&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">cmd_parser.get_help_message&lt;/span>&lt;span class="p">())&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">parsed&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">cmd_and_opts.value&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">parsed_cmd&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">parsed&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">opts&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">parsed&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">copy&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">if&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">parsed_cmd&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">==&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">cmd.parser.program_name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">assert_equal&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">opts.get_string&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;file&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;/path/to/thing&amp;#34;&lt;/span>&lt;span class="p">))&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">assert_equal&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">opts.get_int&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;count&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">42&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">assert_equal&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">opts.get_float&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;fraction&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="mf">0.2&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">assert_equal&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">opts.get_bool&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;verbose&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">True&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">assert_true&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">len&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">opts.get_help_message&lt;/span>&lt;span class="p">()[])&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;h2>Fields&lt;span class="hx-absolute -hx-mt-20" id="fields">&lt;/span>
+&lt;a href="#fields" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;strong>commands&lt;/strong> (&lt;code>Dict[String, Subcommand]&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>description&lt;/strong> (&lt;code>String&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>name&lt;/strong> (&lt;code>String&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;h2>Implemented traits&lt;span class="hx-absolute -hx-mt-20" id="implemented-traits">&lt;/span>
+&lt;a href="#implemented-traits" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>&lt;code>AnyType&lt;/code>, &lt;code>Copyable&lt;/code>, &lt;code>Deinitable&lt;/code>, &lt;code>Movable&lt;/code>&lt;/p>
+&lt;h2>Methods&lt;span class="hx-absolute -hx-mt-20" id="methods">&lt;/span>
+&lt;a href="#methods" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;script lang="JS">
+function expandAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = true;
+}
+}
+function collapseAll() {
+var inputs = document.getElementsByTagName('details');
+for(var i = 0; i &lt; inputs.length; i++) {
+inputs[i].open = false;
+}
+}
+&lt;/script>
+&lt;a class="" onclick="expandAll()" style="cursor:pointer; text-decoration: none;" title="Expand all">➕&lt;/a>&amp;nbsp;
+&lt;a class="" onclick="collapseAll()" style="cursor:pointer; text-decoration: none;" title="Collapse all">➖&lt;/a>
+&lt;h3>&lt;code>__init__&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="__init__">&lt;/span>
+&lt;a href="#__init__" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="fm">__init__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">out&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">var&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nv">description&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Details
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>name&lt;/strong> (&lt;code>String&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>description&lt;/strong> (&lt;code>String&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Self&lt;/code>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>get_help_message&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="get_help_message">&lt;/span>
+&lt;a href="#get_help_message" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">get_help_message&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">String&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Create the help message for the subcommands.
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>String&lt;/code>&lt;/p>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>add_command&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="add_command">&lt;/span>
+&lt;a href="#add_command" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">add_command&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">mut&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">command&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Subcommand&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Add a subcommand.
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>command&lt;/strong> (&lt;code>Subcommand&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;/details>
+&lt;h3>&lt;code>parse_args&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="parse_args">&lt;/span>
+&lt;a href="#parse_args" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">parse_args&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">args&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">List&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">])&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Optional&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">Tuple&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ParsedOpts&lt;/span>&lt;span class="p">]]&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Parse the input args, expecting a subcommand.
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;li>&lt;strong>args&lt;/strong> (&lt;code>List[String]&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Optional[Tuple[String, ParsedOpts]]&lt;/code>&lt;/p>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details>
+&lt;h3>&lt;code>parse_sys_args&lt;/code>&lt;span class="hx-absolute -hx-mt-20" id="parse_sys_args">&lt;/span>
+&lt;a href="#parse_sys_args" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code ">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mojo" data-lang="mojo">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">parse_sys_args&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Optional&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">Tuple&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">String&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ParsedOpts&lt;/span>&lt;span class="p">]]&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+&lt;button
+class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+title="Copy code"
+>
+&lt;div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>&lt;p>
+&lt;details>
+&lt;summary>Parse the sys.argv() list.
+&lt;/summary>
+&lt;strong>Args:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>self&lt;/strong> (&lt;code>Self&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Returns:&lt;/strong>&lt;/p>
+&lt;p>&lt;code>Optional[Tuple[String, ParsedOpts]]&lt;/code>&lt;/p>
+&lt;p>&lt;strong>Raises:&lt;/strong>&lt;/p>
+&lt;/details></description></item></channel></rss>
