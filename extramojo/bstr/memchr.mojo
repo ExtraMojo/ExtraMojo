@@ -6,7 +6,7 @@ it should be faster. `memchr` is just vanilla memchr.
 """
 from std import math
 from std.bit import count_trailing_zeros
-from std.memory import pack_bits, UnsafePointer
+from std.memory import pack_bits
 from std.sys.info import simd_width_of
 
 comptime SIMD_U8_WIDTH: Int = simd_width_of[DType.uint8]()
@@ -20,7 +20,7 @@ def memchr[
     Function to find the next occurrence of character.
 
     ```mojo
-    from testing import assert_equal
+    from std.testing import assert_equal
     from extramojo.bstr.memchr import memchr
 
     assert_equal(memchr("enlivened,unleavened,Arnulfo's,Unilever's,unloved|Anouilh,analogue,analogy".as_bytes(), ord("|")), 49)
@@ -53,7 +53,7 @@ def memchr[
     var offset = 0
 
     comptime if do_alignment:
-        var v = ptr.load[width=SIMD_U8_WIDTH]()
+        var v = ptr.unsafe_load[width=SIMD_U8_WIDTH]()
         var mask = v.eq(chr)
 
         var packed = pack_bits(mask)
@@ -64,7 +64,7 @@ def memchr[
         # Now get the alignment
         offset = SIMD_U8_WIDTH - (ptr.__int__() & (SIMD_U8_WIDTH - 1))
         # var aligned_ptr = ptr.offset(offset)
-        ptr = ptr + offset
+        ptr = ptr.unsafe_offset(offset)
 
     # Find the last aligned end
     var haystack_len = len(haystack) - (start + offset)
@@ -74,7 +74,7 @@ def memchr[
 
     # Now do aligned reads all through
     for s in range(0, aligned_end, SIMD_U8_WIDTH):
-        var v = ptr.load[width=SIMD_U8_WIDTH](s)
+        var v = ptr.unsafe_load[width=SIMD_U8_WIDTH](s)
         var mask = v.eq(chr)
         var packed = pack_bits(mask)
         if packed:
@@ -100,7 +100,7 @@ def memchr_wide(haystack: Span[UInt8, _], chr: UInt8, start: Int = 0) -> Int:
     This function does more unrolling and will be faster if the search if over longer distances. If in doubt use `memchr`.
 
     ```mojo
-    from testing import assert_equal
+    from std.testing import assert_equal
     from extramojo.bstr.memchr import memchr_wide
 
     assert_equal(memchr_wide("enlivened,unleavened,Arnulfo's,Unilever's,unloved|Anouilh,analogue,analogy".as_bytes(), ord("|")), 49)
@@ -122,7 +122,7 @@ def memchr_wide(haystack: Span[UInt8, _], chr: UInt8, start: Int = 0) -> Int:
 
     # Do an unaligned initial read, it doesn't matter that this will overlap the next portion
     var ptr = haystack[start:].unsafe_ptr()
-    var v = ptr.load[width=SIMD_U8_WIDTH]()
+    var v = ptr.unsafe_load[width=SIMD_U8_WIDTH]()
     var mask = v.eq(chr)
 
     var packed = pack_bits(mask)
@@ -132,7 +132,7 @@ def memchr_wide(haystack: Span[UInt8, _], chr: UInt8, start: Int = 0) -> Int:
 
     # Now get the alignment
     var offset = SIMD_U8_WIDTH - (ptr.__int__() & (SIMD_U8_WIDTH - 1))
-    var aligned_ptr = ptr + offset
+    var aligned_ptr = ptr.unsafe_offset(offset)
 
     # Find the last aligned end
     var haystack_len = len(haystack) - (start + offset)
@@ -142,10 +142,16 @@ def memchr_wide(haystack: Span[UInt8, _], chr: UInt8, start: Int = 0) -> Int:
 
     # Now do aligned reads all through
     for s in range(0, aligned_end, LOOP_SIZE):
-        var a = aligned_ptr.load[width=SIMD_U8_WIDTH](s)
-        var b = aligned_ptr.load[width=SIMD_U8_WIDTH](s + 1 * SIMD_U8_WIDTH)
-        var c = aligned_ptr.load[width=SIMD_U8_WIDTH](s + 2 * SIMD_U8_WIDTH)
-        var d = aligned_ptr.load[width=SIMD_U8_WIDTH](s + 3 * SIMD_U8_WIDTH)
+        var a = aligned_ptr.unsafe_load[width=SIMD_U8_WIDTH](s)
+        var b = aligned_ptr.unsafe_load[width=SIMD_U8_WIDTH](
+            s + 1 * SIMD_U8_WIDTH
+        )
+        var c = aligned_ptr.unsafe_load[width=SIMD_U8_WIDTH](
+            s + 2 * SIMD_U8_WIDTH
+        )
+        var d = aligned_ptr.unsafe_load[width=SIMD_U8_WIDTH](
+            s + 3 * SIMD_U8_WIDTH
+        )
         var eqa = a.eq(chr)
         var eqb = b.eq(chr)
         var eqc = c.eq(chr)
@@ -179,7 +185,7 @@ def memchr_wide(haystack: Span[UInt8, _], chr: UInt8, start: Int = 0) -> Int:
         haystack_len, SIMD_U8_WIDTH
     )  # relative to start + offset
     for s in range(aligned_end, single_simd_end, SIMD_U8_WIDTH):
-        var v = aligned_ptr.load[width=SIMD_U8_WIDTH](s)
+        var v = aligned_ptr.unsafe_load[width=SIMD_U8_WIDTH](s)
         var mask = v.eq(chr)
 
         var packed = pack_bits(mask)

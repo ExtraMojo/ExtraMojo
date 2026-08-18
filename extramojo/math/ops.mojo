@@ -3,8 +3,10 @@ from std.sys import llvm_intrinsic
 
 @always_inline
 def saturating_sub[
-    data: DType where data.is_integral(), width: Int
-](lhs: SIMD[data, width], rhs: SIMD[data, width]) -> SIMD[data, width]:
+    data: DType, width: SIMDLength
+](lhs: SIMD[data, width], rhs: SIMD[data, width]) -> SIMD[
+    data, width
+] where data.is_integral():
     """Saturating SIMD subtraction.
 
     https://llvm.org/docs/LangRef.html#llvm-usub-sat-intrinsics
@@ -19,8 +21,10 @@ def saturating_sub[
 
 @always_inline
 def saturating_add[
-    data: DType where data.is_integral(), width: Int
-](lhs: SIMD[data, width], rhs: SIMD[data, width]) -> SIMD[data, width]:
+    data: DType, width: SIMDLength
+](lhs: SIMD[data, width], rhs: SIMD[data, width]) -> SIMD[
+    data, width
+] where data.is_integral():
     """Saturating SIMD addition.
 
     https://llvm.org/docs/LangRef.html#llvm-uadd-sat-intrinsics

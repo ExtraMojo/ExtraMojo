@@ -35,9 +35,11 @@ def test_bitvec_count_set_bits() raises:
         mask & Scalar[BitVec.WORD.dtype].MAX, Scalar[BitVec.WORD.dtype](1)
     )
     assert_equal(
-        bv1.data[1],
+        bv1.data[unsafe_offset=1],
         1,
-        String("data: {}, mask {}").format(bin(bv1.data[1]), bin(mask)),
+        String("data: {}, mask {}").format(
+            bin(bv1.data[unsafe_offset=1]), bin(mask)
+        ),
     )
     assert_equal(bv1.count_set_bits(), 65)
 
@@ -87,7 +89,7 @@ def test_bitvec_init_length_fill_false() raises:
 
     # Ensure bits are cleared
     for i in range(UInt(0), bv.word_len()):
-        assert_equal(bv.data[i], 0)
+        assert_equal(bv.data[unsafe_offset=i], 0)
     _ = bv
 
 
@@ -96,12 +98,12 @@ def test_bitvec_init_length_fill_true() raises:
     assert_equal(len(bv), 65)
 
     for i in range(UInt(0), bv.word_len() - 1):
-        assert_equal(bv.data[i], ~0)
-    assert_equal(bv.data[bv.word_len() - 1], 1)
+        assert_equal(bv.data[unsafe_offset=i], ~0)
+    assert_equal(bv.data[unsafe_offset=bv.word_len() - 1], 1)
 
     var last_bits = 65 % bit_width_of[bv.WORD.dtype]()
     var mask = Scalar[BitVec.WORD_DTYPE]((1 << last_bits) - 1)
-    assert_equal(bv.data[bv._capacity - 1] & mask, mask)
+    assert_equal(bv.data[unsafe_offset=bv._capacity - 1] & mask, mask)
     _ = bv
 
 
@@ -111,13 +113,13 @@ def test_bitvec_resize_grow_fill_false() raises:
     assert_equal(len(bv), 130)
 
     # Check bits from original words
-    var first_word = bv.data[0]
+    var first_word = bv.data[unsafe_offset=0]
     var first_word_mask = Scalar[BitVec.WORD_DTYPE]((1 << 10) - 1)
     assert_equal(first_word & first_word_mask, first_word_mask)
 
     # Check new words are cleared
     for i in range(UInt(1), bv.word_len()):
-        assert_equal(bv.data[i], 0)
+        assert_equal(bv.data[unsafe_offset=i], 0)
     _ = bv
 
 
@@ -127,16 +129,16 @@ def test_bitvec_resize_grow_fill_true() raises:
     assert_equal(len(bv), 130)
 
     # Check original bits are zero
-    assert_equal(bv.data[0] & ((1 << 10) - 1), 0)
+    assert_equal(bv.data[unsafe_offset=0] & ((1 << 10) - 1), 0)
 
     # Check that upper bits of first word are set
     var upper_mask = Scalar[BitVec.WORD_DTYPE](~((1 << 10) - 1))
-    assert_true((bv.data[0] & upper_mask) == upper_mask)
+    assert_true((bv.data[unsafe_offset=0] & upper_mask) == upper_mask)
 
     # Check new words are set to 0xFFFFFFFF
     for i in range(UInt(1), bv.word_len() - 1):
-        assert_equal(bv.data[i], ~0)
-    assert_true(bv.data[bv.word_len() - 1] != ~0)
+        assert_equal(bv.data[unsafe_offset=i], ~0)
+    assert_true(bv.data[unsafe_offset=bv.word_len() - 1] != ~0)
     _ = bv
 
 
@@ -146,7 +148,7 @@ def test_bitvec_resize_shrink() raises:
     assert_equal(len(bv), 64)
 
     var mask = Scalar[bv.WORD_DTYPE].MAX
-    assert_equal(bv.data[0], mask)
+    assert_equal(bv.data[unsafe_offset=0], mask)
     _ = bv
 
 
@@ -154,13 +156,13 @@ def test_bitvec_shrink_to_same_size() raises:
     var bv = BitVec(length=64, fill=True)
     bv.shrink(64)  # no-op
     assert_equal(len(bv), 64)
-    assert_equal(bv.data[0], ~0)
+    assert_equal(bv.data[unsafe_offset=0], ~0)
     _ = bv
 
 
 def test_bitvec_clear() raises:
     var bv = BitVec(length=514, fill=True)
-    assert_true(bv.data[1] != 0)
+    assert_true(bv.data[unsafe_offset=1] != 0)
     assert_true(len(bv) == 514)
     bv.clear()
     assert_true(len(bv) == 0)

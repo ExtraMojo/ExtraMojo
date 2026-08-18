@@ -25,7 +25,7 @@ version = "0.1.0"
 [tasks]
 
 [dependencies]
-mojo = "=1.0.0b1"
+mojo = "=1.0.0"
 ```
 
 then run:

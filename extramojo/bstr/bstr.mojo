@@ -1,6 +1,5 @@
 from std import math
 from std.algorithm import vectorize
-from std.memory import UnsafePointer
 from std.sys.info import simd_width_of
 
 from extramojo.bstr.memchr import memchr
@@ -17,7 +16,7 @@ def find_chr_all_occurrences(haystack: Span[UInt8, _], chr: UInt8) -> List[Int]:
     """Find all the occurrences of `chr` in the input buffer.
 
     ```mojo
-    from testing import assert_equal
+    from std.testing import assert_equal
     from extramojo.bstr.bstr import find_chr_all_occurrences
 
     var haystack = "ATCGACCATCGAGATCATGTTTCAT"
@@ -35,10 +34,10 @@ def find_chr_all_occurrences(haystack: Span[UInt8, _], chr: UInt8) -> List[Int]:
                 holder.append(i)
         return holder^
 
-    def inner[
-        simd_width: Int
-    ](offset: Int) {mut holder, read haystack, read chr}:
-        var simd_vec = haystack.unsafe_ptr().load[width=simd_width](offset)
+    def inner[simd_width: Int](offset: Int) {mut holder, imm haystack, imm chr}:
+        var simd_vec = haystack.unsafe_ptr().unsafe_load[width=simd_width](
+            offset
+        )
         var bool_vec = simd_vec.eq(chr)
         if bool_vec.reduce_or():
             # TODO: @unroll
@@ -65,7 +64,7 @@ def is_ascii_uppercase(value: UInt8) -> Bool:
     """Check if a byte is ASCII uppercase.
 
     ```mojo
-    from testing import assert_true, assert_false
+    from std.testing import assert_true, assert_false
     from extramojo.bstr.bstr import is_ascii_uppercase
 
     for ascii_letter in range(ord("A"), ord("Z")+1):
@@ -83,7 +82,7 @@ def is_ascii_lowercase(value: UInt8) -> Bool:
     """Check if a byte is ASCII lowercase.
 
     ```mojo
-    from testing import assert_true, assert_false
+    from std.testing import assert_true, assert_false
     from extramojo.bstr.bstr import is_ascii_lowercase
 
     for ascii_letter in range(ord("A"), ord("Z")+1):
@@ -101,7 +100,7 @@ def to_ascii_lowercase(mut buffer: List[UInt8]):
     """Lowercase all ascii a-zA-Z characters.
 
     ```mojo
-    from testing import assert_equal
+    from std.testing import assert_equal
     from extramojo.bstr.bstr import to_ascii_lowercase
     var test = List("ABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZ".as_bytes())
     var expected = List("abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz".as_bytes())
@@ -117,13 +116,13 @@ def to_ascii_lowercase(mut buffer: List[UInt8]):
 
     # Initial unaligned set
     var ptr = buffer.unsafe_ptr()
-    var v = ptr.load[width=SIMD_U8_WIDTH]()
+    var v = ptr.unsafe_load[width=SIMD_U8_WIDTH]()
     _to_ascii_lowercase_vec(v)
-    ptr.store(0, v)
+    ptr.unsafe_store(0, v)
 
     # Now get an aligned pointer
     var offset = SIMD_U8_WIDTH - (ptr.__int__() & (SIMD_U8_WIDTH - 1))
-    var aligned_ptr = ptr + offset
+    var aligned_ptr = ptr.unsafe_offset(offset)
 
     # Find the last aligned read possible
     var buffer_len = len(buffer) - offset
@@ -133,9 +132,9 @@ def to_ascii_lowercase(mut buffer: List[UInt8]):
 
     # Now do aligned reads all through
     for s in range(0, aligned_end, SIMD_U8_WIDTH):
-        var v = aligned_ptr.load[width=SIMD_U8_WIDTH](s)
+        var v = aligned_ptr.unsafe_load[width=SIMD_U8_WIDTH](s)
         _to_ascii_lowercase_vec(v)
-        aligned_ptr.store(s, v)
+        aligned_ptr.unsafe_store(s, v)
 
     for i in range(aligned_end + offset, len(buffer)):
         buffer[i] |= UInt8(UInt(is_ascii_uppercase(buffer[i]))) * 32
@@ -155,7 +154,7 @@ def to_ascii_uppercase(mut buffer: List[UInt8]):
     """Uppercase all ascii a-zA-Z characters.
 
     ```mojo
-    from testing import assert_equal
+    from std.testing import assert_equal
     from extramojo.bstr.bstr import to_ascii_uppercase
     var test = List("ABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZ".as_bytes())
     var expected = List("ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ".as_bytes())
@@ -171,13 +170,13 @@ def to_ascii_uppercase(mut buffer: List[UInt8]):
 
     # Initial unaligned set
     var ptr = buffer.unsafe_ptr()
-    var v = ptr.load[width=SIMD_U8_WIDTH]()
+    var v = ptr.unsafe_load[width=SIMD_U8_WIDTH]()
     _to_ascii_uppercase_vec(v)
-    ptr.store(0, v)
+    ptr.unsafe_store(0, v)
 
     # Now get an aligned pointer
     var offset = SIMD_U8_WIDTH - (ptr.__int__() & (SIMD_U8_WIDTH - 1))
-    var aligned_ptr = ptr + offset
+    var aligned_ptr = ptr.unsafe_offset(offset)
 
     # Find the last aligned read possible
     var buffer_len = len(buffer) - offset
@@ -187,9 +186,9 @@ def to_ascii_uppercase(mut buffer: List[UInt8]):
 
     # Now do aligned reads all through
     for s in range(0, aligned_end, SIMD_U8_WIDTH):
-        var v = aligned_ptr.load[width=SIMD_U8_WIDTH](s)
+        var v = aligned_ptr.unsafe_load[width=SIMD_U8_WIDTH](s)
         _to_ascii_uppercase_vec(v)
-        aligned_ptr.store(s, v)
+        aligned_ptr.unsafe_store(s, v)
 
     for i in range(aligned_end + offset, len(buffer)):
         buffer[i] ^= UInt8(UInt(is_ascii_lowercase(buffer[i]))) * 32
@@ -212,7 +211,7 @@ def find(haystack: Span[UInt8, _], needle: Span[UInt8, _]) -> Optional[Int]:
     if they match the rest of the needle.
 
     ```mojo
-    from testing import assert_equal
+    from std.testing import assert_equal
     from extramojo.bstr.bstr import find
 
     var haystack = "ABCDEFGhijklmnop".as_bytes()
@@ -275,22 +274,22 @@ struct SplitIterator[is_mutable: Bool, //, origin: Origin[mut=is_mutable]](
     TODO: these test run fine in the test module, but not in doctests.
 
     ```
-    from testing import assert_equal
+    from std.testing import assert_equal
     from extramojo.bstr.bstr import SplitIterator
     var input = "ABCD\tEFGH\tIJKL\nMNOP".as_bytes()
     var expected = List(
         "ABCD".as_bytes(), "EFGH".as_bytes(), "IJKL\nMNOP".as_bytes()
     )
-    var output = List[Span[UInt8, StaticConstantOrigin]]()
+    var output = List[Span[UInt8, ImmStaticOrigin]]()
     for value in SplitIterator(input, ord("\t")):
         output.append(value)
     for i in range(len(expected)):
-        assert_equal(StringSlice(unsafe_from_utf8=output[i]), StringSlice(unsafe_from_utf8=expected[i]))
+        assert_equal(StringSpan(unsafe_from_utf8=output[i]), StringSpan(unsafe_from_utf8=expected[i]))
     ```
 
     ```
-    from collections.string.string_slice import StringSlice
-    from testing import assert_equal
+    from std.collections.string import StringSpan
+    from std.testing import assert_equal
     from extramojo.bstr.bstr import SplitIterator
 
     var input = "ABCD\tEFGH\tIJKL\nMNOP".as_bytes()
@@ -301,9 +300,9 @@ struct SplitIterator[is_mutable: Bool, //, origin: Origin[mut=is_mutable]](
     var first = iter.__next__()
     var peek = iter.peek()
     var second = iter.__next__()
-    assert_equal(StringSlice(unsafe_from_utf8=peek.value()), StringSlice(unsafe_from_utf8=second))
-    assert_equal(StringSlice(unsafe_from_utf8=first), StringSlice(unsafe_from_utf8=expected[0]))
-    assert_equal(StringSlice(unsafe_from_utf8=second), StringSlice(unsafe_from_utf8=expected[1]))
+    assert_equal(StringSpan(unsafe_from_utf8=peek.value()), StringSpan(unsafe_from_utf8=second))
+    assert_equal(StringSpan(unsafe_from_utf8=first), StringSpan(unsafe_from_utf8=expected[0]))
+    assert_equal(StringSpan(unsafe_from_utf8=second), StringSpan(unsafe_from_utf8=expected[1]))
     ```
     """
 

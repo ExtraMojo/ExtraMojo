@@ -1,6 +1,6 @@
 context:
-  version: "0.20.1"
-  max_version: "=26.3.0"
+  version: "0.23.0"
+  max_version: "=26.5.0"
 
 package:
   name: "extramojo"
@@ -15,7 +15,7 @@ source:
 build:
   number: 0
   script:
-    - mojo package extramojo -o ${{ PREFIX }}/lib/mojo/extramojo.mojopkg
+    - mojo precompile extramojo -o $PREFIX/lib/mojo/extramojo.mojoc
 requirements:
   host:
     - max ${{ max_version }}
@@ -27,12 +27,12 @@ tests:
   - script:
       - if: unix
         then:
-          - mojo run -I ${{ PREFIX }}/lib/mojo/extramojo.mojopkg tests/test_file.mojo
-          - mojo test -I ${{ PREFIX }}/lib/mojo/extramojo.mojopkg tests/test_bstr.mojo
-          - mojo test -I ${{ PREFIX }}/lib/mojo/extramojo.mojopkg tests/math/test_ops.mojo
-          - mojo test -I ${{ PREFIX }}/lib/mojo/extramojo.mojopkg tests/collections/test_bitvec.mojo
-          - mojo test -I ${{ PREFIX }}/lib/mojo/extramojo.mojopkg tests/collections/bbhash/test_hash.mojo
-          - mojo test -I ${{ PREFIX }}/lib/mojo/extramojo.mojopkg tests/collections/bbhash/test_bbhash.mojo
+          - mojo run -I $PREFIX/lib/mojo tests/test_file.mojo
+          - mojo run -I $PREFIX/lib/mojo tests/test_bstr.mojo
+          - mojo run -I $PREFIX/lib/mojo tests/math/test_ops.mojo
+          - mojo run -I $PREFIX/lib/mojo tests/collections/test_bitvec.mojo
+          - mojo run -I $PREFIX/lib/mojo tests/collections/bbhash/test_hash.mojo
+          - mojo run -I $PREFIX/lib/mojo tests/collections/bbhash/test_bbhash.mojo
     requirements:
       run:
         - max ${{ max_version }}

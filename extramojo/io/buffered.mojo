@@ -6,7 +6,7 @@ Buffered reading and writing.
 BufferedReader:
 
 ```mojo
-from testing import assert_equal
+from std.testing import assert_equal
 from extramojo.io.buffered import BufferedReader
 
 def test_read_until(file: String, expected_lines: List[String]) raises:
@@ -45,7 +45,7 @@ def test_buffered_writer(file: String, expected_lines: List[String]) raises:
 """
 from std import math
 from std.algorithm import vectorize
-from std.memory import UnsafePointer, memcpy
+from std.memory import Layout, alloc, unsafe_memcpy
 from std.sys.info import simd_width_of
 from std.io import Writable
 
@@ -78,17 +78,17 @@ def read_lines(
     # TODO: make this an iterator
     var fh = open(path, "r")
     var result = List[List[UInt8]]()
-    var file_pos: UInt64 = 0
+    var file_pos: Int = 0
 
     while True:
         _ = fh.seek(file_pos)
         var buffer = fh.read_bytes(buf_size)
         var newlines = find_chr_all_occurrences(buffer, NEW_LINE)
-        var start: UInt64 = 0
+        var start: Int = 0
         for i in range(0, len(newlines)):
             var newline = newlines[i]
             result.append(List(buffer[Int(start) : newline]))
-            start = UInt64(newline + 1)
+            start = newline + 1
 
         if len(buffer) < BUF_SIZE:
             break
@@ -114,7 +114,7 @@ def for_each_line[
     """
     var fh = open(path, "r")
     # var result = List[Tensor[DType.int8]]()
-    var file_pos: UInt64 = 0
+    var file_pos: Int = 0
 
     while True:
         _ = fh.seek(file_pos)
@@ -129,7 +129,7 @@ def for_each_line[
             func(buffer, buffer_index, newline)
             buffer_index = newline + 1
 
-        file_pos += UInt64(buffer_index)
+        file_pos += buffer_index
         if len(buffer) < BUF_SIZE:
             break
 
@@ -171,7 +171,7 @@ struct BufferedReader(Movable):
     ```mojo
     from extramojo.io.buffered import BufferedReader
 
-    def read_bytes(read file: String) raises -> List[UInt8]:
+    def read_bytes(imm file: String) raises -> List[UInt8]:
         var fh = open(file, "r")
         var reader = BufferedReader(fh^, buffer_capacity=50)
         var buffer = List[UInt8](capacity=125)
@@ -192,9 +192,7 @@ struct BufferedReader(Movable):
 
     var fh: FileHandle
     """The internal filehandle to read from."""
-    var buffer: UnsafePointer[
-        mut=True, type=UInt8, origin=ExternalOrigin[mut=True]
-    ]
+    var buffer: Pointer[UInt8, MutUntrackedOrigin]
     """The internal buffer."""
     var file_offset: Int
     """Current offset into the file."""
@@ -218,27 +216,29 @@ struct BufferedReader(Movable):
         self.file_offset = 0
         self.buffer_offset = 0
         self.buffer_capacity = buffer_capacity
-        self.buffer = alloc[UInt8](self.buffer_capacity)
+        self.buffer = alloc(
+            Layout[UInt8](count=self.buffer_capacity)
+        ).unsafe_leak()
         self.buffer_len = 0
         _ = self._fill_buffer()
 
-    def __del__(deinit self):
+    def __deinit__(deinit self):
         try:
             self.fh.close()
         except:
             pass
-        self.buffer.free()
+        self.buffer.unsafe_free()
 
     def __enter__(var self) -> Self:
         return self^
 
-    def __init__(out self, *, deinit take: Self):
-        self.fh = take.fh^
-        self.file_offset = take.file_offset
-        self.buffer_offset = take.buffer_offset
-        self.buffer = take.buffer
-        self.buffer_capacity = take.buffer_capacity
-        self.buffer_len = take.buffer_len
+    def __init__(out self, *, deinit move: Self):
+        self.fh = move.fh^
+        self.file_offset = move.file_offset
+        self.buffer_offset = move.buffer_offset
+        self.buffer = move.buffer
+        self.buffer_capacity = move.buffer_capacity
+        self.buffer_len = move.buffer_len
 
     def read_bytes(mut self, mut buffer: List[UInt8]) raises -> Int:
         """Read up to `len(buffer)` bytes.
@@ -254,14 +254,14 @@ struct BufferedReader(Movable):
         var bytes_read = 0
 
         while bytes_to_read > 0:
-            var out_buf_ptr = buffer.unsafe_ptr() + bytes_read
+            var out_buf_ptr = buffer.unsafe_ptr().unsafe_offset(bytes_read)
             # Copy as much as possible into the buffer
             var available_bytes = min(
                 self.buffer_len - self.buffer_offset, bytes_to_read
             )
-            memcpy(
+            unsafe_memcpy(
                 dest=out_buf_ptr,
-                src=self.buffer + self.buffer_offset,
+                src=self.buffer.unsafe_offset(self.buffer_offset),
                 count=available_bytes,
             )
             self.buffer_offset += available_bytes
@@ -298,7 +298,7 @@ struct BufferedReader(Movable):
         while True:
             # Find the next newline in the buffer
             var newline_index = memchr(
-                Span[UInt8](ptr=self.buffer, length=self.buffer_len),
+                Span[UInt8](unsafe_ptr=self.buffer, length=self.buffer_len),
                 UInt8(char),
                 self.buffer_offset,
             )
@@ -308,10 +308,10 @@ struct BufferedReader(Movable):
             var size = end - self.buffer_offset
             buffer.reserve(len(buffer) + size)
             buffer._annotate_increase(n=size)  # for asan
-            var line_ptr = buffer.unsafe_ptr() + len(buffer)
-            memcpy(
+            var line_ptr = buffer.unsafe_ptr().unsafe_offset(len(buffer))
+            unsafe_memcpy(
                 dest=line_ptr,
-                src=self.buffer + self.buffer_offset,
+                src=self.buffer.unsafe_offset(self.buffer_offset),
                 count=size,
             )
             # TODO: is there a better way to do this?
@@ -340,21 +340,21 @@ struct BufferedReader(Movable):
         """
         var buf_ptr = self.buffer
         var bytes_read = self.fh.read(
-            Span[UInt8](ptr=buf_ptr, length=self.buffer_capacity)
+            Span[UInt8](unsafe_ptr=buf_ptr, length=self.buffer_capacity)
         )
         self.buffer_len = bytes_read.__int__()
         self.buffer_offset = 0
         return self.buffer_len
 
 
-struct BufferedWriter[W: Movable & Writer](Movable, Writer):
+struct BufferedWriter[W: Movable & Deinitable & Writer](Movable, Writer):
     """A BufferedWriter.
 
     ## Example
 
     ```mojo
     from extramojo.io.buffered import BufferedWriter
-    def write_to_file(read file: String, read expected_lines: List[String]) raises:
+    def write_to_file(imm file: String, imm expected_lines: List[String]) raises:
         var fh = BufferedWriter(open(String(file), "w"), buffer_capacity=128)
         for i in range(len(expected_lines)):
             fh.write_bytes(expected_lines[i].as_bytes())
@@ -387,23 +387,23 @@ struct BufferedWriter[W: Movable & Writer](Movable, Writer):
         self.buffer_capacity = buffer_capacity
         self.buffer_len = 0
 
-    def __del__(deinit self):
+    def __deinit__(deinit self):
         self.flush()
 
     def __enter__(var self) -> Self:
         return self^
 
-    def __init__(out self, *, deinit take: Self):
-        self.inner = take.inner^
-        self.buffer = take.buffer^
-        self.buffer_capacity = take.buffer_capacity
-        self.buffer_len = take.buffer_len
+    def __init__(out self, *, deinit move: Self):
+        self.inner = move.inner^
+        self.buffer = move.buffer^
+        self.buffer_capacity = move.buffer_capacity
+        self.buffer_len = move.buffer_len
 
     def close(mut self) raises:
         self.flush()
         # self.fh.close()
 
-    def write_string(mut self, string: StringSlice):
+    def write_string(mut self, string: StringSpan):
         self.write_bytes(string.as_bytes())
 
     def write_bytes(mut self, bytes: Span[UInt8, _]):
@@ -418,8 +418,8 @@ struct BufferedWriter[W: Movable & Writer](Movable, Writer):
 
             var to_copy = b[:end]
             self.buffer._annotate_increase(n=len(to_copy))  # for asan
-            memcpy(
-                dest=self.buffer.unsafe_ptr() + self.buffer_len,
+            unsafe_memcpy(
+                dest=self.buffer.unsafe_ptr().unsafe_offset(self.buffer_len),
                 src=to_copy.unsafe_ptr(),
                 count=len(to_copy),
             )
@@ -438,8 +438,7 @@ struct BufferedWriter[W: Movable & Writer](Movable, Writer):
             args: Any `Writable` values that will be written to the writer.
         """
 
-        @parameter
-        def write_arg[T: Writable](arg: T):
+        def write_arg[T: Writable](arg: T) {mut self}:
             arg.write_to(self)
 
         comptime for i in range(0, args.__len__()):
@@ -449,6 +448,6 @@ struct BufferedWriter[W: Movable & Writer](Movable, Writer):
         """Write any remaining bytes in the current buffer, then clear the buffer.
         """
         # TODO: replace the inner writer with something of our own
-        self.inner.write_string(StringSlice(unsafe_from_utf8=Span(self.buffer)))
+        self.inner.write_string(StringSpan(unsafe_from_utf8=Span(self.buffer)))
         self.buffer_len = 0
         self.buffer.clear()
