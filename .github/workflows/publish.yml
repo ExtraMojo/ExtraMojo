@@ -1,0 +1,104 @@
+name: Docs
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docs-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  MODO_VERSION: 0.11.13
+  HUGO_COMMIT: 7d3df9e77fe96fd8a915dd1dffaf466da8e45d0d
+
+jobs:
+  build:
+    name: Build API docs
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout ExtraMojo
+        uses: actions/checkout@v4
+
+      - name: Install Mojo and project dependencies
+        uses: prefix-dev/setup-pixi@v0.10.1
+        with:
+          pixi-version: v0.59.0
+          cache: true
+          locked: true
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.24.x
+          cache: false
+
+      - name: Install Modo
+        run: |
+          curl --fail --location --retry 3 \
+            "https://github.com/mlange-42/modo/releases/download/v${MODO_VERSION}/modo-v${MODO_VERSION}-linux-amd64.tar.gz" \
+            --output "${RUNNER_TEMP}/modo.tar.gz"
+          tar -xzf "${RUNNER_TEMP}/modo.tar.gz" -C "${RUNNER_TEMP}"
+          echo "${RUNNER_TEMP}" >> "${GITHUB_PATH}"
+
+      - name: Build Hugo with Mojo syntax highlighting
+        run: |
+          git init "${RUNNER_TEMP}/hugo-source"
+          git -C "${RUNNER_TEMP}/hugo-source" remote add origin https://github.com/mlange-42/hugo.git
+          git -C "${RUNNER_TEMP}/hugo-source" fetch --depth 1 origin "${HUGO_COMMIT}"
+          git -C "${RUNNER_TEMP}/hugo-source" checkout --detach FETCH_HEAD
+          go build -C "${RUNNER_TEMP}/hugo-source" -o "${RUNNER_TEMP}/hugo" .
+
+      - name: Generate API docs
+        run: modo build
+
+      - name: Build docs site
+        run: "${RUNNER_TEMP}/hugo --source docs/site --minify"
+
+      - name: Archive generated Markdown
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs-markdown
+          path: docs/site/content
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Archive generated site
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs-site
+          path: docs/site/public
+          if-no-files-found: error
+          retention-days: 14
+
+  deploy:
+    name: Deploy API docs
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download generated site
+        uses: actions/download-artifact@v4
+        with:
+          name: docs-site
+          path: docs/site/public
+
+      - name: Deploy to GitHub Pages
+        uses: crazy-max/ghaction-github-pages@v5
+        with:
+          target_branch: gh-pages
+          build_dir: docs/site/public
+          jekyll: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

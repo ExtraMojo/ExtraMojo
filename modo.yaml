@@ -9,7 +9,7 @@ source:
 
 # Full URLs of package sources. Used to create source links.
 source-url:
-  ExtraMojo: https://github.com/ExtraMojo/ExtraMojo/blob/main/ExtraMojo
+  extramojo: https://github.com/ExtraMojo/ExtraMojo/blob/main/extramojo
 
 # Output directory.
 output: docs/site/content
@@ -22,7 +22,7 @@ tests: ""
 format: hugo
 
 # Re-structure docs according to package re-exports.
-exports: true
+exports: false
 
 # Use shortened cross-ref link labels.
 short-links: true
