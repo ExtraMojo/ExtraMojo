@@ -16,7 +16,7 @@ def find_chr_all_occurrences(haystack: Span[UInt8, _], chr: UInt8) -> List[Int]:
     """Find all the occurrences of `chr` in the input buffer.
 
     ```mojo
-    from testing import assert_equal
+    from std.testing import assert_equal
     from extramojo.bstr.bstr import find_chr_all_occurrences
 
     var haystack = "ATCGACCATCGAGATCATGTTTCAT"
@@ -64,7 +64,7 @@ def is_ascii_uppercase(value: UInt8) -> Bool:
     """Check if a byte is ASCII uppercase.
 
     ```mojo
-    from testing import assert_true, assert_false
+    from std.testing import assert_true, assert_false
     from extramojo.bstr.bstr import is_ascii_uppercase
 
     for ascii_letter in range(ord("A"), ord("Z")+1):
@@ -82,7 +82,7 @@ def is_ascii_lowercase(value: UInt8) -> Bool:
     """Check if a byte is ASCII lowercase.
 
     ```mojo
-    from testing import assert_true, assert_false
+    from std.testing import assert_true, assert_false
     from extramojo.bstr.bstr import is_ascii_lowercase
 
     for ascii_letter in range(ord("A"), ord("Z")+1):
@@ -100,7 +100,7 @@ def to_ascii_lowercase(mut buffer: List[UInt8]):
     """Lowercase all ascii a-zA-Z characters.
 
     ```mojo
-    from testing import assert_equal
+    from std.testing import assert_equal
     from extramojo.bstr.bstr import to_ascii_lowercase
     var test = List("ABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZ".as_bytes())
     var expected = List("abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz".as_bytes())
@@ -154,7 +154,7 @@ def to_ascii_uppercase(mut buffer: List[UInt8]):
     """Uppercase all ascii a-zA-Z characters.
 
     ```mojo
-    from testing import assert_equal
+    from std.testing import assert_equal
     from extramojo.bstr.bstr import to_ascii_uppercase
     var test = List("ABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZABCdefgHIjklmnOPQRSTUVWXYZ".as_bytes())
     var expected = List("ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ".as_bytes())
@@ -211,7 +211,7 @@ def find(haystack: Span[UInt8, _], needle: Span[UInt8, _]) -> Optional[Int]:
     if they match the rest of the needle.
 
     ```mojo
-    from testing import assert_equal
+    from std.testing import assert_equal
     from extramojo.bstr.bstr import find
 
     var haystack = "ABCDEFGhijklmnop".as_bytes()
@@ -274,7 +274,7 @@ struct SplitIterator[is_mutable: Bool, //, origin: Origin[mut=is_mutable]](
     TODO: these test run fine in the test module, but not in doctests.
 
     ```
-    from testing import assert_equal
+    from std.testing import assert_equal
     from extramojo.bstr.bstr import SplitIterator
     var input = "ABCD\tEFGH\tIJKL\nMNOP".as_bytes()
     var expected = List(
@@ -289,7 +289,7 @@ struct SplitIterator[is_mutable: Bool, //, origin: Origin[mut=is_mutable]](
 
     ```
     from std.collections.string import StringSpan
-    from testing import assert_equal
+    from std.testing import assert_equal
     from extramojo.bstr.bstr import SplitIterator
 
     var input = "ABCD\tEFGH\tIJKL\nMNOP".as_bytes()

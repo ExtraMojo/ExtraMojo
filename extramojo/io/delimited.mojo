@@ -8,7 +8,7 @@ TODO: this should be two different examples, but the doc parser can't seem to ha
 
 ```mojo
 from std.collections.string import StringSpan
-from testing import assert_equal
+from std.testing import assert_equal
 
 from extramojo.bstr.bstr import SplitIterator
 from extramojo.cli.parser import ParsedOpts

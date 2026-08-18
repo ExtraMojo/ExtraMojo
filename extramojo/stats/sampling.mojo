@@ -14,8 +14,8 @@ struct ReservoirSampler[T: Copyable & Deinitable](Copyable, Deinitable):
     Sample all the elements, this should retain the order since we always automatically take the first N elements.
 
     ```mojo
-    from random import seed
-    from testing import assert_equal
+    from std.random import seed
+    from std.testing import assert_equal
 
     from extramojo.stats.sampling import ReservoirSampler
 

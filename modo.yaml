@@ -59,7 +59,13 @@ pre-test: []
 
 # Bash scripts to run after test.
 # Also runs after build if 'tests' is given.
-post-test: []
+post-test:
+  - |
+    if [ -d docs/test ]; then
+      echo Running generated Mojo tests...
+      find docs/test -name '*.mojo' -exec pixi run mojo run -I . {} \;
+      echo Done.
+    fi
 
 # Bash scripts to run after build.
 post-build: []

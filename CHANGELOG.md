@@ -7,6 +7,8 @@
 - Migrate to Mojo 1.0.0.
 - Adopt the unified pointer and explicit unsafe memory APIs.
 - Replace removed `mojo test` and deprecated `mojo package` workflows.
+- Build Conda packages from `recipe.yaml` and emit the stable `.mojoc` format.
+- Update documentation imports and ignore generated `.mojoc` packages.
 
 ## v0.22.0
 

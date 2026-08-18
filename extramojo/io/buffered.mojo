@@ -6,7 +6,7 @@ Buffered reading and writing.
 BufferedReader:
 
 ```mojo
-from testing import assert_equal
+from std.testing import assert_equal
 from extramojo.io.buffered import BufferedReader
 
 def test_read_until(file: String, expected_lines: List[String]) raises:

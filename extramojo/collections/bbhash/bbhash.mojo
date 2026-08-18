@@ -3,7 +3,7 @@
 ## Examples
 
 ```mojo
-from testing import assert_true, assert_false
+from std.testing import assert_true, assert_false
 from extramojo.collections.bbhash.bbhash import BBHash
 
 var keys: List[String] = ["fox", "cat", "dog", "mouse", "frog"]
@@ -17,8 +17,8 @@ Verify that a returned True value for key matches the key from the original
 input set:
 
 ```mojo
-from hashlib.hash import hash
-from testing import assert_true, assert_false
+from std.hashlib.hash import hash
+from std.testing import assert_true, assert_false
 from extramojo.collections.bbhash.bbhash import BBHash
 
 var keys: List[String] = ["fox", "cat", "dog", "mouse", "frog"]

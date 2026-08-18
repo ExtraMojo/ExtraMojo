@@ -1,7 +1,7 @@
 """A very basic CLI Opt Parser.
 
 ```mojo {doctest="parser" class="no-wrap"}
-from testing import assert_equal, assert_true
+from std.testing import assert_equal, assert_true
 from extramojo.cli.parser import OptParser, OptConfig, OptKind
 
 var args = List(String("--file"), String("/path/to/thing"), String("--count"), String("42"), String("--fraction"), String("-0.2"), String("--verbose"), String("ExtraFile.tsv"))
@@ -545,7 +545,7 @@ struct SubcommandParser(Copyable, Movable):
     The parser is for the options for the subcommand.
 
     ```mojo
-    from testing import assert_equal, assert_true
+    from std.testing import assert_equal, assert_true
     from extramojo.cli.parser import OptParser, OptConfig, OptKind, SubcommandParser, Subcommand
 
     var args = List(String("do-work"), String("--file"), String("/path/to/thing"), String("--count"), String("42"), String("--fraction"), String("-0.2"), String("--verbose"))
