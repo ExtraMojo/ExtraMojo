@@ -29,6 +29,7 @@ tests:
         then:
           - mojo run -I $PREFIX/lib/mojo tests/test_file.mojo
           - mojo run -I $PREFIX/lib/mojo tests/test_bstr.mojo
+          - mojo run -I $PREFIX/lib/mojo tests/test_bstr_parse.mojo
           - mojo run -I $PREFIX/lib/mojo tests/math/test_ops.mojo
           - mojo run -I $PREFIX/lib/mojo tests/collections/test_bitvec.mojo
           - mojo run -I $PREFIX/lib/mojo tests/collections/bbhash/test_hash.mojo
@@ -40,6 +41,7 @@ tests:
       recipe:
         - tests/test_file.mojo
         - tests/test_bstr.mojo
+        - tests/test_bstr_parse.mojo
         - tests/math/test_ops.mojo
         - tests/collections/test_bitvec.mojo
         - tests/collections/bbhash/test_hash.mojo
@@ -47,10 +49,13 @@ tests:
 
 about:
   homepage: https://github.com/ExtraMojo/ExtraMojo
-  license: "Unlicense OR MIT"
+  license: "(Unlicense OR MIT) AND MIT AND Apache-2.0 WITH LLVM-exception"
   license_file:
     - LICENSE-MIT
     - UNLICENSE
+    - licenses/third-party/README.md
+    - licenses/third-party/zig.txt
+    - licenses/third-party/modular.txt
   summary: Extra functionality not yet in the standard library, mostly focused on strings and file IO.
   repository: https://github.com/ExtraMojo/ExtraMojo
 
