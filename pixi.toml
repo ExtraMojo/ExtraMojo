@@ -6,7 +6,7 @@ channels = [
 ]
 description = "Useful things that aren't in the standard library."
 platforms = ["osx-arm64", "linux-64", "linux-aarch64"]
-license = "Unlicense OR MIT"
+license = "(Unlicense OR MIT) AND MIT AND Apache-2.0 WITH LLVM-exception"
 preview = ["pixi-build"]
 
 [package]
