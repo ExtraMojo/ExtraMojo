@@ -13,7 +13,7 @@ source:
   use_gitignore: true
 
 build:
-  number: 0
+  number: 1
   script:
     - mojo precompile extramojo -o $PREFIX/lib/mojo/extramojo.mojoc
 requirements:
