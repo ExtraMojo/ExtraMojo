@@ -1,4 +1,4 @@
-# Third-party code in the decimal byte parser
+# Third-party code in the byte float parser
 
 ExtraMojo's original code remains available under its existing MIT / Unlicense
 terms. The adapted portions of `extramojo/bstr/parse.mojo` retain the following
@@ -12,7 +12,11 @@ upstream licenses; the package metadata describes their combined requirements.
 - Copyright (c) Zig contributors.
 - License: MIT (Expat), reproduced unchanged in [zig.txt](zig.txt).
 - Changes: translated the relevant operations to Mojo, used byte spans, and added
-  checked significand accumulation and a restricted decimal grammar.
+  checked significand accumulation with an extended-syntax fallback. The public
+  API accepts Zig's decimal, hexadecimal, separator, and special-value syntax
+  for `Float64`. Hexadecimal conversion and the bounded exact-rational decimal
+  fallback are implemented locally; they do not copy `convert_hex.zig` or
+  `decimal.zig`.
 - Upstream credits Johnny Lee's
   [Fast numeric string to int](https://johnnylee-sde.github.io/Fast-numeric-string-to-int/)
   for eight-digit conversion, and Daniel Lemire's
