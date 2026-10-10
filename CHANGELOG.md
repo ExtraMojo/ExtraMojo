@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## v0.24.0
+
+- Migrate to Mojo 1.1.0 and use standalone Mojo compiler dependencies instead of MAX.
+- Migrate BitVec set-operation helpers and `for_each_line` to value-taking unified closures.
+- Update `for_each_line` calls from `for_each_line[callback](path)` to `for_each_line(path, callback)`.
+- Remove the unused import of the removed `memcmp` API.
+- Update compile-time numeric test tables for Mojo 1.1.
+- Validate tests and Conda packages on Linux x86-64, Linux AArch64, and macOS ARM64, retaining Linux AddressSanitizer coverage and API docs checks.
+
 ## v0.23.0
 
 - Migrate to Mojo 1.0.0.

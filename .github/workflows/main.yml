@@ -2,40 +2,52 @@ name: Build and test
 on: [push, pull_request]
 jobs:
     build_and_test:
-        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                os: [ubuntu-latest, ubuntu-24.04-arm, macos-14]
+        runs-on: ${{ matrix.os }}
 
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
 
-            - name: Install pixi CLI
-              run: |
-                  curl -fsSL https://pixi.sh/install.sh | sh
-                  export PATH="/home/runner/.pixi/bin:$PATH"
-
-            - name: Install mojo and dependencies
-              run: |
-                  export PATH="/home/runner/.pixi/bin:$PATH"
-                  pixi install --locked
-
-            - name: Install llvm-symbolizer
-              run: |
-                  sudo apt-get install -y llvm
+            - name: Install Mojo and dependencies
+              uses: prefix-dev/setup-pixi@v0.10.1
+              with:
+                  pixi-version: v0.80.0
+                  cache: true
+                  locked: true
 
             - name: Run build
-              run: |
-                  export PATH="/home/runner/.pixi/bin:$PATH"
-                  pixi run build
+              run: pixi run build
 
             - name: Run tests
+              run: pixi run t
+
+            - name: Install llvm-symbolizer
+              if: matrix.os == 'ubuntu-latest'
+              run: sudo apt-get install -y llvm
+
+            - name: Run AddressSanitizer tests
+              if: matrix.os == 'ubuntu-latest'
               env:
                   LLVM_SYMBOLIZER_PATH: /usr/bin/llvm-symbolizer
-              run: |
-                  export PATH="/home/runner/.pixi/bin:$PATH"
-                  pixi run t-asan
+              run: pixi run t-asan
 
             - name: Check formatting
               run: |
-                  export PATH="/home/runner/.pixi/bin:$PATH"
-                  if pixi run mojo format extramojo/* 2>&1 | grep -E "reformatted|error|failed" ; then echo "Formatter failed" ; exit 1 ; else echo "Formatting OK"; fi
-                  if pixi run mojo format tests/* 2>&1 | grep -E "reformatted|error|failed" ; then echo "Formatter failed" ; exit 1 ; else echo "Formatting OK"; fi
+                  pixi run mojo format extramojo tests
+                  git diff --exit-code
+
+            - name: Build Conda package
+              run: pixi publish --path . --target-dir dist
+
+            - name: Test installed Conda package
+              run: |
+                  for package in dist/*.conda; do
+                      pixi exec --spec rattler-build=0.76.1 rattler-build test \
+                          --channel conda-forge \
+                          --channel https://conda.modular.com/max \
+                          --package-file "$package"
+                  done

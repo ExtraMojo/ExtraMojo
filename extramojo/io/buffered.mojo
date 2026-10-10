@@ -96,19 +96,19 @@ def read_lines(
     return result^
 
 
-def for_each_line[
-    func: def(Span[UInt8, _], Int, Int) capturing[_] -> None
-](path: String, buf_size: Int = BUF_SIZE) raises:
+def for_each_line(
+    path: String,
+    func: Some[def(Span[UInt8, _], Int, Int) -> None],
+    buf_size: Int = BUF_SIZE,
+) raises:
     """
     Call the provided callback on each line.
 
     The callback will be given a buffer, and the [start, end) of where the line is in that buffer.
 
-    Parameters:
-        func: The callback to run for each line.
-
     Args:
         path: The file path to open and read.
+        func: The callback to run for each line, passed as a value.
         buf_size: The size of the buffer to use.
 
     """

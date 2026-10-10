@@ -75,8 +75,8 @@ def test_delim_reader_writer(file: String) raises:
 # #########################################
 
 struct Score[
-    truth_lengths_origin: ImmutableOrigin,
-    truth_names_origin: ImmutableOrigin,
+    truth_lengths_origin: ImmOrigin,
+    truth_names_origin: ImmOrigin,
 ](ToDelimited):
     var assembly_name: String
     var assembly_length: Int
