@@ -6,3 +6,5 @@
 .magic
 *.mojopkg
 *.mojoc
+# Built Conda packages
+dist/

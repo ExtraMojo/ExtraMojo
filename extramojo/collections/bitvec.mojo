@@ -22,7 +22,6 @@ from std.memory import (
     Layout,
     alloc,
     pack_bits,
-    memcmp,
     unsafe_memcpy,
     unsafe_memset,
     unsafe_memset_zero,
@@ -771,12 +770,19 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
     @always_inline
     @staticmethod
     def _vectorize_apply[
-        func: def[simd_width: Int](
-            SIMD[Self.WORD_DTYPE, simd_width],
-            SIMD[Self.WORD_DTYPE, simd_width],
-        ) capturing -> SIMD[Self.WORD_DTYPE, simd_width],
-        lhs_zero_out: Bool = False,
-    ](imm left: Self, imm right: Self) -> Self:
+        lhs_zero_out: Bool = False
+    ](
+        left: Self,
+        right: Self,
+        func: Some[
+            def[
+                simd_width: Int
+            ](
+                SIMD[Self.WORD_DTYPE, simd_width],
+                SIMD[Self.WORD_DTYPE, simd_width],
+            ) -> SIMD[Self.WORD_DTYPE, simd_width]
+        ],
+    ) -> Self:
         """Applies a vectorized binary operation between two BitVecs.
 
         This internal utility function optimizes set operations by processing
@@ -789,10 +795,6 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
         SIMD width.
 
         Parameters:
-            func: A function that takes two SIMD vectors of Self.WORD_DTYPE
-                values and returns a SIMD vector with the result of the operation.
-                The function should implement the desired set operation (e.g.,
-                union, intersection).
             lhs_zero_out: Decides how to handle the case where the lhs is longer than
                 the rhs. If it is set to True, then the remainder of the lhs, will be
                 cleared. If it is set to False, then the lhs bits will be left alone.
@@ -800,6 +802,7 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
         Args:
             left: The first BitVec operand.
             right: The second BitVec operand.
+            func: A closure that takes two SIMD vectors and returns their set operation.
 
         Returns:
             A new BitVec containing the result of applying the function to each
@@ -818,7 +821,7 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
         @always_inline
         def _intersect[
             simd_width: Int
-        ](offset: Int) {mut res, imm left, imm right}:
+        ](offset: Int) {mut res, imm left, imm right, imm func}:
             # Initialize SIMD vectors to hold multiple words from each `BitVec`
             var left_vec: SIMD[Self.WORD_DTYPE, simd_width]
             var right_vec: SIMD[Self.WORD_DTYPE, simd_width]
@@ -833,7 +836,7 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
 
             # Apply the provided operation (union, intersection, etc.) to the
             # vectors
-            var result_vec = func(left_vec, right_vec)
+            var result_vec = func[simd_width](left_vec, right_vec)
 
             # Store the results back into the result `BitVec`
             res.data.unsafe_offset(offset).unsafe_store[width=simd_width](
@@ -893,20 +896,19 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
             A new `BitVec` containing all elements from both sets.
         """
 
-        @parameter
         @always_inline
         def _union[
             simd_width: Int
         ](
-            left: SIMD[self.WORD_DTYPE, simd_width],
-            right: SIMD[self.WORD_DTYPE, simd_width],
-        ) -> SIMD[self.WORD_DTYPE, simd_width]:
+            left: SIMD[Self.WORD_DTYPE, simd_width],
+            right: SIMD[Self.WORD_DTYPE, simd_width],
+        ) {} -> SIMD[Self.WORD_DTYPE, simd_width]:
             return left | right
 
         if len(self) >= len(other):
-            return Self._vectorize_apply[_union, False](self, other)
+            return Self._vectorize_apply[False](self, other, _union)
         else:
-            return Self._vectorize_apply[_union, False](other, self)
+            return Self._vectorize_apply[False](other, self, _union)
 
     def intersection(self, other: Self) -> Self:
         """Returns a new `BitVec` that is the intersection of `self` and `other`.
@@ -924,20 +926,19 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
             A new `BitVec` containing only the elements present in both sets.
         """
 
-        @parameter
         @always_inline
         def _intersection[
             simd_width: Int
         ](
-            left: SIMD[self.WORD_DTYPE, simd_width],
-            right: SIMD[self.WORD_DTYPE, simd_width],
-        ) -> SIMD[self.WORD_DTYPE, simd_width]:
+            left: SIMD[Self.WORD_DTYPE, simd_width],
+            right: SIMD[Self.WORD_DTYPE, simd_width],
+        ) {} -> SIMD[Self.WORD_DTYPE, simd_width]:
             return left & right
 
         if len(self) >= len(other):
-            return Self._vectorize_apply[_intersection, True](self, other)
+            return Self._vectorize_apply[True](self, other, _intersection)
         else:
-            return Self._vectorize_apply[_intersection, True](other, self)
+            return Self._vectorize_apply[True](other, self, _intersection)
 
     def difference(self, other: Self) -> Self:
         """Returns a new `BitVec` that is the difference of `self` and `other`.
@@ -955,20 +956,19 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
             A new `BitVec` containing elements from `self` that are not in `other`.
         """
 
-        @parameter
         @always_inline
         def _difference[
             simd_width: Int
         ](
-            left: SIMD[self.WORD_DTYPE, simd_width],
-            right: SIMD[self.WORD_DTYPE, simd_width],
-        ) -> SIMD[self.WORD_DTYPE, simd_width]:
+            left: SIMD[Self.WORD_DTYPE, simd_width],
+            right: SIMD[Self.WORD_DTYPE, simd_width],
+        ) {} -> SIMD[Self.WORD_DTYPE, simd_width]:
             return left & ~right
 
         if len(self) >= len(other):
-            return Self._vectorize_apply[_difference, False](self, other)
+            return Self._vectorize_apply[False](self, other, _difference)
         else:
-            return Self._vectorize_apply[_difference, False](other, self)
+            return Self._vectorize_apply[False](other, self, _difference)
 
     # --------------------------------------------------------------------- #
     # Inplace Set operations
@@ -977,12 +977,19 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
     @always_inline
     @staticmethod
     def _mut_vectorize_apply[
-        func: def[simd_width: Int](
-            mut SIMD[Self.WORD_DTYPE, simd_width],
-            SIMD[Self.WORD_DTYPE, simd_width],
-        ) capturing,
-        lhs_zero_out: Bool = False,
-    ](mut left: Self, right: Self):
+        lhs_zero_out: Bool = False
+    ](
+        mut left: Self,
+        right: Self,
+        func: Some[
+            def[
+                simd_width: Int
+            ](
+                mut SIMD[Self.WORD_DTYPE, simd_width],
+                SIMD[Self.WORD_DTYPE, simd_width],
+            )
+        ],
+    ):
         """Applies a vectorized binary operation between two BitVecs.
 
         This internal utility function optimizes set operations by processing
@@ -995,10 +1002,6 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
         SIMD width.
 
         Parameters:
-            func: A function that takes two SIMD vectors of Self.WORD_DTYPE
-                values and returns a SIMD vector with the result of the operation.
-                The function should implement the desired set operation (e.g.,
-                union, intersection).
             lhs_zero_out: Decides how to handle the case where the lhs is longer than
                 the rhs. If it is set to True, then the remainder of the lhs, will be
                 cleared. If it is set to False, then the lhs bits will be left alone.
@@ -1006,13 +1009,16 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
         Args:
             left: The first BitVec operand.
             right: The second BitVec operand.
+            func: A closure that updates its first SIMD vector using the second.
 
         """
         comptime width = simd_width_of[Self.WORD_DTYPE]()
 
         # Define a vectorized operation that processes multiple words at once
         @always_inline
-        def _intersect[simd_width: Int](offset: Int) {mut left, imm right}:
+        def _intersect[
+            simd_width: Int
+        ](offset: Int) {mut left, imm right, imm func}:
             # Initialize SIMD vectors to hold multiple words from each `BitVec`
             var left_vec: SIMD[Self.WORD_DTYPE, simd_width]
             var right_vec: SIMD[Self.WORD_DTYPE, simd_width]
@@ -1027,7 +1033,7 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
 
             # Apply the provided operation (union, intersection, etc.) to the
             # vectors
-            func(left_vec, right_vec)
+            func[simd_width](left_vec, right_vec)
 
             # Store the results back into the result `BitVec`
             left.data.unsafe_offset(offset).unsafe_store[width=simd_width](
@@ -1080,17 +1086,16 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
             This retains `self`s length.
         """
 
-        @parameter
         @always_inline
         def _union[
             simd_width: Int
         ](
-            mut left: SIMD[self.WORD_DTYPE, simd_width],
-            right: SIMD[self.WORD_DTYPE, simd_width],
-        ):
+            mut left: SIMD[Self.WORD_DTYPE, simd_width],
+            right: SIMD[Self.WORD_DTYPE, simd_width],
+        ) {}:
             left |= right
 
-        return Self._mut_vectorize_apply[_union, False](self, other)
+        return Self._mut_vectorize_apply[False](self, other, _union)
 
     def intersection_update(mut self, other: Self):
         """Modifies `self` to be the intersection of `self` and `other`.
@@ -1111,17 +1116,16 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
             This retains `self`s length.
         """
 
-        @parameter
         @always_inline
         def _intersection[
             simd_width: Int
         ](
-            mut left: SIMD[self.WORD_DTYPE, simd_width],
-            right: SIMD[self.WORD_DTYPE, simd_width],
-        ):
+            mut left: SIMD[Self.WORD_DTYPE, simd_width],
+            right: SIMD[Self.WORD_DTYPE, simd_width],
+        ) {}:
             left &= right
 
-        return Self._mut_vectorize_apply[_intersection, True](self, other)
+        return Self._mut_vectorize_apply[True](self, other, _intersection)
 
     def difference_update(mut self, other: Self):
         """Modifies `self` to be the difference of `self` and `other`.
@@ -1142,17 +1146,16 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
             This retains `self`s length.
         """
 
-        @parameter
         @always_inline
         def _difference[
             simd_width: Int
         ](
-            mut left: SIMD[self.WORD_DTYPE, simd_width],
-            right: SIMD[self.WORD_DTYPE, simd_width],
-        ):
+            mut left: SIMD[Self.WORD_DTYPE, simd_width],
+            right: SIMD[Self.WORD_DTYPE, simd_width],
+        ) {}:
             left &= ~right
 
-        return Self._mut_vectorize_apply[_difference, False](self, other)
+        return Self._mut_vectorize_apply[False](self, other, _difference)
 
     def write_to[W: Writer](imm self, mut writer: W):
         """Write the bitvec in a nice format."""

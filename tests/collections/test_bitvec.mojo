@@ -839,5 +839,38 @@ def test_bitvec_equal_more() raises:
     assert_true(bv7 == bv8)
 
 
+def test_set_operations_vector_and_scalar_tails() raises:
+    # Exercise all six migrated callbacks across SIMD and word boundaries.
+    for length in [0, 1, 63, 64, 65, 255, 256, 257, 600, 1025, 4097]:
+        var left = BitVec(length=UInt(length), fill=False)
+        var right = BitVec(length=UInt(length), fill=False)
+        for i in range(length):
+            left[UInt(i)] = i % 3 == 0
+            right[UInt(i)] = i % 5 == 0
+
+        var union = left.union(right)
+        var intersection = left.intersection(right)
+        var difference = left.difference(right)
+        var union_update = left.copy()
+        var intersection_update = left.copy()
+        var difference_update = left.copy()
+        union_update.union_update(right)
+        intersection_update.intersection_update(right)
+        difference_update.difference_update(right)
+
+        assert_equal(len(union), length)
+        assert_equal(len(intersection), length)
+        assert_equal(len(difference), length)
+        assert_true(union == union_update)
+        assert_true(intersection == intersection_update)
+        assert_true(difference == difference_update)
+        for i in range(length):
+            var a = i % 3 == 0
+            var b = i % 5 == 0
+            assert_equal(union[UInt(i)], a or b)
+            assert_equal(intersection[UInt(i)], a and b)
+            assert_equal(difference[UInt(i)], a and not b)
+
+
 def main() raises:
     TestSuite.discover_tests[__functions_in_module()]().run()

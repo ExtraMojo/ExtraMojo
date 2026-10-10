@@ -19,15 +19,15 @@ def _sat_add[
 
 
 def test_saturating_add() raises:
-    comptime dtypes = (
+    comptime dtypes = [
         DType.uint8,
         DType.int8,
         DType.uint16,
         DType.int16,
         DType.uint32,
         DType.int32,
-    )
-    comptime widths = (4, 8, 16, 32, 64, 128)
+    ]
+    comptime widths = [4, 8, 16, 32, 64, 128]
 
     comptime for i in range(0, len(dtypes)):
         comptime for j in range(0, len(widths)):
@@ -80,8 +80,7 @@ def test_saturating_sub() raises:
 #         DType.uint128,
 #     ]
 
-#     @parameter
-#     for i in range(0, len(types)):
+#     comptime for i in range(0, len(types)):
 #         var x = ~Scalar[types[i]](0)
 #         assert_equal(fastmod(x, 2), x % 2)
 

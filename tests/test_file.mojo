@@ -120,14 +120,16 @@ def test_for_each_line(file: Path, expected_lines: List[String]) raises:
     var counter = 0
     var found_bad = False
 
-    @parameter
-    def inner(buffer: Span[UInt8, _], start: Int, end: Int) capturing -> None:
+    def inner(
+        buffer: Span[UInt8, _], start: Int, end: Int
+    ) {mut counter, mut found_bad, imm expected_lines}:
         if s(buffer[start:end]) != expected_lines[counter]:
             found_bad = True
         counter += 1
 
-    for_each_line[inner](String(file))
+    for_each_line(String(file), inner)
     assert_false(found_bad)
+    assert_equal(counter, len(expected_lines))
     print("Successful for_each_line")
 
 

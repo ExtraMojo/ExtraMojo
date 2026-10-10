@@ -10,12 +10,14 @@ Also see any of the tests in the `test_*.mojo` files.
 
 ## Install / Usage
 
+ExtraMojo 0.24.0 targets **Mojo 1.1.0**.
+
 Add `https://repo.prefix.dev/modular-community` to your project channels:
 
 ```
-# mojoproject.toml or pixi.toml
+# pixi.toml
 
-[project]
+[workspace]
 channels = ["conda-forge", "https://conda.modular.com/max", "https://repo.prefix.dev/modular-community"]
 description = "Add a short description here"
 name = "my-mojo-project"
@@ -25,7 +27,7 @@ version = "0.1.0"
 [tasks]
 
 [dependencies]
-mojo = "=1.0.0"
+mojo = "=1.1.0"
 ```
 
 then run:
@@ -56,6 +58,13 @@ Note the bit about how to add this project to your LSP so things resolve in VSCo
 
 See [docs for details](https://extramojo.github.io/ExtraMojo/)
 
+
+## Migrating to 0.24.0
+
+`for_each_line` now takes its callback as a runtime argument:
+`for_each_line(path, callback, buf_size=...)`, rather than
+`for_each_line[callback](path, buf_size=...)`. Define callbacks with explicit
+capture lists (`{imm ...}` / `{mut ...}`), without `@parameter`.
 
 ## Tasks
 
