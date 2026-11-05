@@ -2,7 +2,7 @@
 authors = ["Seth Stadick <sstadick@gmail.com>"]
 channels = [
     "https://prefix.dev/conda-forge",
-    "https://conda.modular.com/max",
+    "https://conda.modular.com/max-nightly",
 ]
 description = "Useful things that aren't in the standard library."
 platforms = ["osx-arm64", "linux-64", "linux-aarch64"]
@@ -21,7 +21,7 @@ backend = { name = "pixi-build-rattler-build", version = "0.*", channels = [
 
 # These are basically just dev deps, the real deps are specified in the recipe.yaml
 [dependencies]
-mojo = "=1.1.0"
+mojo = "==1.3.0.dev2026110505"
 
 [tasks]
 build = "pixi run mojo precompile extramojo -o extramojo.mojoc"
@@ -34,6 +34,6 @@ format = "pixi run mojo format ./"
 
 # rattler-build tasks
 rbuild = "pixi publish --path . --target-dir dist"
-rtest = { cmd = "pixi exec --spec rattler-build=0.76.1 rattler-build test -c conda-forge -c https://conda.modular.com/max --package-file dist/extramojo*.conda", depends-on = [
+rtest = { cmd = "pixi exec --spec rattler-build=0.76.1 rattler-build test -c conda-forge -c https://conda.modular.com/max-nightly --package-file dist/extramojo*.conda", depends-on = [
     "rbuild",
 ] }
