@@ -12,7 +12,7 @@ Also see any of the tests in the `test_*.mojo` files.
 
 ### Nightly source checkout
 
-The `nightly` branch targets **Mojo 1.3.0.dev2026110505** from
+The `nightly` branch targets **Mojo 1.3.0.dev2026110705** from
 `https://conda.modular.com/max-nightly`. From a checkout of this branch, run:
 
 ```bash
