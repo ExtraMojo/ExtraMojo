@@ -217,14 +217,14 @@ struct BufferedReader(Movable):
         self.buffer_offset = 0
         self.buffer_capacity = buffer_capacity
         self.buffer = alloc(
-            Layout[UInt8](count=self.buffer_capacity)
+            Layout[UInt8](length=self.buffer_capacity)
         ).unsafe_leak()
         self.buffer_len = 0
         _ = self._fill_buffer()
 
     def __deinit__(deinit self):
         try:
-            self.fh.close()
+            self.fh^.close()
         except:
             pass
         self.buffer.unsafe_free()

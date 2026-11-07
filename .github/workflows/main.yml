@@ -5,7 +5,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                os: [ubuntu-latest, ubuntu-24.04-arm, macos-14]
+                os: [ubuntu-latest, ubuntu-24.04-arm, macos-15]
         runs-on: ${{ matrix.os }}
 
         steps:
@@ -48,6 +48,6 @@ jobs:
                   for package in dist/*.conda; do
                       pixi exec --spec rattler-build=0.76.1 rattler-build test \
                           --channel conda-forge \
-                          --channel https://conda.modular.com/max \
+                          --channel https://conda.modular.com/max-nightly \
                           --package-file "$package"
                   done

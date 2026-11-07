@@ -28,7 +28,7 @@ assert_true(len(opts.get_help_message()[]) > 0)
 """
 from std import sys
 from std.collections import Dict
-from std.hashlib.hasher import Hasher
+from std.hash import Hasher
 
 
 struct OptKind(Copyable, ImplicitlyCopyable, Movable, Writable):

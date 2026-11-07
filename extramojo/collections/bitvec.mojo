@@ -118,7 +118,9 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
         var word_cap = Int(_elts[Self.WORD_DTYPE](capacity))
         if word_cap > 0:
             self.data = alloc(
-                Layout[self.WORD](count=word_cap, alignment=self.WORD_BYTEWIDTH)
+                Layout[Self.WORD, alignment=.of_bytes[Self.WORD_BYTEWIDTH]()](
+                    length=word_cap
+                )
             ).unsafe_leak()
             unsafe_memset_zero(self.data, word_cap)
         else:
@@ -236,8 +238,8 @@ struct BitVec(Boolable, Copyable, Movable, Sized, Writable):
     def _realloc(mut self, new_capacity: UInt):
         """Reallocate to for new_capacity, which is in words."""
         var new_data = alloc(
-            Layout[self.WORD](
-                count=Int(new_capacity), alignment=self.WORD_BYTEWIDTH
+            Layout[Self.WORD, alignment=.of_bytes[Self.WORD_BYTEWIDTH]()](
+                length=Int(new_capacity)
             )
         ).unsafe_leak()
         var current_words = _elts[self.WORD_DTYPE](self._len)
