@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Pin the nightly branch and Conda build/host/run dependencies to Mojo 1.3.0.dev2026110505.
+- Pin the nightly branch and Conda build/host/run dependencies to Mojo 1.3.0.dev2026110805.
 - Update hashing imports to `std.hash` and allocation layouts to the nightly API, retaining BitVec's explicit word alignment.
 - Transfer the buffered reader's file handle when closing it during destruction.
 
