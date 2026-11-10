@@ -1,0 +1,42 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>ExtraMojo – bstr</title><link>https://extramojo.github.io/ExtraMojo/extramojo/bstr/</link><description>Recent content in bstr on ExtraMojo</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="https://extramojo.github.io/ExtraMojo/extramojo/bstr/index.xml" rel="self" type="application/rss+xml"/><item><title>bstr</title><link>https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/</guid><description>
+&lt;p>Mojo module &lt;a href="https://github.com/ExtraMojo/ExtraMojo/blob/main/extramojo/bstr/bstr.mojo" target="_blank" rel="noopener">🡭&lt;/a>&lt;/p>
+&lt;h1>&lt;code>bstr&lt;/code>&lt;/h1>&lt;h2>Aliases&lt;span class="hx-absolute -hx-mt-20" id="aliases">&lt;/span>
+&lt;a href="#aliases" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;code>SIMD_U8_WIDTH = simd_width_of[DType.uint8]()&lt;/code>&lt;/li>
+&lt;li>&lt;code>CAPITAL_A = SIMD(SIMDLength(ord(StringSpan(&amp;quot;A&amp;quot;))))&lt;/code>&lt;/li>
+&lt;li>&lt;code>CAPITAL_Z = SIMD(SIMDLength(ord(StringSpan(&amp;quot;Z&amp;quot;))))&lt;/code>&lt;/li>
+&lt;li>&lt;code>LOWER_A = SIMD(SIMDLength(ord(StringSpan(&amp;quot;a&amp;quot;))))&lt;/code>&lt;/li>
+&lt;li>&lt;code>LOWER_Z = SIMD(SIMDLength(ord(StringSpan(&amp;quot;z&amp;quot;))))&lt;/code>&lt;/li>
+&lt;li>&lt;code>ASCII_CASE_MASK = SIMD(32)&lt;/code>&lt;/li>
+&lt;li>&lt;code>ZERO = SIMD(0)&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h2>Structs&lt;span class="hx-absolute -hx-mt-20" id="structs">&lt;/span>
+&lt;a href="#structs" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;a href="https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/StartEnd/" >&lt;code>StartEnd&lt;/code>&lt;/a>: Helper struct for tracking start/end coords in &lt;code>SplitIterator&lt;/code>.&lt;/li>
+&lt;li>&lt;a href="https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/SplitIterator/" >&lt;code>SplitIterator&lt;/code>&lt;/a>: Get an iterator the yields the splits from the input &lt;code>to_split&lt;/code> string.&lt;/li>
+&lt;li>&lt;a href="https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/SplitIteratorPos/" >&lt;code>SplitIteratorPos&lt;/code>&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;h2>Functions&lt;span class="hx-absolute -hx-mt-20" id="functions">&lt;/span>
+&lt;a href="#functions" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;a href="https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/find_chr_all_occurrences/" >&lt;code>find_chr_all_occurrences&lt;/code>&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/is_ascii_uppercase/" >&lt;code>is_ascii_uppercase&lt;/code>&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/is_ascii_lowercase/" >&lt;code>is_ascii_lowercase&lt;/code>&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/to_ascii_lowercase/" >&lt;code>to_ascii_lowercase&lt;/code>&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/to_ascii_uppercase/" >&lt;code>to_ascii_uppercase&lt;/code>&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://extramojo.github.io/ExtraMojo/extramojo/bstr/bstr/find/" >&lt;code>find&lt;/code>&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>memchr</title><link>https://extramojo.github.io/ExtraMojo/extramojo/bstr/memchr/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://extramojo.github.io/ExtraMojo/extramojo/bstr/memchr/</guid><description>
+&lt;p>Mojo module &lt;a href="https://github.com/ExtraMojo/ExtraMojo/blob/main/extramojo/bstr/memchr.mojo" target="_blank" rel="noopener">🡭&lt;/a>&lt;/p>
+&lt;h1>&lt;code>memchr&lt;/code>&lt;/h1>&lt;p>Fast memchr implementations.&lt;/p>
+&lt;p>There are two here, &lt;code>memchr&lt;/code> and &lt;code>memchr_wide&lt;/code>. &lt;code>memchr_wide&lt;/code> will do more comparisons at once,
+but needs to do more loading first. If you know you have some distance between &lt;code>needle&lt;/code>s, then
+it should be faster. &lt;code>memchr&lt;/code> is just vanilla memchr.&lt;/p>
+&lt;h2>Aliases&lt;span class="hx-absolute -hx-mt-20" id="aliases">&lt;/span>
+&lt;a href="#aliases" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;code>SIMD_U8_WIDTH = simd_width_of[DType.uint8]()&lt;/code>&lt;/li>
+&lt;li>&lt;code>LOOP_SIZE = (simd_width_of[DType.uint8]() * Int(4))&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h2>Functions&lt;span class="hx-absolute -hx-mt-20" id="functions">&lt;/span>
+&lt;a href="#functions" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;a href="https://extramojo.github.io/ExtraMojo/extramojo/bstr/memchr/memchr/" >&lt;code>memchr&lt;/code>&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://extramojo.github.io/ExtraMojo/extramojo/bstr/memchr/memchr_wide/" >&lt;code>memchr_wide&lt;/code>&lt;/a>&lt;/li>
+&lt;/ul></description></item></channel></rss>

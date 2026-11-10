@@ -1,0 +1,10 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>ExtraMojo – stats</title><link>https://extramojo.github.io/ExtraMojo/extramojo/stats/</link><description>Recent content in stats on ExtraMojo</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="https://extramojo.github.io/ExtraMojo/extramojo/stats/index.xml" rel="self" type="application/rss+xml"/><item><title>sampling</title><link>https://extramojo.github.io/ExtraMojo/extramojo/stats/sampling/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://extramojo.github.io/ExtraMojo/extramojo/stats/sampling/</guid><description>
+&lt;p>Mojo module &lt;a href="https://github.com/ExtraMojo/ExtraMojo/blob/main/extramojo/stats/sampling.mojo" target="_blank" rel="noopener">🡭&lt;/a>&lt;/p>
+&lt;h1>&lt;code>sampling&lt;/code>&lt;/h1>&lt;p>Reservoir sampling on a stream.&lt;/p>
+&lt;h1>References&lt;/h1>&lt;ul>
+&lt;li>Algorithm R: &lt;a href="https://en.wikipedia.org/wiki/Reservoir_sampling" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Reservoir_sampling&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;h2>Structs&lt;span class="hx-absolute -hx-mt-20" id="structs">&lt;/span>
+&lt;a href="#structs" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;ul>
+&lt;li>&lt;a href="https://extramojo.github.io/ExtraMojo/extramojo/stats/sampling/ReservoirSampler/" >&lt;code>ReservoirSampler&lt;/code>&lt;/a>: Sample N items from a stream of unknown length.&lt;/li>
+&lt;/ul></description></item></channel></rss>
