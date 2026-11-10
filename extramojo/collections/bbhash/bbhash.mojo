@@ -17,7 +17,7 @@ Verify that a returned True value for key matches the key from the original
 input set:
 
 ```mojo
-from std.hashlib.hash import hash
+from std.hash.hash import hash
 from std.testing import assert_true, assert_false
 from extramojo.collections.bbhash.bbhash import BBHash
 
@@ -35,7 +35,7 @@ assert_true(key_hash.value() == hash(String("fox")))
 - https://arxiv.org/abs/1702.03154
 """
 
-from std.hashlib.hash import hash
+from std.hash.hash import hash
 from std.os import abort
 from std.sys import bit_width_of
 

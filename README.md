@@ -10,7 +10,8 @@ Also see any of the tests in the `test_*.mojo` files.
 
 ## Install / Usage
 
-ExtraMojo 0.24.0 targets **Mojo 1.1.0**.
+This checkout targets **Mojo 1.2.0**. Use a source checkout or a published
+package built for the same compiler version.
 
 Add `https://repo.prefix.dev/modular-community` to your project channels:
 
@@ -27,7 +28,7 @@ version = "0.1.0"
 [tasks]
 
 [dependencies]
-mojo = "=1.1.0"
+mojo = "=1.2.0"
 ```
 
 then run:
@@ -36,14 +37,25 @@ then run:
 pixi add extramojo
 ```
 
-Or directly by following these instructions.
+To build and install a local checkout instead, use Pixi 0.80 or newer and add
+the following to your consumer's manifest (keeping the stable Modular and
+conda-forge channels above):
 
-See docs for [numojo](https://github.com/Mojo-Numerics-and-Algorithms-group/NuMojo/tree/v0.3?tab=readme-ov-file#how-to-install) and just do that for this package until Mojo has true package / library support.
+```toml
+[workspace]
+preview = ["pixi-build"]
+# ...channels and platforms...
 
-tl;dr;
+[dependencies]
+mojo = "=1.2.0"
+extramojo = { path = "../ExtraMojo" }
+```
 
-In your project `mojo run -I "../extramojo" my_example_file.mojo`.
-Note the bit about how to add this project to your LSP so things resolve in VSCode.
+Run `pixi install`, then `pixi run mojo run my_example_file.mojo`. No source
+include path is needed: `pixi-build-mojo` installs the compiled library into
+the environment's `lib/mojo` directory. The package pins `mojo-compiler` to
+1.2.0 for build, host, and runtime compatibility. ExtraMojo remains self-contained;
+its buffered I/O and byte-string APIs do not require `mojo-io` or `mojo-bstr`.
 
 
 ## Notable Functionality
@@ -59,19 +71,31 @@ Note the bit about how to add this project to your LSP so things resolve in VSCo
 See [docs for details](https://extramojo.github.io/ExtraMojo/)
 
 
-## Migrating to 0.24.0
+## Line callbacks
 
-`for_each_line` now takes its callback as a runtime argument:
-`for_each_line(path, callback, buf_size=...)`, rather than
-`for_each_line[callback](path, buf_size=...)`. Define callbacks with explicit
+`for_each_line(path, callback, buf_size=...)` takes a runtime callback.
+Define callbacks with explicit
 capture lists (`{imm ...}` / `{mut ...}`), without `@parameter`.
 
 ## Tasks
 
+```bash
+pixi install --locked
+pixi run build   # Precompile the library for local development
+pixi run t       # All existing tests; also used by `hat test`
+pixi run t-asan  # AddressSanitizer tests
+pixi run rbuild  # Build a Conda archive in dist/ with pixi-build-mojo
+pixi run rtest   # Build, install into a temporary consumer, run all tests
 ```
-pixi run t
-```
+
+The consumer test copies only `tests/` outside the checkout, installs the exact
+archive from `dist/`, and runs without `-I .` or a source import path. CI runs
+source and installed-package tests on Linux x86-64, Linux ARM64, and macOS ARM64,
+plus AddressSanitizer on Linux x86-64. Neither packaging task uploads a release.
+
+`pixi.toml` defines the package build. `LICENSE` includes both license texts;
+see also `LICENSE-MIT`, `UNLICENSE`, and source attribution notices.
 
 ## Attribution
 
-- Much of the first draft of the File and Tensor code was taken from [here](https://github.com/MoSafi2/MojoFastTrim/tree/restructed), which has now moved [here](https://github.com/MoSafi2/BlazeSeq).
+- File and Tensor code includes work from [MojoFastTrim](https://github.com/MoSafi2/MojoFastTrim/tree/restructed), maintained as [BlazeSeq](https://github.com/MoSafi2/BlazeSeq).
