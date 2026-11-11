@@ -21,7 +21,7 @@ backend = { name = "pixi-build-rattler-build", version = "0.*", channels = [
 
 # These are basically just dev deps, the real deps are specified in the recipe.yaml
 [dependencies]
-mojo = "==1.3.0.dev2026111005"
+mojo = "==1.3.0.dev2026111105"
 
 [tasks]
 build = "pixi run mojo precompile extramojo -o extramojo.mojoc"
