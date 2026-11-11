@@ -8,18 +8,40 @@ description = "Useful things that aren't in the standard library."
 platforms = ["osx-arm64", "linux-64", "linux-aarch64"]
 license = "Unlicense OR MIT"
 preview = ["pixi-build"]
+requires-pixi = ">=0.80"
 
 [package]
 name = "extramojo"
 version = "0.24.0"
+license = "Unlicense OR MIT"
+# Pixi accepts one license file; LICENSE contains both original license texts.
+license-file = "LICENSE"
+homepage = "https://github.com/ExtraMojo/ExtraMojo"
+repository = "https://github.com/ExtraMojo/ExtraMojo"
+description = "Extra functionality not yet in the standard library, mostly focused on strings and file IO."
 
 [package.build]
-backend = { name = "pixi-build-rattler-build", version = "0.*", channels = [
+backend = { name = "pixi-build-mojo", version = "0.2.*", channels = [
     "https://prefix.dev/pixi-build-backends",
     "https://prefix.dev/conda-forge",
 ] }
 
-# These are basically just dev deps, the real deps are specified in the recipe.yaml
+[package.build.config]
+extra-input-globs = ["LICENSE", "LICENSE-MIT", "UNLICENSE"]
+
+[package.build.config.pkg]
+path = "extramojo"
+
+# Precompiled Mojo packages must use the same compiler when built and consumed.
+[package.build-dependencies]
+mojo-compiler = "==1.3.0.dev2026111105"
+
+[package.host-dependencies]
+mojo-compiler = "==1.3.0.dev2026111105"
+
+[package.run-dependencies]
+mojo-compiler = "==1.3.0.dev2026111105"
+
 [dependencies]
 mojo = "==1.3.0.dev2026111105"
 
@@ -32,8 +54,9 @@ t = { cmd = "sh -c 'find ./tests -name test_*.mojo | xargs -I % pixi run mojo ru
 t-asan = { cmd = "sh -c 'target_features=\"\"; if [ \"$(uname -m)\" = \"x86_64\" ]; then target_features=\"--target-features -avx512bf16,-avx512bitalg,-avx512bw,-avx512cd,-avx512dq,-avx512f,-avx512ifma,-avx512vbmi,-avx512vbmi2,-avx512vl,-avx512vnni,-avx512vpopcntdq\"; fi; find ./tests -name test_*.mojo | xargs -I % sh -c \"pixi run mojo build $target_features --sanitize address -debug-level=line-tables -I . -D ASSERT=all % -o /tmp/test_bin && /tmp/test_bin\"'" } # test with ASAN
 format = "pixi run mojo format ./"
 
-# rattler-build tasks
-rbuild = "pixi publish --path . --target-dir dist"
-rtest = { cmd = "pixi exec --spec rattler-build=0.76.1 rattler-build test -c conda-forge -c https://conda.modular.com/max-nightly --package-file dist/extramojo*.conda", depends-on = [
+# Local packaging only; neither task uploads a release.
+# Refresh same-version archives so rtest never tests an older local build.
+rbuild = "pixi publish --path pixi.toml --target-dir dist --force --clean"
+rtest = { cmd = "bash scripts/test-package.sh dist/extramojo-*.conda", depends-on = [
     "rbuild",
 ] }

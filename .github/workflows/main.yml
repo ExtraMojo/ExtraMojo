@@ -41,13 +41,7 @@ jobs:
                   git diff --exit-code
 
             - name: Build Conda package
-              run: pixi publish --path . --target-dir dist
+              run: pixi run rbuild
 
             - name: Test installed Conda package
-              run: |
-                  for package in dist/*.conda; do
-                      pixi exec --spec rattler-build=0.76.1 rattler-build test \
-                          --channel conda-forge \
-                          --channel https://conda.modular.com/max-nightly \
-                          --package-file "$package"
-                  done
+              run: bash scripts/test-package.sh dist/extramojo-*.conda
