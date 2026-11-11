@@ -1,5 +1,5 @@
 from std.collections import Set
-from std.hash.hash import hash
+from std.hash import hash
 from std.testing import assert_equal, assert_true, assert_false, TestSuite
 
 from extramojo.collections.bbhash.bbhash import BBHash

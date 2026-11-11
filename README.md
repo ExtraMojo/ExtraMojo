@@ -10,7 +10,23 @@ Also see any of the tests in the `test_*.mojo` files.
 
 ## Install / Usage
 
-This checkout targets **Mojo 1.2.0**. Use a source checkout or a published
+### Nightly source checkout
+
+The `nightly` branch targets **Mojo 1.3.0.dev2026111105** from
+`https://conda.modular.com/max-nightly`. From a checkout of this branch, run:
+
+```bash
+pixi install --locked
+pixi run build
+pixi run t
+```
+
+Use the same compiler version when importing this checkout with `mojo run -I`.
+The stable package below is not built for this nightly compiler.
+
+### Stable package
+
+The `main` branch targets **Mojo 1.2.0**. Use a source checkout or a published
 package built for the same compiler version.
 
 Add `https://repo.prefix.dev/modular-community` to your project channels:

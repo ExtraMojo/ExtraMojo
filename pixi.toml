@@ -2,7 +2,7 @@
 authors = ["Seth Stadick <sstadick@gmail.com>"]
 channels = [
     "https://prefix.dev/conda-forge",
-    "https://conda.modular.com/max",
+    "https://conda.modular.com/max-nightly",
 ]
 description = "Useful things that aren't in the standard library."
 platforms = ["osx-arm64", "linux-64", "linux-aarch64"]
@@ -34,16 +34,16 @@ path = "extramojo"
 
 # Precompiled Mojo packages must use the same compiler when built and consumed.
 [package.build-dependencies]
-mojo-compiler = "=1.2.0"
+mojo-compiler = "==1.3.0.dev2026111105"
 
 [package.host-dependencies]
-mojo-compiler = "=1.2.0"
+mojo-compiler = "==1.3.0.dev2026111105"
 
 [package.run-dependencies]
-mojo-compiler = "=1.2.0"
+mojo-compiler = "==1.3.0.dev2026111105"
 
 [dependencies]
-mojo = "=1.2.0"
+mojo = "==1.3.0.dev2026111105"
 
 [tasks]
 build = "pixi run mojo precompile extramojo -o extramojo.mojoc"

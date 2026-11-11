@@ -41,11 +41,11 @@ for package in "$@"; do
     cat > "$work/pixi.toml" <<EOF
 [workspace]
 name = "extramojo-consumer"
-channels = ["https://prefix.dev/conda-forge", "https://conda.modular.com/max"]
+channels = ["https://prefix.dev/conda-forge", "https://conda.modular.com/max-nightly"]
 platforms = ["$platform"]
 
 [dependencies]
-mojo = "=1.2.0"
+mojo = "==1.3.0.dev2026111105"
 extramojo = { url = "file://$package", sha256 = "$digest" }
 EOF
     (
